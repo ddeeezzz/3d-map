@@ -6,9 +6,12 @@
   - 楼栋搜索、分类筛选、收藏。
   - 路线规划：起点/终点选择、策略（最快/最短/避开施工）。
 - `InfoCard`：显示当前建筑信息（名称、用途、开放时间、实时数据）。
-- `LayerToggle`：控制 deck.gl 图层（道路、热点、热力图）。
+- `LayerToggle`：
+  - 根据 `config.layers` 动态生成开关，显示 `name`，内部使用 `key` 和 `order` 控制层状态。
+  - 切换时更新 store 的 `layerVisibility[key]`，并同步 deck.gl/Three.js。
 - `StatusBar`：展示数据更新时间、日志摘要、当前模式。
-- `LoggerViewer`（可选）：折叠面板，读取 `logger.js` 缓存的最新 N 条日志。
+- `LoggerViewer`（可选）：
+  - 若未来实现，将通过 `logger` 模块提供的接口读取最新日志（目前 logger 无缓存，需在 spec 中另行规划后再实现）。
 
 ## 交互流程
 1. 用户在面板中选中建筑 → 更新 Store → deck.gl/Three.js 同步高亮。
@@ -25,3 +28,4 @@
 ## TODO
 - [ ] 设计主界面布局（断点、响应式策略）。
 - [ ] 确定 panel 与 3D 视图的通信 API。
+- [ ] 当 LoggerViewer 需求明确后，补充“日志缓存/订阅”实现方案，再动手开发。
