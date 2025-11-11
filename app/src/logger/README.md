@@ -1,7 +1,5 @@
-# logger/
+# logger
 
-中文日志模块。
-
-导出"信息/警告/错误"等方法，负责时间戳与模块名。
-
-**当前阶段**：占位文件，正式逻辑待相关 spec/需求确认后再补全。
+- `logger.js` 导出 `logInfo/logDebug/logWarn/logError` 四个方法，输出 `[HH:mm:ss][LEVEL][模块] 消息`。
+- 依赖 `dayjs` 生成时间戳，附加数据通过 `｜数据：...` 拼接，调用方负责确保文字为中文。
+- 测试见 `src/tests/logger/logger.test.js`，覆盖基本输出场景。
