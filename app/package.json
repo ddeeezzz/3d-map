@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest --environment jsdom"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.2",
@@ -36,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "jsdom": "^27.1.0",
     "osmtogeojson": "3.0.0-beta.5",
     "vite": "^7.2.2",
     "vitest": "^4.0.8"

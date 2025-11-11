@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef } from "react";
+import "./App.css";
+import { initScene } from "./three/initScene";
+import { logInfo, logError } from "./logger/logger";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return undefined;
+    }
+
+    let sceneContext;
+    const handleResize = () => {
+      sceneContext?.resize();
+    };
+
+    try {
+      sceneContext = initScene(container);
+      logInfo("三维渲染", "Three.js 场景初始化完成");
+      sceneContext.start();
+      window.addEventListener("resize", handleResize);
+    } catch (error) {
+      logError("三维渲染", "Three.js 场景初始化失败", {
+        错误: error?.message ?? "未知错误",
+      });
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      sceneContext?.stop();
+      const canvas = sceneContext?.renderer?.domElement;
+      if (canvas && container.contains(canvas)) {
+        container.removeChild(canvas);
+      }
+    };
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app-root">
+      <div ref={containerRef} className="scene-container" />
+      <div className="scene-overlay">
+        <h1>西南交通大学犀浦校区</h1>
+        <p>场景初始化完成后会自动加载建筑数据。</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

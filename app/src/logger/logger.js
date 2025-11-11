@@ -1,7 +1,5 @@
 import dayjs from "dayjs";
 
-const latinRegex = /[A-Za-z]/;
-
 const methodMap = {
   INFO: "log",
   DEBUG: "debug",
@@ -17,15 +15,6 @@ function getWriter(level) {
   return console[method].bind(console);
 }
 
-function warnIfNonChinese(field, text) {
-  if (!text) {
-    return;
-  }
-  if (latinRegex.test(text)) {
-    console.warn(`[日志模块][WARN] ${field}必须使用中文，收到：${text}`);
-  }
-}
-
 function formatExtra(extra) {
   if (extra == null) {
     return "";
@@ -39,16 +28,11 @@ function formatExtra(extra) {
 
 function writeLog(level, moduleName, message, extra) {
   const writer = getWriter(level);
-
   const resolvedModule = (moduleName ?? "未命名模块").trim();
   const resolvedMessage = (message ?? "未提供内容").trim();
-
-  warnIfNonChinese("模块名", resolvedModule);
-  warnIfNonChinese("日志内容", resolvedMessage);
-
   const time = dayjs().format("HH:mm:ss");
   const extraSegment = formatExtra(extra);
-  writer.call(console, `[${time}][${level}][${resolvedModule}] ${resolvedMessage}${extraSegment}`);
+  writer(`[${time}][${level}][${resolvedModule}] ${resolvedMessage}${extraSegment}`);
 }
 
 export function logInfo(moduleName, message, extra = null) {

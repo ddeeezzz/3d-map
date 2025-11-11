@@ -1,42 +1,44 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.app-root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-family: "Noto Sans SC", "Segoe UI", Arial, sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.scene-container {
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.scene-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.scene-overlay {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.22);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.45);
 }
 
-.card {
-  padding: 2em;
+.scene-overlay h1 {
+  margin: 0;
+  font-size: 1.3rem;
 }
 
-.read-the-docs {
-  color: #888;
+.scene-overlay p {
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  color: #cbd5f5;
 }

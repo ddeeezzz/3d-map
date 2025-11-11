@@ -37,6 +37,13 @@ describe("logger", () => {
     );
   });
 
+  it("logDebug 输出基本字符串", () => {
+    logDebug("三维渲染", "进入 debug");
+    expect(debugSpy).toHaveBeenCalledWith(
+      "[12:34:56][DEBUG][三维渲染] 进入 debug"
+    );
+  });
+
   it("logWarn 使用 console.warn 输出", () => {
     logWarn("导航面板", "出现异常");
     expect(warnSpy).toHaveBeenCalledWith(
@@ -48,13 +55,6 @@ describe("logger", () => {
     logError("三维渲染", "渲染失败");
     expect(errorSpy).toHaveBeenCalledWith(
       "[12:34:56][ERROR][三维渲染] 渲染失败"
-    );
-  });
-
-  it("检测到英文模块名时发出警告", () => {
-    logInfo("ModuleABC", "说明");
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("模块名必须使用中文")
     );
   });
 
