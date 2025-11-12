@@ -50,6 +50,14 @@ vi.mock("three", () => {
     }
   }
 
+  class GridHelper {
+    constructor() {
+      this.material = {};
+    }
+  }
+
+  class AxesHelper {}
+
   return {
     Scene,
     PerspectiveCamera,
@@ -57,6 +65,8 @@ vi.mock("three", () => {
     AmbientLight,
     DirectionalLight,
     Color,
+    GridHelper,
+    AxesHelper,
     PCFSoftShadowMap: "PCFSoftShadowMap",
   };
 });

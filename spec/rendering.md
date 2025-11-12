@@ -20,6 +20,7 @@
 2. 提供 `resize(width, height)` 与 `render()` 方法，让 React 在窗口变化时同步 camera/renderer，并掌控渲染循环。
 3. 返回 `{ scene, camera, renderer, controls }`，供建筑、路径等模块注册 Mesh。
 4. 初始化完成后立刻在页面中挂载 renderer 的 canvas（例如通过 React ref 注入 DOM），即使暂未载入建筑，也能看到基础背景和相机控制，便于开发调试。
+5. 开发模式（`import.meta.env.DEV`）下，可添加 `GridHelper` + `AxesHelper` 作为辅助线，确认坐标系与灯光方向；生产模式不启用。
 
 ### 建筑 Mesh 构建流程
 1. 数据入口：`import data from "./data/campus.geojson"`，调用 `buildBuildings(data.features)`。
