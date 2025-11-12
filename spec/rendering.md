@@ -81,6 +81,41 @@
   - `App.jsx` 在建筑之后调用 `buildRoads(scene)`，并在 `applySceneTransform` 内一同处理 `roadsGroup`。
   - 测试：在 `src/tests/three/buildRoads.test.js` 验证宽度查找逻辑（给定 highway/residential，应生成预期厚度）。
 
+### 道路交互（hover/click）
+
+- **目标**：在 Three.js 场景内为道路提供基础拾取反馈（hover 高亮 + click 记录日志），暂不影响 UI/store 状态。
+- **实现**：
+  - 新建 `src/three/interactions/roadPicking.js`，导出 `attachRoadPicking({ domElement, camera, roadsGroup, onHover, onSelect })`。
+  - 内部复用单例 `THREE.Raycaster` 与 `THREE.Vector2`，监听 `pointermove` 与 `click`；当 `roadsGroup.visible === false` 时直接返回以节省计算。
+  - `pointermove`：计算与 `roadsGroup.children` 的最近交点，若命中 Mesh，则将其与上一次 hover Mesh 对比；命中变化时通过 `onHover(mesh.userData)` 回调，并在材质上设置 `emissive = #ffffff`、`emissiveIntensity ≈ 0.4`，离开时恢复 `0`。
+  - `click`：若存在当前 hover Mesh，则调用 `onSelect(hoverMesh.userData)` 并保持 hover 高亮状态不变。
+- **日志**：
+  - `App.jsx` 传入的 `onSelect` 内调用 `logInfo("道路交互", \`选中 ${name ?? stableId ?? "未知道路"} (${highway ?? "未知等级"})\`)`，hover 阶段不写日志。
+- **集成**：
+  - `App.jsx` 在 `attachBuildingPicking` 之后调用 `attachRoadPicking`，并在 `useEffect` 清理阶段注销监听及重置 hover 高亮。
+  - 需要以 ref 记录当前 hover Mesh，确保在 `roadsGroup` 显隐切换或场景卸载时恢复材质。
+- **测试规划**：
+  - 后续在 `src/tests/three/roadPicking.test.js` 中通过 stub Mesh/材质验证 emissive 切换与回调触发顺序；当前阶段仅记录 spec，待需求进入编码再实现。
+
+
+## 水系渲染（湖泊与水体）
+
+- **数据输入**：继续复用 `campus.geojson`，筛选 `featureType = "lake"` 的 Polygon/MultiPolygon；若原始 OSM 使用 `natural = water` 或 `water = lake`，需在数据清洗阶段映射为统一的 `featureType`。
+- **几何构建**：
+  - 新增 `src/three/buildWater.js`，通过 `projectCoordinate`/`projectPolygon` 投影后使用 `THREE.Shape` 构建几何，可直接使用 `ShapeGeometry`，或采用 `ExtrudeGeometry` 并将 `depth` 控制在 0.05 以内以避免 z-fighting。
+  - 所有 Mesh 收纳于 `water` group，并在 group 层复用 `SCENE_BASE_ALIGNMENT + sceneTransform` 的旋转/缩放/偏移，确保与建筑、道路对齐。
+  - 处理 MultiPolygon 时需按主轮廓→洞的顺序添加 `shape.holes`，保证湖中岛屿被正确镂空。
+- **材质与显隐**：
+  - `app/src/config/index.js` 补充 `colors.水系`（建议默认 `#4fc3f7`）以及 `layers` 配置 `{ name: "水系", key: "water", visible: true, order: 15 }`，供 LayerToggle/DebugPanel 使用。
+  - 水面材质采用 `MeshPhongMaterial`，`opacity ≈ 0.6`、`transparent: true`、`side: THREE.DoubleSide`，必要时设置轻微 `emissive` 以提升可读性。
+- **集成顺序**：
+  - `App.jsx` 在构建建筑后立即调用 `buildWater(scene)`，再构建道路，初步建议顺序为“建筑 → 水系 → 道路”，如需调整遮挡可再修改。
+  - `applySceneTransform` 与 `layerVisibility.water` 需同时作用在 `waterGroup` 上，默认显示，可通过 UI 切换。
+- **交互与日志**：
+  - 首次实现仅渲染参考，不做 hover/click；若后续需要拾取或日志记录，应在本节补充细则。
+- **测试计划**：
+  - 在 `src/tests/three/buildWater.test.js` 构造多段湖泊数据，校验 Mesh 数量、group 命名和材质透明度，并确认洞处理正确。
+
 
 ## 状态同步
 

@@ -7,11 +7,14 @@ import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
 import { attachBuildingPicking } from "./three/interactions/buildingPicking";
+import { attachRoadPicking } from "./three/interactions/roadPicking";
 
 function App() {
   const containerRef = useRef(null);
   const buildingGroupRef = useRef(null);
   const roadsGroupRef = useRef(null);
+  const roadPickingHandleRef = useRef(null);
+  const hoveredRoadInfoRef = useRef(null);
   const sceneTransform = useSceneStore((state) => state.sceneTransform);
   const roadsVisible = useSceneStore(
     (state) => state.layerVisibility?.roads ?? true
@@ -39,7 +42,7 @@ function App() {
     }
 
     let sceneContext;
-    let detachPicking;
+    let detachBuildingPicking;
     const handleResize = () => {
       sceneContext?.resize();
     };
@@ -62,7 +65,7 @@ function App() {
       applySceneTransform(useSceneStore.getState().sceneTransform);
       logInfo("三维渲染", "道路几何构建完成");
 
-      detachPicking = attachBuildingPicking({
+      detachBuildingPicking = attachBuildingPicking({
         domElement: sceneContext.renderer.domElement,
         camera: sceneContext.camera,
         buildingGroup,
@@ -79,6 +82,24 @@ function App() {
         },
       });
 
+      const roadPickingHandle = attachRoadPicking({
+        domElement: sceneContext.renderer.domElement,
+        camera: sceneContext.camera,
+        roadsGroup,
+        onHover: (info) => {
+          hoveredRoadInfoRef.current = info;
+        },
+        onSelect: (info) => {
+          if (!info) return;
+          const { stableId, name, highway } = info;
+          logInfo(
+            "道路交互",
+            `选中 ${name ?? stableId ?? "未知道路"} (${highway ?? "未知等级"})`
+          );
+        },
+      });
+      roadPickingHandleRef.current = roadPickingHandle;
+
       sceneContext.start();
       window.addEventListener("resize", handleResize);
     } catch (error) {
@@ -89,7 +110,10 @@ function App() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      detachPicking?.();
+      roadPickingHandleRef.current?.clearHover?.();
+      roadPickingHandleRef.current?.dispose?.();
+      roadPickingHandleRef.current = null;
+      detachBuildingPicking?.();
       sceneContext?.stop();
       const canvas = sceneContext?.renderer?.domElement;
       if (canvas && container.contains(canvas)) {
@@ -107,6 +131,10 @@ function App() {
   useEffect(() => {
     if (roadsGroupRef.current) {
       roadsGroupRef.current.visible = roadsVisible;
+    }
+    if (!roadsVisible) {
+      hoveredRoadInfoRef.current = null;
+      roadPickingHandleRef.current?.clearHover?.();
     }
   }, [roadsVisible]);
 

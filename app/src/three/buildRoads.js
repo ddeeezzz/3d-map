@@ -12,6 +12,15 @@ function determineRoadColor() {
   return config.colors.道路 || "#d0d0d0";
 }
 
+function createRoadMaterial() {
+  return new THREE.MeshPhongMaterial({
+    color: determineRoadColor(),
+    transparent: true,
+    opacity: 0.95,
+    emissiveIntensity: 0,
+  });
+}
+
 function parsePositiveNumber(value) {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : null;
@@ -127,12 +136,6 @@ export function buildRoads(scene) {
   }
 
   const origin = findProjectionOrigin(data.features);
-  const color = determineRoadColor();
-  const material = new THREE.MeshPhongMaterial({
-    color,
-    transparent: true,
-    opacity: 0.95,
-  });
 
   const group = new THREE.Group();
   group.name = "roads";
@@ -154,7 +157,8 @@ export function buildRoads(scene) {
       const geometry = buildRoadGeometry(projected, thickness);
       if (!geometry) continue;
 
-      const mesh = new THREE.Mesh(geometry, material);
+      const meshMaterial = createRoadMaterial();
+      const mesh = new THREE.Mesh(geometry, meshMaterial);
       mesh.receiveShadow = true;
       mesh.userData = {
         stableId:
