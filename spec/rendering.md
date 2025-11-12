@@ -66,6 +66,22 @@
 - **测试**：
   - 在 `src/tests/three/buildingPicking.test.js` 编写单测，模拟 Raycaster 命中场景时的状态变化（可通过 stub Mesh/userData 验证）。
 
+  ## 道路建模（快速落地方案）
+
+- **数据输入**：继续从 `campus.geojson` 读取 `featureType = "road"` 的 LineString/MultiLineString，渲染阶段直接根据 `config.roadWidths[properties.highway]` 估算宽度；若 `width`/`lanes` 存在，可优先在渲染阶段读取覆盖配置值。
+- **几何构建**：
+  - 在 `src/three/buildRoads.js`（新增）中遍历道路要素，将线段转换为低矮的 Extrude/带宽线段（可以使用 `THREE.Shape` 挤出高度 0.2m 或 `Line2` + `LineGeometry`），厚度取 `estimatedWidth / sceneScale`。
+  - 与建筑一样复用投影/坐标转换（`projectCoordinate`），并在最终 Group 上应用 `SCENE_BASE_ALIGNMENT` 与 `sceneTransform` 的缩放/旋转/偏移。
+- **颜色与可见性**：
+  - 道路默认使用更浅的灰色（接近白的灰，例如 `#d0d0d0`），在 `config` 中配置可使用 `config.colors.道路`。
+  - Group 名称 `roads`，后续通过 store 的 `layerVisibility.roads` 控制显隐。
+- **交互**：
+  - 首次实现仅用于渲染参考，不做 hover/click；若未来需要交互，再在本节追加拾取需求。
+- **集成**：
+  - `App.jsx` 在建筑之后调用 `buildRoads(scene)`，并在 `applySceneTransform` 内一同处理 `roadsGroup`。
+  - 测试：在 `src/tests/three/buildRoads.test.js` 验证宽度查找逻辑（给定 highway/residential，应生成预期厚度）。
+
+
 ## 状态同步
 
 - React Store（Zustand/Context）维护选中/悬停建筑、路径结果、图层开关。
