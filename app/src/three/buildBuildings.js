@@ -116,6 +116,15 @@ export function buildBuildings(scene) {
       const mesh = new THREE.Mesh(geometry, material);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
+      mesh.userData = {
+        stableId:
+          props.stableId ||
+          props.id ||
+          feature.id ||
+          `building-${mesh.uuid}`,
+        name: props.name || "未命名建筑",
+        category,
+      };
 
       group.add(mesh);
     });

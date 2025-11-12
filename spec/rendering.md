@@ -39,17 +39,38 @@
    - `resetHighlight()`：恢复默认。
 4. 可选优化：预计算法线、合并几何、启用 `InstancedMesh`（可在后续阶段再评估）。
 
-## deck.gl 图层
+## deck.gl 图层（暂缓）
 
-- `GeoJsonLayer`：用于 hover/click 交互、建筑轮廓描边。
-- `PathLayer`：道路、推荐路径。
-- `IconLayer` / `ScatterplotLayer`：兴趣点、实时人流。
-- `TileLayer`（可选）：底图瓦片或其他统计背景。
+- 由于近期回退了 deck.gl 轮廓层实现，当前阶段仅保留 spec 描述，不在代码中加载任何 deck.gl 图层。
+- 后续若再次启用，需重新评估「双 Canvas vs 共享 gl」方案，并根据 Phase 规划逐步恢复 `GeoJsonLayer`、`PathLayer` 等。
+
+## 建筑 Hover/Click 交互（Three.js）
+
+- **目标**：直接在 Three.js 场景内完成建筑拾取与反馈，替代 deck.gl 轮廓层的交互职责。
+- **状态字段**：
+  - `store` 需新增 `hoveredBuilding`（可选）或复用 `selectedBuilding`，明确 hover 和 click 的写入逻辑。
+  - 每个 Mesh 在 `buildBuildings` 阶段写入 `mesh.userData = { stableId, name, category }`，便于拾取后读取。
+- **实现步骤**：
+  1. 在 `src/three/interactions/buildingPicking.js`（新建）封装拾取逻辑：内部创建 `THREE.Raycaster` 与 `Vector2` 鼠标指示。
+  2. `initScene` 初始化时调用 `attachBuildingPicking({ domElement, camera, scene, buildingGroup })`，注册 `pointermove` 和 `click` 事件。
+  3. 每次 `pointermove`：
+     - 将鼠标像素坐标转换为标准设备坐标（NDC），用 Raycaster 与 `buildingGroup.children` 做 `intersectObjects`。
+     - 若命中 Mesh 则更新 `hoveredBuilding`，并在材质上做临时高亮（例如切换 `emissive` 或 `opacity`）；离开时恢复默认。
+  4. `click` 事件：若当前有 hover 对象，则调用 `setSelectedBuilding(stableId)`，并通过 `logInfo("三维交互", \`选中 ${name}\`)` 记录日志。
+- **性能要求**：
+  - Raycaster 及临时 `Vector2` 需复用，避免频繁创建对象。
+  - 拾取组仅包含建筑 Mesh（不含地面/辅助线），必要时可给建筑 group 添加包围盒以提前过滤。
+- **UI 联动**：
+  - `spec/ui.md` 后续应补充 Tooltip 或 InfoCard 与 `hoveredBuilding` 的对应关系（例如显示名称、分类）。
+  - Debug 面板无需参与，但在 DEV 环境可显示当前命中 ID 作为调试信息。
+- **测试**：
+  - 在 `src/tests/three/buildingPicking.test.js` 编写单测，模拟 Raycaster 命中场景时的状态变化（可通过 stub Mesh/userData 验证）。
 
 ## 状态同步
 
-- React Store（Zustand/Context）维护选中建筑、路径结果、图层开关。
-- deck.gl 事件（onHover/onClick）更新 Store；Three.js 订阅 Store 改变材质。
+- React Store（Zustand/Context）维护选中/悬停建筑、路径结果、图层开关。
+- Three.js 拾取逻辑通过 `useSceneStore` 写入 `hoveredBuilding` / `selectedBuilding`，UI（InfoCard、NavigationPanel）订阅这些字段并更新展示。
+- 若未来恢复 deck.gl 图层，再在本节补充其与 store 的接口。
 
 ## 数据加载
 
@@ -58,5 +79,5 @@
 
 ## TODO
 
-- [ ] 定义共享 WebGL 流程（单 canvas vs 双 canvas 决策）。
+- [ ] 实现建筑 hover/click 拾取及材质高亮。
 - [ ] 描述导航路径动画细节（速度、颜色、方向）。

@@ -5,6 +5,7 @@ import { buildBuildings } from "./three/buildBuildings";
 import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
+import { attachBuildingPicking } from "./three/interactions/buildingPicking";
 
 function App() {
   const containerRef = useRef(null);
@@ -32,6 +33,7 @@ function App() {
     }
 
     let sceneContext;
+    let detachPicking;
     const handleResize = () => {
       sceneContext?.resize();
     };
@@ -44,6 +46,23 @@ function App() {
       buildingGroupRef.current = buildingGroup;
       applySceneTransform(useSceneStore.getState().sceneTransform);
 
+      detachPicking = attachBuildingPicking({
+        domElement: sceneContext.renderer.domElement,
+        camera: sceneContext.camera,
+        buildingGroup,
+        onHover: (info) => {
+          useSceneStore.getState().setHoveredBuilding(info);
+        },
+        onSelect: (info) => {
+          if (!info) return;
+          const { stableId, name } = info;
+          if (stableId) {
+            useSceneStore.getState().setSelectedBuilding(stableId);
+          }
+          logInfo("三维交互", `选中 ${name ?? stableId ?? "未知建筑"}`);
+        },
+      });
+
       sceneContext.start();
       window.addEventListener("resize", handleResize);
     } catch (error) {
@@ -54,6 +73,7 @@ function App() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      detachPicking?.();
       sceneContext?.stop();
       const canvas = sceneContext?.renderer?.domElement;
       if (canvas && container.contains(canvas)) {

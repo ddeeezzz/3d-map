@@ -22,6 +22,7 @@ const getInitialSceneTransform = () => ({
 // 将所有字段初始值集中管理，resetStore 时直接复用
 const getInitialData = () => ({
   selectedBuilding: null,
+  hoveredBuilding: null,
   route: null,
   layerVisibility: {},
   logsPreview: [],
@@ -34,6 +35,8 @@ export const useSceneStore = create((set, get) => ({
 
   // 由导航面板或地图点击写入选中建筑 ID
   setSelectedBuilding: (id) => set({ selectedBuilding: id }),
+  // Hover 建筑 ID（用于 tooltip/高亮）
+  setHoveredBuilding: (info) => set({ hoveredBuilding: info }),
   // 由路径规划模块写入当前路线数据
   setRoute: (route) => set({ route }),
 

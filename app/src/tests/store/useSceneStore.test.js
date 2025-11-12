@@ -15,6 +15,14 @@ describe("useSceneStore", () => {
     expect(useSceneStore.getState().selectedBuilding).toBe("way/1");
   });
 
+  it("updates hoveredBuilding info", () => {
+    const hoverInfo = { stableId: "hover-1", name: "测试楼" };
+    useSceneStore.getState().setHoveredBuilding(hoverInfo);
+    expect(useSceneStore.getState().hoveredBuilding).toEqual(hoverInfo);
+    useSceneStore.getState().setHoveredBuilding(null);
+    expect(useSceneStore.getState().hoveredBuilding).toBeNull();
+  });
+
   it("toggles layer visibility", () => {
     const key = "roads";
     useSceneStore.getState().toggleLayerVisibility(key);
