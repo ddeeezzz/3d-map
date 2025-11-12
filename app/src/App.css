@@ -42,3 +42,63 @@
   font-size: 0.95rem;
   color: #cbd5f5;
 }
+
+.debug-panel {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  width: 260px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.18);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.4);
+  font-size: 0.9rem;
+}
+
+.debug-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.debug-panel__header button {
+  border: 1px solid rgba(226, 232, 240, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  color: #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.debug-panel__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.debug-panel__row span {
+  flex: 1;
+}
+
+.debug-panel__row input[type="range"] {
+  flex: 1;
+}
+
+.debug-panel__row input[type="number"] {
+  width: 80px;
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(226, 232, 240, 0.3);
+  background: rgba(15, 23, 42, 0.5);
+  color: #e2e8f0;
+}
+
+.debug-panel__value {
+  width: 36px;
+  text-align: right;
+}

@@ -1,9 +1,11 @@
 # 渲染层次 Spec
 
 ## 目标
+
 - 将校园 GeoJSON 以「三维体块 + 数据图层」呈现，支持导航交互与热点展示。
 
 ## Three.js 场景
+
 - **基础组件**：透视相机、轨道控制、自适应 renderer、环境光 + 方向光。
 - **建筑体块**：
   - 输入：GeoJSON Polygon。
@@ -13,6 +15,7 @@
 - **共享上下文**：优先使用 deck.gl 暴露的 `gl`，若不稳定则双 Canvas 并同步相机矩阵。
 
 ### 场景初始化
+
 1. 在 `src/three/initScene.js` 封装初始化：
    - 创建 `Scene`、`PerspectiveCamera`（初始位置覆盖整个校园）、`WebGLRenderer`（抗锯齿+shadowMap）。
    - 添加 `OrbitControls`，限制俯仰与距离，防止穿透地面。
@@ -22,8 +25,9 @@
 4. 初始化完成后立刻在页面中挂载 renderer 的 canvas（例如通过 React ref 注入 DOM），即使暂未载入建筑，也能看到基础背景和相机控制，便于开发调试。
 5. 开发模式（`import.meta.env.DEV`）下，可添加 `GridHelper` + `AxesHelper` 作为辅助线，确认坐标系与灯光方向；生产模式不启用。
 
-### 建筑 Mesh 构建流程
-1. 数据入口：`import data from "./data/campus.geojson"`，调用 `buildBuildings(data.features)`。
+### 建筑 Mesh 构建流程（`src/three/buildBuildings.js`）
+
+1. 数据入口：`import rawGeojson from "./data/campus.geojson?raw"`，解析后在场景 ready 时调用 `buildBuildings(scene)`。
 2. 构建步骤：
    - 过滤 `featureType = "building"`。
    - 将经纬度映射到平面坐标（统一缩放，1 单位≈1 米）。
@@ -36,19 +40,23 @@
 4. 可选优化：预计算法线、合并几何、启用 `InstancedMesh`（可在后续阶段再评估）。
 
 ## deck.gl 图层
+
 - `GeoJsonLayer`：用于 hover/click 交互、建筑轮廓描边。
 - `PathLayer`：道路、推荐路径。
 - `IconLayer` / `ScatterplotLayer`：兴趣点、实时人流。
 - `TileLayer`（可选）：底图瓦片或其他统计背景。
 
 ## 状态同步
+
 - React Store（Zustand/Context）维护选中建筑、路径结果、图层开关。
 - deck.gl 事件（onHover/onClick）更新 Store；Three.js 订阅 Store 改变材质。
 
 ## 数据加载
+
 - Three.js 与 deck.gl 初始化时，通过静态 `import data from "./data/campus.geojson"` 获取校园 GeoJSON，不使用 `fetch`。
 - 如需切换到远程接口，需先在 spec 更新约定并调整加载逻辑。
 
 ## TODO
+
 - [ ] 定义共享 WebGL 流程（单 canvas vs 双 canvas 决策）。
 - [ ] 描述导航路径动画细节（速度、颜色、方向）。

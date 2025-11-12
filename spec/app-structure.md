@@ -22,14 +22,13 @@
 - `src/tests/`
   - 全局测试目录：集中存放 Vitest 单测（如 `logger/logger.test.js`、`lib/data-utils.test.js`）与后续集成测试。
   - 测试命名遵循 `<模块>/<文件>.test.js`，便于定位。
-
-## 关联目录（按需启用）
+- `src/store/`
+  - 状态管理层：集中保存需要跨组件、Three.js、deck.gl 共享的状态。
 - `src/data/`
   - 存放 `campus.geojson` 等静态数据，由数据管线脚本生成。
   - 在组件和 Three.js/deck.gl 中通过 `import` 或 `fetch` 加载。
-- `src/store/`（可选）
-  - 状态管理层：集中保存需要跨组件、Three.js、deck.gl 共享的状态。
-  - 适合在交互复杂后再引入（Zustand、Context+Reducer 等）。
+
+## 关联目录（按需启用）
 
 ## TODO
 - [x] 在 `t2/app/src/` 按上述结构创建空目录与占位 README。

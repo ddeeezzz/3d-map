@@ -1,7 +1,5 @@
 # three
 
-- `initScene.js` 负责创建 Scene/Camera/Renderer/OrbitControls 与基础灯光，并立即挂载 renderer canvas。
-- 后续在此目录添加：
-  - `buildBuildings.js`：解析 `campus.geojson`、生成 `ExtrudeGeometry`。
-  - `navigation.js`：处理导航路径、`Line2` 动画。
-- 所有 Three.js 相关逻辑集中在此，React 组件通过导出的函数获得 `{ scene, renderer, controls }`。
+- `initScene.js`：初始化 Scene/Camera/Renderer/OrbitControls，开发模式下添加 Grid/Axes helper，并立即挂载 canvas。
+- `buildBuildings.js`：静态 `import "./data/campus.geojson?raw"`，解析 GeoJSON，生成 `ExtrudeGeometry` Mesh，并按分类设置半透明材质后挂载到场景。
+- 后续可继续添加 `navigation.js` 等模块，用于路径动画或其他三维效果。

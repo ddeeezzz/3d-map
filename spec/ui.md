@@ -12,6 +12,9 @@
 - `StatusBar`：展示数据更新时间、日志摘要、当前模式。
 - `LoggerViewer`（可选）：
   - 若未来实现，将通过 `logger` 模块提供的接口读取最新日志（目前 logger 无缓存，需在 spec 中另行规划后再实现）。
+- `DebugPanel`（仅 DEV 环境显示）：
+  - 提供绕 Y 轴旋转角度、场景整体缩放、地面偏移等滑块，写入 store 中的 `sceneTransform`。
+  - 调用 Three.js 层的接口（如 `buildingGroup.rotation.y`、`buildingGroup.scale`），便于校准校园整体坐标。
 
 ## 交互流程
 1. 用户在面板中选中建筑 → 更新 Store → deck.gl/Three.js 同步高亮。
@@ -19,11 +22,12 @@
 3. Hover 建筑 → InfoCard 自动切换，日志记录一次“信息”级别的交互事件。
 
 ## UI 状态管理
-- 建议使用 Zustand：
-  - `selectedBuilding`
-  - `route`
-  - `layerVisibility`
-  - `logsPreview`
+- 使用 Zustand：
+  - `selectedBuilding`：当前选中的建筑 StableId，供 Three.js 和面板高亮同步。
+  - `route`：导航结果（起终点、路径点集合）。
+  - `layerVisibility`：记录 deck.gl 图层的开关状态（`{ [layerKey]: boolean }`）。
+  - `logsPreview`：LoggerViewer（若实现）展示的最新 N 条日志。
+  - `sceneTransform`：调试面板使用，结构 `{ rotationY: number, scale: number, offset: { x: number, z: number } }`，用于控制建筑群绕 Y 轴旋转、整体缩放、平移。
 
 ## TODO
 - [ ] 设计主界面布局（断点、响应式策略）。

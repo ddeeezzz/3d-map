@@ -1,10 +1,29 @@
 import { useEffect, useRef } from "react";
 import "./App.css";
 import { initScene } from "./three/initScene";
+import { buildBuildings } from "./three/buildBuildings";
+import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
+import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
 
 function App() {
   const containerRef = useRef(null);
+  const buildingGroupRef = useRef(null);
+  const sceneTransform = useSceneStore((state) => state.sceneTransform);
+
+  const applySceneTransform = (transform) => {
+    const group = buildingGroupRef.current;
+    if (!group) return;
+    const rotation = SCENE_BASE_ALIGNMENT.rotationY + transform.rotationY;
+    const scale = SCENE_BASE_ALIGNMENT.scale * transform.scale;
+    const positionX = SCENE_BASE_ALIGNMENT.offset.x + transform.offset.x;
+    const positionZ = SCENE_BASE_ALIGNMENT.offset.z + transform.offset.z;
+
+    group.rotation.y = rotation;
+    group.scale.set(scale, scale, scale);
+    group.position.x = positionX;
+    group.position.z = positionZ;
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -20,6 +39,11 @@ function App() {
     try {
       sceneContext = initScene(container);
       logInfo("三维渲染", "Three.js 场景初始化完成");
+
+      const buildingGroup = buildBuildings(sceneContext.scene);
+      buildingGroupRef.current = buildingGroup;
+      applySceneTransform(useSceneStore.getState().sceneTransform);
+
       sceneContext.start();
       window.addEventListener("resize", handleResize);
     } catch (error) {
@@ -38,6 +62,10 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    applySceneTransform(sceneTransform);
+  }, [sceneTransform]);
+
   return (
     <div className="app-root">
       <div ref={containerRef} className="scene-container" />
@@ -45,6 +73,7 @@ function App() {
         <h1>西南交通大学犀浦校区</h1>
         <p>场景初始化完成后会自动加载建筑数据。</p>
       </div>
+      <DebugPanel />
     </div>
   );
 }

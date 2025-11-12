@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@turf/centroid": "^7.2.0",
     "@turf/clean-coords": "^7.2.0",
     "@turf/rewind": "^7.2.0",
