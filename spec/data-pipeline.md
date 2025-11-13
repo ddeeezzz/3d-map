@@ -20,7 +20,7 @@
    - 面状水系：`natural = water`、`water` 属于 `lake/pond/reservoir` 或 `landuse = reservoir`，保留 Polygon/MultiPolygon，写入 `featureType = "lake"`。
    - 线状水系：`waterway = river` 的 LineString/MultiLineString，写入 `featureType = "river"`。
    - 围墙：`amenity = university` 且 `name = "西南交通大学（犀浦校区）"` 的 Polygon/MultiPolygon，写入 `featureType = "campusBoundary"`。
-   - 绿化：`natural` 属于 `wood/forest/tree_row/scrub/grass/meadow` 等常见植被标签，或 `landuse = grass`；保留 Polygon、MultiPolygon、LineString/ tree_row（按原始几何写入），统一写入 `featureType = "greenery"`。
+   - 绿化：`natural` 属于 `wood/forest/tree_row/scrub/grass/meadow` 等常见植被标签，或 `landuse = grass`；保留 Polygon、MultiPolygon、LineString（tree_row 可继续按线状输出），统一写入 `featureType = "greenery"`。
 2. **高度补全（建筑）**
    - 优先使用 `height` 数值；否则使用 `building:levels × config.heights["1层"]`；若仍缺失则查 `config.heights[category]`，最后回退 `config.heights.默认`；结果写入 `properties.elevation` 并统计缺失次数。
 3. **分类映射**
@@ -30,7 +30,7 @@
    - `properties.sourceTag` 记录原始标签（`building`、`highway`、`natural`、`waterway`、`amenity` 等）。
 5. **几何处理**
    - Polygon/MultiPolygon 使用 `@turf/clean-coords` 去重、`@turf/rewind` 统一方向；可选计算 `properties.centroid` 供 UI 使用。
-6. **附加字段**
+6. **附加字段**`n   - 线状绿化：若 `natural = tree_row`，后续建模需参考河道处理方式，并在配置中读取 `config.greenery.treeRow.width/height` 提供挤出参数。
    - 面状水系：补齐 `properties.name`、`properties.waterType`，并在 `sourceTag` 中保留 `{ natural, water, landuse }`。
    - 线状水系：保留 `properties.name`，写入 `properties.waterType = "river"`，并在 `sourceTag` 中记录 `{ waterway }`。
    - 围墙：写入 `properties.boundaryType = "campus"`，并保留 `{ amenity, name, id }`。
@@ -55,3 +55,4 @@
 - [x] `tools/convert-osm.js` 生成 `data/tmp.json`。
 - [x] `tools/clean-geojson.js` 输出 `campus.geojson` 与报告。
 - [ ] 实现围墙/边界裁剪并在报告中记录（待前端渲染稳定后）。
+

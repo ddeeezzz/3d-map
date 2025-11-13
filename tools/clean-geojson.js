@@ -5,6 +5,8 @@ const { pathToFileURL } = require("url");
 const cleanCoords = require("../app/node_modules/@turf/clean-coords").default;
 const rewind = require("../app/node_modules/@turf/rewind").default;
 const centroid = require("../app/node_modules/@turf/centroid").default;
+const GREENERY_NATURAL = new Set(["wood", "forest", "tree_row", "scrub", "grass", "meadow"]);
+const GREENERY_LANDUSE = new Set(["grass"]);
 
 const rootDir = resolve(__dirname, "..");
 const dataDir = join(rootDir, "data");
@@ -122,6 +124,18 @@ function buildWaterSourceTag(props) {
   };
 }
 
+function detectGreeneryType(props) {
+  const natural = (props.natural || "").toLowerCase();
+  if (natural && GREENERY_NATURAL.has(natural)) {
+    return natural;
+  }
+  const landuse = (props.landuse || "").toLowerCase();
+  if (landuse && GREENERY_LANDUSE.has(landuse)) {
+    return landuse;
+  }
+  return null;
+}
+
 function isRiverFeature(props, geometry) {
   if (!geometry || !geometry.type) return false;
   const type = geometry.type;
@@ -158,6 +172,7 @@ async function main() {
       lakes: 0,
       rivers: 0,
       boundaries: 0,
+      greenery: 0,
       filtered: 0,
       missingElevation: 0,
       categories: {},
@@ -324,6 +339,48 @@ async function main() {
         return;
       }
 
+      const greeneryType = detectGreeneryType(props);
+      if (greeneryType) {
+        let finalGeometry = geometry;
+        if (geometry.type === "Polygon" || geometry.type === "MultiPolygon") {
+          finalGeometry = cleanPolygonGeometry(geometry);
+          if (!finalGeometry) {
+            summary.filtered++;
+            logWarn("数据管线", "绿化面几何不支持，已忽略", { featureId: feature.id || index });
+            return;
+          }
+        } else if (geometry.type !== "LineString" && geometry.type !== "MultiLineString") {
+          summary.filtered++;
+          logWarn("数据管线", "绿化几何不支持，已忽略", {
+            featureId: feature.id || index,
+            geometry: geometry.type,
+          });
+          return;
+        }
+
+        const stableId = buildStableId(feature, index);
+        const newProps = {
+          ...props,
+          stableId,
+          featureType: "greenery",
+          greenType: greeneryType,
+          sourceTag: {
+            natural: props.natural,
+            landuse: props.landuse,
+          },
+        };
+
+        cleanedFeatures.push({
+          type: "Feature",
+          geometry: finalGeometry,
+          properties: newProps,
+        });
+
+        summary.kept++;
+        summary.greenery++;
+        return;
+      }
+
       summary.filtered++;
     });
 
@@ -347,6 +404,7 @@ async function main() {
       湖泊数量: summary.lakes,
       河流数量: summary.rivers,
       围墙数量: summary.boundaries,
+      绿化数量: summary.greenery,
     });
   } catch (error) {
     logError("数据管线", "清洗失败", { 错误: error.message });

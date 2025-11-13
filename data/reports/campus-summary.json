@@ -1,14 +1,15 @@
 {
-  "generatedAt": "2025-11-13T10:22:58.460Z",
+  "generatedAt": "2025-11-13T11:16:47.941Z",
   "source": "M:\\MyTest\\adsjksh\\t2\\data\\tmp.json",
   "total": 2046,
-  "kept": 1065,
+  "kept": 1201,
   "buildings": 391,
   "roads": 655,
   "lakes": 10,
   "rivers": 8,
   "boundaries": 1,
-  "filtered": 981,
+  "greenery": 136,
+  "filtered": 845,
   "missingElevation": 0,
   "categories": {
     "默认": 265,
