@@ -1,9 +1,12 @@
-# three
+﻿# three
 
-- `initScene.js`：初始化 Scene / Camera / Renderer / OrbitControls，开发模式挂载 Grid/Axes helper，并暴露 `resize/start/stop` 接口。
-- `buildBuildings.js`：静态导入 `campus.geojson` 构建建筑 group，写入 `userData`（stableId/name/category/elevation），供拾取与 UI 使用。
-- `buildRoads.js`：遍历 `featureType = "road"` 的线要素估算宽度生成低矮 Extrude 几何，统一加入 `roads` group，并在 `userData` 中记录道路属性。
-- `buildWater.js`：解析 `featureType = "lake"` 的 Polygon/MultiPolygon，投影后生成 1m 厚的水面 Mesh，加入 `water` group，材质半透明带轻微 emissive。
-- `interactions/buildingPicking.js`：封装建筑拾取逻辑，监听 `pointermove`/`click`，在 hover/选中时回调并配合 store 写入状态。
-- `interactions/roadPicking.js`：道路拾取模块，负责 hover 高亮与点击日志，提供 `clearHover`/`dispose` 便于图层开关。
-- `interactions/waterPicking.js`：水系拾取模块，复用 Raycaster 完成 hover 发光与 click 日志，不写入 store，仅通过回调报告当前命中的水体信息。
+- `initScene.js`：初始化 Scene / Camera / Renderer / OrbitControls，开发模式挂载 Grid/Axes helper，并提供 `resize/start/stop` 接口以便 React 同步视图。
+- `buildBuildings.js`：解析 `campus.geojson` 中 `featureType = "building"` 的要素，按 `properties.elevation` 挤出 Mesh，写入 `userData`（stableId/name/category/elevation）供 UI 使用。
+- `buildRoads.js`：读取 `featureType = "road"` 线要素，结合 `config.roadWidths` 或属性宽度估算厚度，生成低矮 Extrude Mesh 并记录道路属性。
+- `buildBoundary.js`：处理 `featureType = "campusBoundary"` Polygon/MultiPolygon，`sanitizeRing` 保留 OSM 重复节点，`prepareClosedRing` 提前复制首点到末尾，再按 `config.boundary.width/height` 构建围墙 group。
+- `buildWater.js`：将 `featureType = "lake"` Polygon/MultiPolygon 投影并生成 1 m 厚的水面 Mesh，材质半透明并带 emissive，统一加入 `water` group。
+- `buildWaterway.js`：解析 `featureType = "river"` LineString/MultiLineString，按照 `config.waterway.river` 的宽高挤出河道。
+- `interactions/buildingPicking.js`：封装建筑拾取逻辑，监听 `pointermove`/`click`，同步 store 的 hovered/selected 状态。
+- `interactions/roadPicking.js`：道路 hover 高亮与点击日志，提供 `clearHover`/`dispose`，方便图层显隐管理。
+- `interactions/waterPicking.js`：水系 hover/click 反馈，复用回调输出命中水体信息，不写入 store。
+- `interactions/boundaryPicking.js`：围墙拾取模块，hover 时把材质 emissive 设为 `#ffe082` 并缓存原色，click 时调用 `logInfo` 输出中文日志，提供 `clearHover`/`dispose` 供图层隐藏或卸载时清理。

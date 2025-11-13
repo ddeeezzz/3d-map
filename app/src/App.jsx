@@ -2,58 +2,68 @@ import { useEffect, useRef } from "react";
 import "./App.css";
 import { initScene } from "./three/initScene";
 import { buildBuildings } from "./three/buildBuildings";
-import { buildRoads } from "./three/buildRoads";
+import { buildBoundary } from "./three/buildBoundary";
 import { buildWater } from "./three/buildWater";
+import { buildWaterway } from "./three/buildWaterway";
+import { buildRoads } from "./three/buildRoads";
 import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
 import { attachBuildingPicking } from "./three/interactions/buildingPicking";
-import { attachRoadPicking } from "./three/interactions/roadPicking";
 import { attachWaterPicking } from "./three/interactions/waterPicking";
+import { attachRiverPicking } from "./three/interactions/riverPicking";
+import { attachRoadPicking } from "./three/interactions/roadPicking";
+import { attachBoundaryPicking } from "./three/interactions/boundaryPicking";
 
 function App() {
-  /** DOM/Three.js 引用 —— 便于在副作用中访问。 */
   const containerRef = useRef(null);
   const buildingGroupRef = useRef(null);
+  const boundaryGroupRef = useRef(null);
   const waterGroupRef = useRef(null);
+  const waterwayGroupRef = useRef(null);
   const roadsGroupRef = useRef(null);
+
+  const boundaryPickingHandleRef = useRef(null);
   const roadPickingHandleRef = useRef(null);
   const waterPickingHandleRef = useRef(null);
+  const riverPickingHandleRef = useRef(null);
+
   const hoveredRoadInfoRef = useRef(null);
   const hoveredWaterInfoRef = useRef(null);
+  const hoveredRiverInfoRef = useRef(null);
 
-  /** Zustand 状态 —— 仅提取当前组件需要的字段。 */
   const sceneTransform = useSceneStore((state) => state.sceneTransform);
-  const roadsVisible = useSceneStore(
-    (state) => state.layerVisibility?.roads ?? true
+  const boundaryVisible = useSceneStore(
+    (state) => state.layerVisibility?.boundary ?? true
   );
   const waterVisible = useSceneStore(
     (state) => state.layerVisibility?.water ?? true
   );
+  const roadsVisible = useSceneStore(
+    (state) => state.layerVisibility?.roads ?? true
+  );
 
-  /**
-   * 将调试面板的增量（sceneTransform）叠加到基准姿态，统一应用到 buildings/water/roads。
-   */
   const applySceneTransform = (transform) => {
     const rotation = SCENE_BASE_ALIGNMENT.rotationY + transform.rotationY;
     const scale = SCENE_BASE_ALIGNMENT.scale * transform.scale;
     const positionX = SCENE_BASE_ALIGNMENT.offset.x + transform.offset.x;
     const positionZ = SCENE_BASE_ALIGNMENT.offset.z + transform.offset.z;
 
-    [buildingGroupRef.current, waterGroupRef.current, roadsGroupRef.current].forEach(
-      (group) => {
-        if (!group) return;
-        group.rotation.y = rotation;
-        group.scale.set(scale, scale, scale);
-        group.position.x = positionX;
-        group.position.z = positionZ;
-      }
-    );
+    [
+      buildingGroupRef.current,
+      boundaryGroupRef.current,
+      waterGroupRef.current,
+      waterwayGroupRef.current,
+      roadsGroupRef.current,
+    ].forEach((group) => {
+      if (!group) return;
+      group.rotation.y = rotation;
+      group.scale.set(scale, scale, scale);
+      group.position.x = positionX;
+      group.position.z = positionZ;
+    });
   };
 
-  /**
-   * 场景初始化 + Three.js 资源释放。
-   */
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return undefined;
@@ -67,28 +77,32 @@ function App() {
       sceneContext = initScene(container);
       logInfo("三维渲染", "Three.js 场景初始化完成");
 
-      // 构建三大 group：建筑 → 水系 → 道路。
       const buildingGroup = buildBuildings(sceneContext.scene);
+      const boundaryGroup = buildBoundary(sceneContext.scene);
       const waterGroup = buildWater(sceneContext.scene);
+      const waterwayGroup = buildWaterway(sceneContext.scene);
       const roadsGroup = buildRoads(sceneContext.scene);
+
       buildingGroupRef.current = buildingGroup;
+      boundaryGroupRef.current = boundaryGroup;
       waterGroupRef.current = waterGroup;
+      waterwayGroupRef.current = waterwayGroup;
       roadsGroupRef.current = roadsGroup;
 
-      // 根据当前 store 的 layerVisibility 决定初始显隐。
-      const currentWaterVisible =
-        useSceneStore.getState().layerVisibility?.water ?? true;
-      if (waterGroup) waterGroup.visible = currentWaterVisible;
-
-      const currentRoadVisible =
-        useSceneStore.getState().layerVisibility?.roads ?? true;
-      if (roadsGroup) roadsGroup.visible = currentRoadVisible;
+      const visibility = useSceneStore.getState().layerVisibility;
+      const boundaryState = visibility?.boundary ?? true;
+      const waterState = visibility?.water ?? true;
+      const roadState = visibility?.roads ?? true;
+      if (boundaryGroup) boundaryGroup.visible = boundaryState;
+      if (waterGroup) waterGroup.visible = waterState;
+      if (waterwayGroup) waterwayGroup.visible = waterState;
+      if (roadsGroup) roadsGroup.visible = roadState;
 
       applySceneTransform(useSceneStore.getState().sceneTransform);
+      logInfo("三维渲染", "围墙几何构建完成");
       logInfo("三维渲染", "水系几何构建完成");
       logInfo("三维渲染", "道路几何构建完成");
 
-      // 建筑拾取：hover 写入 store，click 记录日志。
       detachBuildingPicking = attachBuildingPicking({
         domElement: sceneContext.renderer.domElement,
         camera: sceneContext.camera,
@@ -106,7 +120,15 @@ function App() {
         },
       });
 
-      // 水系拾取：仅日志反馈，不写 store。
+      const boundaryPickingHandle = boundaryGroup
+        ? attachBoundaryPicking({
+            domElement: sceneContext.renderer.domElement,
+            camera: sceneContext.camera,
+            boundaryGroup,
+          })
+        : null;
+      boundaryPickingHandleRef.current = boundaryPickingHandle;
+
       const waterPickingHandle = attachWaterPicking({
         domElement: sceneContext.renderer.domElement,
         camera: sceneContext.camera,
@@ -125,7 +147,21 @@ function App() {
       });
       waterPickingHandleRef.current = waterPickingHandle;
 
-      // 道路拾取：hover 仅缓存引用，click 输出日志。
+      const riverPickingHandle = attachRiverPicking({
+        domElement: sceneContext.renderer.domElement,
+        camera: sceneContext.camera,
+        riverGroup: waterwayGroup,
+        onHover: (info) => {
+          hoveredRiverInfoRef.current = info;
+        },
+        onSelect: (info) => {
+          if (!info) return;
+          const { stableId, name } = info;
+          logInfo("河流交互", `选中 ${name ?? stableId ?? "未知河流"}`);
+        },
+      });
+      riverPickingHandleRef.current = riverPickingHandle;
+
       const roadPickingHandle = attachRoadPicking({
         domElement: sceneContext.renderer.domElement,
         camera: sceneContext.camera,
@@ -154,30 +190,60 @@ function App() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      boundaryPickingHandleRef.current?.clearHover?.();
+      boundaryPickingHandleRef.current?.dispose?.();
+      boundaryPickingHandleRef.current = null;
       roadPickingHandleRef.current?.clearHover?.();
       roadPickingHandleRef.current?.dispose?.();
       roadPickingHandleRef.current = null;
       waterPickingHandleRef.current?.clearHover?.();
       waterPickingHandleRef.current?.dispose?.();
       waterPickingHandleRef.current = null;
+      riverPickingHandleRef.current?.clearHover?.();
+      riverPickingHandleRef.current?.dispose?.();
+      riverPickingHandleRef.current = null;
       detachBuildingPicking?.();
       sceneContext?.stop();
-      const canvas = sceneContext?.renderer?.domElement;
+      const canvas = sceneContext.renderer?.domElement;
       if (canvas && container.contains(canvas)) {
         container.removeChild(canvas);
       }
       buildingGroupRef.current = null;
+      boundaryGroupRef.current = null;
       waterGroupRef.current = null;
+      waterwayGroupRef.current = null;
       roadsGroupRef.current = null;
     };
   }, []);
 
-  /** 场景姿态随调试面板变化而更新。 */
   useEffect(() => {
     applySceneTransform(sceneTransform);
   }, [sceneTransform]);
 
-  /** 道路显隐同步 store。 */
+  useEffect(() => {
+    if (boundaryGroupRef.current) {
+      boundaryGroupRef.current.visible = boundaryVisible;
+    }
+    if (!boundaryVisible) {
+      boundaryPickingHandleRef.current?.clearHover?.();
+    }
+  }, [boundaryVisible]);
+
+  useEffect(() => {
+    if (waterGroupRef.current) {
+      waterGroupRef.current.visible = waterVisible;
+    }
+    if (waterwayGroupRef.current) {
+      waterwayGroupRef.current.visible = waterVisible;
+    }
+    if (!waterVisible) {
+      hoveredWaterInfoRef.current = null;
+      hoveredRiverInfoRef.current = null;
+      waterPickingHandleRef.current?.clearHover?.();
+      riverPickingHandleRef.current?.clearHover?.();
+    }
+  }, [waterVisible]);
+
   useEffect(() => {
     if (roadsGroupRef.current) {
       roadsGroupRef.current.visible = roadsVisible;
@@ -188,23 +254,12 @@ function App() {
     }
   }, [roadsVisible]);
 
-  /** 水系显隐同步 store。 */
-  useEffect(() => {
-    if (waterGroupRef.current) {
-      waterGroupRef.current.visible = waterVisible;
-    }
-    if (!waterVisible) {
-      hoveredWaterInfoRef.current = null;
-      waterPickingHandleRef.current?.clearHover?.();
-    }
-  }, [waterVisible]);
-
   return (
     <div className="app-root">
       <div ref={containerRef} className="scene-container" />
       <div className="scene-overlay">
         <h1>西南交通大学犀浦校区</h1>
-        <p>场景初始化完成后会自动加载建筑、水系与道路数据。</p>
+        <p>场景初始化完成后会自动加载建筑、围墙、水系与道路数据。</p>
       </div>
       <DebugPanel />
     </div>

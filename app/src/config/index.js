@@ -7,6 +7,7 @@ export const config = {
     默认: "#999999",
     道路: "#d0d0d0",
     水系: "#4fc3f7",
+    围墙: "#f5deb3",
   },
   heights: {
     "1层": 4,
@@ -19,6 +20,7 @@ export const config = {
   },
   layers: [
     { name: "建筑", key: "buildings", visible: true, order: 10 },
+    { name: "围墙", key: "boundary", visible: true, order: 12 },
     { name: "水系", key: "water", visible: true, order: 15 },
     { name: "道路", key: "roads", visible: true, order: 20 },
     { name: "热点", key: "pois", visible: false, order: 30 },
@@ -33,6 +35,16 @@ export const config = {
     service: 4,
     footway: 3,
     默认: 6,
+  },
+  boundary: {
+    width: 1,
+    height: 20,
+  },
+  waterway: {
+    river: {
+      width: 5,
+      height: 1,
+    },
   },
   dataPath: "/src/data/campus.geojson",
 };

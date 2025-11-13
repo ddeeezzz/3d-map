@@ -117,6 +117,23 @@
 - **测试计划**：
   - 在 `src/tests/three/buildWater.test.js` 构造多段湖泊数据，校验 Mesh 数量、group 命名和材质透明度，并确认洞处理正确。
 
+### 线状水系（河流）
+
+- **数据输入**：来自清洗脚本的 `featureType = "river"`（`waterway = river` 的 LineString/MultiLineString）。
+- **几何构建**：
+  - 新增 `src/three/buildWaterway.js`，沿用道路建模方案：将折线投影到平面后，根据 `config.waterway.river.width` 计算左右 offset 形成 `THREE.Shape`，使用 `ExtrudeGeometry` 挤出，挤出高度取 `config.waterway.river.height`。
+  - 生成后旋转 `-90°` 贴合 XZ 平面，底部位于 Y=0，随 `SCENE_BASE_ALIGNMENT + sceneTransform` 一起变换。
+- **材质与显隐**：
+  - 颜色复用 `config.colors.水系` 或新增 `config.colors.河流`（若后续拓展）；显隐由 `config.layers` 中的 `{ key: "water" }` 统一控制。
+- **交互**（新增）：
+  - `src/three/interactions/riverPicking.js` 导出 `attachRiverPicking({ domElement, camera, riverGroup, onHover, onSelect })`，内部逻辑复用水系 hover 方案：当 `riverGroup.visible` 为 false 时跳过；hover 命中时设置 `emissive = #5ad0ff`、`emissiveIntensity ≈ 0.5`，离开时恢复 0；click 返回 `mesh.userData`。
+  - `App.jsx` 传入的 `onSelect` 中调用 `logInfo("河流交互", \`选中 ${name ?? stableId ?? "未知河流"}\`)`，当前阶段不写入 store。
+- **集成**：
+  - `App.jsx` 在湖泊之后调用 `buildWaterway(scene)`，以 `waterwayGroupRef` 缓存并纳入 `applySceneTransform`；显隐与 `waterGroup` 一样监听 `layerVisibility.water`。
+  - `attachRiverPicking` 在 `attachWaterPicking` 之后挂载，卸载时执行 `clearHover/ dispose`；当水层隐藏时需调用 `clearHover()`。
+- **测试计划**：
+  - 待实现后，在 `src/tests/three/buildWaterway.test.js` 中验证宽度挤出逻辑与 `config.waterway` 的读取；交互部分在 `riverPicking.test.js` 覆盖 hover/click 行为。
+
 ### 水系交互（hover/click）
 
 - **目标**：为湖泊 Mesh 提供基础拾取反馈（hover 高亮 + click 日志），当前阶段不写入 store，仅用于可视与日志验证。
@@ -132,6 +149,25 @@
   - 使用 ref 记录当前 hover 水体，响应 `layerVisibility.water` 变化时调用 `clearHover()`，确保隐藏或卸载时材质复位。
 - **测试规划**：
   - 待交互实现时，在 `src/tests/three/waterPicking.test.js` 通过 stub Mesh/材质验证 emissive 切换与回调；当前记录于 spec，编码阶段同步补测。
+
+## 校园范围（围墙）
+
+- **数据输入**：使用清洗脚本输出的 `featureType = "campusBoundary"`（即 `amenity = university` 且名称为西南交通大学犀浦校区的 Polygon/MultiPolygon）。
+- **几何构建**：
+  - 新建 `src/three/buildBoundary.js`，对主环按道路建模方案处理：投影后以 `config.boundary.width` 为厚度计算左右 offset，构建闭合 `THREE.Shape`，再使用 `ExtrudeGeometry` 挤出。
+  - 挤出深度取 `config.boundary.height`，并在几何生成后旋转 `-90°` 贴合 XZ 平面；围墙底部位于 Y=0，挤出高度沿正 Y 方向。
+  - 投影阶段不得丢弃与上一点 XY 完全相同的坐标（OSM 闭合段通常复用首尾节点）；`sanitizeRing` 仅负责过滤非法坐标或非数值结果，不得因“与上一点重复”而跳过。
+  - 如需去重，仅能在构建 offset 之前由算法自行处理，并且须保证闭合段仍然保留一条独立边。
+  - 为确保完全闭合：投影后的点列在构建 offset 前必须显式复制首点到末尾；若遇到过短线段（长度趋近 0），需复用上一条有效法线/方向而不是直接跳过，保证每条边都生成对应 Mesh。所有坐标转换复用 `projectCoordinate`，最终 group 必须套用 `SCENE_BASE_ALIGNMENT + sceneTransform` 变换。
+- **材质与显隐**：
+  - `config.colors.围墙` 控制材质颜色；`config.layers` 中 `{ name: "围墙", key: "boundary", visible: true, order: 12 }` 供 LayerToggle 使用。
+  - 厚度/高度一律从 `config.boundary.width/height` 读取，不得在代码中硬编码。
+- **交互**：暂不实现 hover/click，围墙仅作静态参考；若后续需要拾取会在本节补充。
+- **集成**：
+  - `App.jsx` 在建筑之后、道路之前调用 `buildBoundary(scene)`，缓存 `boundaryGroupRef` 并纳入 `applySceneTransform`。
+  - 监听 `layerVisibility.boundary` 控制显隐（默认 true），围墙不接入拾取模块。
+- **测试计划**：
+  - 待允许新增测试时，在 `src/tests/three/buildBoundary.test.js` 中准备 boundary 示例，验证 mesh 数量、材质颜色及 `userData.boundaryType`。
 
 
 ## 状态同步
@@ -149,3 +185,22 @@
 
 - [ ] 实现建筑 hover/click 拾取及材质高亮。
 - [ ] 描述导航路径动画细节（速度、颜色、方向）。
+## 围墙建模补充说明
+
+- **已知问题**：当前 Three.js 围墙仍存在单段缺口（对应 OSM 节点 2178276210 ↔ 5194469641）。后续排查须从以下方向入手：
+  1. 在 `sanitizeRing`/`prepareClosedRing` 中输出调试坐标，确认闭合点没有被重复过滤或顺序被打乱；
+  2. 检查 `buildBoundaryGeometry` 针对零长度线段是否直接 `continue`，必要时复用前后方向向量，避免 Mesh 被跳过；
+  3. 观察 `boundary` group 套用 `SCENE_BASE_ALIGNMENT + sceneTransform` 后的位置/角度，排除缩放或旋转导致的错位。
+- **处理计划**：待上述排查完成后再统一修复，当前版本先维持现状。
+
+### 围墙交互（hover/click）
+
+- **目标**：为围墙提供 hover 高亮与 click 日志，方便调试与后续 UI 联动。
+- **数据源**：`buildBoundary` 生成的 `boundary` group，依赖 `useSceneStore` 的 `layerVisibility.boundary` 以及 `logger` 模块。
+- **实现要求**：
+  - 新增 `src/three/interactions/boundaryPicking.js`，建立 Raycaster 监听 `pointermove`/`click`；
+  - Hover 命中时，将材质 `emissive` 设为 `#ffe082`（或在原色基础上增亮 30%），记录原值并在离开/隐藏时恢复；
+  - Click 命中时调用 `logInfo("围墙交互", \\"点击 ${name ?? stableId ?? \"未命名围墙\"}\\")` 输出中文日志，不写入 store，日志 payload 附带 `stableId`、`boundaryType`；
+  - 暴露 `clearHover()` 与 `dispose()`，分别用于图层隐藏/组件卸载时的复位。
+- **集成**：`App.jsx` 在 `buildBoundary` 后调用 `attachBoundaryPicking({ scene, camera, domElement, boundaryGroup, logger })`，并依据 `layerVisibility.boundary` 控制启停；隐藏图层或组件卸载时记得调用清理方法。
+- **测试计划**：允许新增测试后，在 `src/tests/three/boundaryPicking.test.js` 中模拟命中/未命中场景，校验 emissive 切换与日志输出。

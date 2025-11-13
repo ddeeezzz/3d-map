@@ -31,6 +31,7 @@ const buildingCategoryMap = {
 
 const singleFloorHeightKey = "1层";
 const WATER_TYPES = new Set(["lake", "pond", "reservoir", "basin", "pool"]);
+const CAMPUS_NAME = "西南交通大学（犀浦校区）";
 
 async function loadModule(relativePath) {
   const url = pathToFileURL(resolve(__dirname, relativePath)).href;
@@ -121,6 +122,25 @@ function buildWaterSourceTag(props) {
   };
 }
 
+function isRiverFeature(props, geometry) {
+  if (!geometry || !geometry.type) return false;
+  const type = geometry.type;
+  if (type !== "LineString" && type !== "MultiLineString") return false;
+  return (props.waterway || "").toLowerCase() === "river";
+}
+
+function isCampusBoundary(props, geometry) {
+  if (!geometry || !geometry.type) return false;
+  if (geometry.type !== "Polygon" && geometry.type !== "MultiPolygon") {
+    return false;
+  }
+  const amenity = (props.amenity || "").toLowerCase();
+  const name = props.name || props["name:zh"] || props["name:zh-cn"];
+  if (amenity !== "university") return false;
+  if (!name) return false;
+  return name.trim() === CAMPUS_NAME;
+}
+
 async function main() {
   const config = await loadModule("../app/src/config/index.js");
   const loggerModule = await loadModule("../app/src/logger/logger.js");
@@ -136,6 +156,8 @@ async function main() {
       buildings: 0,
       roads: 0,
       lakes: 0,
+      rivers: 0,
+      boundaries: 0,
       filtered: 0,
       missingElevation: 0,
       categories: {},
@@ -157,6 +179,8 @@ async function main() {
       const buildingTag = props.building;
       const highwayTag = props.highway;
       const waterFeature = isWaterFeature(props, geometry);
+      const riverFeature = isRiverFeature(props, geometry);
+      const boundaryFeature = isCampusBoundary(props, geometry);
 
       if (buildingTag && buildingTag !== "no") {
         const cleanedGeometry = cleanPolygonGeometry(geometry);
@@ -250,12 +274,62 @@ async function main() {
         return;
       }
 
+      if (riverFeature) {
+        const stableId = buildStableId(feature, index);
+        cleanedFeatures.push({
+          type: "Feature",
+          geometry,
+          properties: {
+            ...props,
+            stableId,
+            featureType: "river",
+            waterType: "river",
+            sourceTag: { waterway: props.waterway },
+          },
+        });
+        summary.kept++;
+        summary.rivers++;
+        return;
+      }
+
+      if (boundaryFeature) {
+        const cleanedGeometry = cleanPolygonGeometry(geometry);
+        if (!cleanedGeometry) {
+          summary.filtered++;
+          logWarn("数据管线", "围墙几何不支持，已忽略", { featureId: feature.id || index });
+          return;
+        }
+
+        const stableId = buildStableId(feature, index);
+        const newProps = {
+          ...props,
+          stableId,
+          featureType: "campusBoundary",
+          boundaryType: "campus",
+          sourceTag: {
+            amenity: props.amenity,
+            name: props.name,
+            id: feature.id || props["@id"],
+          },
+        };
+
+        cleanedFeatures.push({
+          type: "Feature",
+          geometry: cleanedGeometry,
+          properties: newProps,
+        });
+
+        summary.kept++;
+        summary.boundaries++;
+        return;
+      }
+
       summary.filtered++;
     });
 
     const output = { type: "FeatureCollection", features: cleanedFeatures };
     mkdirSync(join(rootDir, "app", "src", "data"), { recursive: true });
-    writeFileSync(outputGeojsonPath, JSON.stringify(output), "utf8");
+    writeFileSync(outputGeojsonPath, JSON.stringify(output, null, 2), "utf8");
 
     mkdirSync(reportsDir, { recursive: true });
     const report = {
@@ -270,7 +344,9 @@ async function main() {
       报告: reportPath,
       建筑数量: summary.buildings,
       道路数量: summary.roads,
-      水系数量: summary.lakes,
+      湖泊数量: summary.lakes,
+      河流数量: summary.rivers,
+      围墙数量: summary.boundaries,
     });
   } catch (error) {
     logError("数据管线", "清洗失败", { 错误: error.message });
