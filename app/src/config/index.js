@@ -6,6 +6,7 @@ export const config = {
     行政楼: "#B8E986",
     默认: "#999999",
     道路: "#d0d0d0",
+    水系: "#4fc3f7",
   },
   heights: {
     "1层": 4,
@@ -18,6 +19,7 @@ export const config = {
   },
   layers: [
     { name: "建筑", key: "buildings", visible: true, order: 10 },
+    { name: "水系", key: "water", visible: true, order: 15 },
     { name: "道路", key: "roads", visible: true, order: 20 },
     { name: "热点", key: "pois", visible: false, order: 30 },
   ],

@@ -18,7 +18,7 @@
    - **要素筛选**：
      - 建筑：`properties.building` 存在且不为 `no`，保留 Polygon/MultiPolygon，写入 `featureType = "building"`。
      - 道路：`properties.highway` 存在，保留 LineString，写入 `featureType = "road"`。
-     - 其他要素（如 `natural=water`）视需求保留，初期可忽略。
+     - 水系：`properties.natural = "water"` 或 `properties.water` 包含 `lake/pond`，以及 `landuse = "reservoir"` 等情况，统一写入 `featureType = "lake"`，仅保留 Polygon/MultiPolygon 用于三维水面。
    - **高度补全**：
      - 若 `height` 可解析为数字则直接使用。
      - 否则使用 `building:levels × config.heights["1层"]`。
@@ -33,6 +33,9 @@
    - **几何处理**：
      - 对 Polygon/MultiPolygon 去除重复点、确保顺时针方向（例如使用 `@turf/clean-coords`、`@turf/rewind`）。
      - 为建筑可选计算 `properties.centroid`、`properties.area`（基于 turf），供 UI 使用。
+   - **水系补充字段**
+     - 若存在 `name`、`water`、`waterway` 等属性，写入 `properties.name`、`properties.waterType`，便于渲染与 tooltip。
+     - 可在 `properties.sourceTag` 中记录 `{ natural, water, landuse }` 等原始标签，并在报告中统计水体数量与面积。
    - **日志**：
      - 处理流程关键节点需要 `logger.logInfo`（加载开始、要素统计、写入完成）。
      - 异常或缺失情况使用 `logWarn` / `logError`。

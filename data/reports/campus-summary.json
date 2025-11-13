@@ -1,15 +1,21 @@
 {
-  "generatedAt": "2025-11-11T15:06:40.725Z",
+  "generatedAt": "2025-11-13T05:30:00.945Z",
   "source": "M:\\MyTest\\adsjksh\\t2\\data\\tmp.json",
   "total": 1457,
-  "kept": 654,
+  "kept": 662,
   "buildings": 196,
   "roads": 458,
-  "filtered": 803,
+  "lakes": 8,
+  "filtered": 795,
   "missingElevation": 0,
   "categories": {
     "默认": 141,
     "教学楼": 17,
     "宿舍": 38
+  },
+  "waterTypes": {
+    "lake": 2,
+    "pond": 3,
+    "river": 3
   }
 }

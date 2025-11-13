@@ -103,6 +103,7 @@
 - **数据输入**：继续复用 `campus.geojson`，筛选 `featureType = "lake"` 的 Polygon/MultiPolygon；若原始 OSM 使用 `natural = water` 或 `water = lake`，需在数据清洗阶段映射为统一的 `featureType`。
 - **几何构建**：
   - 新增 `src/three/buildWater.js`，通过 `projectCoordinate`/`projectPolygon` 投影后使用 `THREE.Shape` 构建几何，可直接使用 `ShapeGeometry`，或采用 `ExtrudeGeometry` 并将 `depth` 控制在 0.05 以内以避免 z-fighting。
+  - 与建筑一样复用投影/坐标转换（`projectCoordinate`），并在最终 Group 上应用 `SCENE_BASE_ALIGNMENT` 与 `sceneTransform` 的缩放/旋转/偏移。
   - 所有 Mesh 收纳于 `water` group，并在 group 层复用 `SCENE_BASE_ALIGNMENT + sceneTransform` 的旋转/缩放/偏移，确保与建筑、道路对齐。
   - 处理 MultiPolygon 时需按主轮廓→洞的顺序添加 `shape.holes`，保证湖中岛屿被正确镂空。
 - **材质与显隐**：
@@ -115,6 +116,22 @@
   - 首次实现仅渲染参考，不做 hover/click；若后续需要拾取或日志记录，应在本节补充细则。
 - **测试计划**：
   - 在 `src/tests/three/buildWater.test.js` 构造多段湖泊数据，校验 Mesh 数量、group 命名和材质透明度，并确认洞处理正确。
+
+### 水系交互（hover/click）
+
+- **目标**：为湖泊 Mesh 提供基础拾取反馈（hover 高亮 + click 日志），当前阶段不写入 store，仅用于可视与日志验证。
+- **实现**：
+  - 新建 `src/three/interactions/waterPicking.js`，导出 `attachWaterPicking({ domElement, camera, waterGroup, onHover, onSelect })`。
+  - 内部复用单例 `THREE.Raycaster` 与 `THREE.Vector2`，监听 `pointermove`、`click`；当 `waterGroup.visible === false` 时直接返回以节省计算。
+  - `pointermove`：计算与 `waterGroup.children` 的最近交点，若命中 Mesh 则比较是否为全新对象；命中变化时通过 `onHover(mesh.userData)` 回调，并将材质 `emissive = #5ad0ff`、`emissiveIntensity ≈ 0.5`，离开时恢复为 0。
+  - `click`：若存在当前 hover Mesh，则调用 `onSelect(hoverMesh.userData)`，保持 hover 状态不变。
+- **日志**：
+  - `App.jsx` 传入的 `onSelect` 内调用 `logInfo("水系交互", \`选中 ${name ?? stableId ?? "未命名水体"} (${waterType ?? "未知类型"})\`)`，hover 阶段不输出日志。
+- **集成**：
+  - `App.jsx` 在 `attachRoadPicking` 前后调用 `attachWaterPicking`，并在 `useEffect` 清理阶段注销监听、恢复 emissive。
+  - 使用 ref 记录当前 hover 水体，响应 `layerVisibility.water` 变化时调用 `clearHover()`，确保隐藏或卸载时材质复位。
+- **测试规划**：
+  - 待交互实现时，在 `src/tests/three/waterPicking.test.js` 通过 stub Mesh/材质验证 emissive 切换与回调；当前记录于 spec，编码阶段同步补测。
 
 
 ## 状态同步

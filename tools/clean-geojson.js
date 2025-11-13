@@ -30,6 +30,7 @@ const buildingCategoryMap = {
 };
 
 const singleFloorHeightKey = "1层";
+const WATER_TYPES = new Set(["lake", "pond", "reservoir", "basin", "pool"]);
 
 async function loadModule(relativePath) {
   const url = pathToFileURL(resolve(__dirname, relativePath)).href;
@@ -91,6 +92,35 @@ function buildStableId(feature, fallbackIndex) {
   return `feature/${fallbackIndex}`;
 }
 
+function isWaterFeature(props, geometry) {
+  if (!geometry || !geometry.type) return false;
+  if (geometry.type !== "Polygon" && geometry.type !== "MultiPolygon") {
+    return false;
+  }
+  const natural = (props.natural || "").toLowerCase();
+  const water = (props.water || "").toLowerCase();
+  const landuse = (props.landuse || "").toLowerCase();
+  if (natural === "water") return true;
+  if (water && WATER_TYPES.has(water)) return true;
+  if (landuse === "reservoir") return true;
+  return false;
+}
+
+function determineWaterType(props) {
+  if (props.water) return props.water;
+  if (props.natural) return props.natural;
+  if (props.landuse) return props.landuse;
+  return null;
+}
+
+function buildWaterSourceTag(props) {
+  return {
+    natural: props.natural,
+    water: props.water,
+    landuse: props.landuse,
+  };
+}
+
 async function main() {
   const config = await loadModule("../app/src/config/index.js");
   const loggerModule = await loadModule("../app/src/logger/logger.js");
@@ -105,9 +135,11 @@ async function main() {
       kept: 0,
       buildings: 0,
       roads: 0,
+      lakes: 0,
       filtered: 0,
       missingElevation: 0,
       categories: {},
+      waterTypes: {},
     };
 
     const cleanedFeatures = [];
@@ -124,6 +156,7 @@ async function main() {
 
       const buildingTag = props.building;
       const highwayTag = props.highway;
+      const waterFeature = isWaterFeature(props, geometry);
 
       if (buildingTag && buildingTag !== "no") {
         const cleanedGeometry = cleanPolygonGeometry(geometry);
@@ -187,6 +220,36 @@ async function main() {
         return;
       }
 
+      if (waterFeature) {
+        const cleanedGeometry = cleanPolygonGeometry(geometry);
+        if (!cleanedGeometry) {
+          summary.filtered++;
+          logWarn("数据管线", "水系几何不支持，已忽略", { featureId: feature.id || index });
+          return;
+        }
+
+        const stableId = buildStableId(feature, index);
+        const waterType = determineWaterType(props) || "未知";
+        const newProps = {
+          ...props,
+          stableId,
+          featureType: "lake",
+          waterType,
+          sourceTag: buildWaterSourceTag(props),
+        };
+
+        cleanedFeatures.push({
+          type: "Feature",
+          geometry: cleanedGeometry,
+          properties: newProps,
+        });
+
+        summary.kept++;
+        summary.lakes++;
+        summary.waterTypes[waterType] = (summary.waterTypes[waterType] || 0) + 1;
+        return;
+      }
+
       summary.filtered++;
     });
 
@@ -207,6 +270,7 @@ async function main() {
       报告: reportPath,
       建筑数量: summary.buildings,
       道路数量: summary.roads,
+      水系数量: summary.lakes,
     });
   } catch (error) {
     logError("数据管线", "清洗失败", { 错误: error.message });
