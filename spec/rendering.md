@@ -67,7 +67,7 @@
 - 暴露 `clearHover`/`dispose`，供 `layerVisibility.boundary` 与组件卸载时使用。
 
 ## 绿化渲染（Greenery）
-- **数据输入**：清洗脚本输出的 `featureType = "greenery"` 要素，`properties.greenType` 区分 `wood/forest/tree_row/scrub/grass/meadow` 或 `landuse = grass`。
+- **数据输入**：清洗脚本输出的 `featureType = "greenery"` 要素，`properties.greenType` 可能来自 `natural = wood/tree_row/scrub/grass/meadow`，或 `landuse = grass/forest`（`forest` 仅从 landuse 而来）。
 - **几何处理（纯 Three.js）**：
   - 面状绿化（Polygon/MultiPolygon）：参考湖泊流程，在 `src/three/buildGreenery.js` 中使用 `Shape` + `ExtrudeGeometry`，挤出厚度固定为 2m（`config.greenery.surfaceDepth`），底边 `surfaceBaseY` 用于统一下沉，从而保持顶面高度；颜色取 `config.colors.绿化`（缺省 `#4caf50`），`opacity = 0.6`。
   - 线状绿化（LineString/MultiLineString）：沿用 `buildWaterway` 的 offset 逻辑，统一读取 `config.greenery.width/height/baseY` 生成条带，其中 `height` 亦固定为 2m，`baseY` 调整下沉量，确保顶面位置与面状一致；无须按 `greenType` 再划分配置。
@@ -83,6 +83,10 @@
 - **几何构建**：
   - 在 `src/three/buildSites.js` 内复用建筑的投影工具，将 Polygon/MultiPolygon 转为 `Shape`，再以 `ExtrudeGeometry` 挤出矮柱体；
   - `depth` 读取 `properties.elevation ?? config.site.height`，挤出后统一 `geometry.rotateX(-Math.PI / 2)`，`mesh.position.y = config.site.baseY`，确保与道路/绿化共享的基准面一致。
+- **与场景基准对齐**：
+  - `buildSites` 必须沿用 `buildBuildings` 中的坐标投影/归一化逻辑：从 `coordinates.js` 读取已缓存的校园原点（首个建筑质心），用相同的 `projectPolygonToPlane`/`centerGeometry` 工具生成 XZ 平面坐标，避免出现与建筑错位的“第二坐标系”；
+  - 生成的 `sitesGroup` 调用 `applySceneTransform(sitesGroup, sceneTransform, SCENE_BASE_ALIGNMENT)`，以保持与建筑、道路统一的旋转/缩放/平移；禁止在 `buildSites` 内额外写死平移或缩放，所有对准操作均应依赖 `sceneTransform`；
+  - 当 DebugPanel 修改 `sceneTransform` 或 `config.site.baseY` 调整矮柱基线时，`useEffect` 需与建筑 group 同步更新，确保组合旋转后的地块仍紧贴地面（即 `SCENE_BASE_ALIGNMENT.offset` 始终作用于整组 Mesh）。
 - **材质与分组**：
   - 颜色取 `config.colors.site[siteCategory] ?? config.colors.site.默认`，使用半透明 `MeshPhongMaterial`（`opacity ≈ 0.85`、`side = THREE.DoubleSide`）；
   - 所有 Mesh 挂入 `sites` Group，统一交给 `applySceneTransform`，禁止额外平移/旋转以保持与建筑坐标一致。

@@ -225,7 +225,7 @@ export function buildBuildings(scene) {
       material = new THREE.MeshPhongMaterial({
         color,
         transparent: true,
-        opacity: 0.75,
+        opacity: 0.5,
         side: THREE.DoubleSide,
       });
       materialCache.set(color, material);

@@ -34,6 +34,14 @@ export const config = {
     水系: "#4fc3f7",
     围墙: "#f5deb3",
     绿化: "#4caf50",
+    site: {
+      默认: "#d3b6b6",
+      stadium: "#50E3C2",
+      track: "#ff8800",
+      swimming_pool: "#4FC3F7",
+      parking: "#d0d0d0",
+      construction: "#d3b6b6",
+    },
   },
 
   /**
@@ -56,6 +64,7 @@ export const config = {
     宿舍: 15,
     体育馆: 12,
     默认: 10,
+    site: 2,
   },
 
   /**
@@ -76,6 +85,7 @@ export const config = {
     { name: "建筑", key: "buildings", visible: true, order: 10 },
     { name: "围墙", key: "boundary", visible: true, order: 12 },
     { name: "水系", key: "water", visible: true, order: 15 },
+    { name: "场地", key: "sites", visible: true, order: 16 },
     { name: "绿化", key: "greenery", visible: true, order: 18 },
     { name: "道路", key: "roads", visible: true, order: 20 },
     { name: "热点", key: "pois", visible: false, order: 30 },
@@ -160,9 +170,20 @@ export const config = {
   greenery: {
     width: 3,
     height: 3.5,
-    baseY: -4.2,
+    baseY: -4.5,
     surfaceDepth: 3.5,
-    surfaceBaseY: -4.2,
+    surfaceBaseY: -4.5,
+  },
+
+  /**
+   * site：场地矮柱统一参数
+   * 字段：
+   * - height：Three.js 场地矮柱的高度（单位：米）
+   * - baseY：矮柱整体的基准 Y 偏移，保持与道路顶面一致
+   */
+  site: {
+    height: 4,
+    baseY: -5.5,
   },
 
   /**

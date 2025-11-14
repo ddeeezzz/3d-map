@@ -21,7 +21,7 @@
    - 线状水系：`waterway = river` 的 LineString/MultiLineString，写入 `featureType = "river"`。
    - 围墙：`amenity = university` 且 `name = "西南交通大学（犀浦校区）"` 的 Polygon/MultiPolygon，写入 `featureType = "campusBoundary"`。
    - 场地：`amenity = parking`、`leisure = stadium/track/swimming_pool` 或 `landuse = construction`，仅保留 Polygon/MultiPolygon，写入 `featureType = "site"`。
-   - 绿化：`natural` 属于 `wood/forest/tree_row/scrub/grass/meadow` 等常见植被标签，或 `landuse = grass`；保留 Polygon、MultiPolygon、LineString（tree_row 可继续按线状输出），统一写入 `featureType = "greenery"`。
+   - 绿化：`natural` 属于 `wood/tree_row/scrub/grass/meadow`（不再使用 `natural = forest`），或 `landuse = grass/forest`；保留 Polygon、MultiPolygon、LineString（tree_row 可继续按线状输出），统一写入 `featureType = "greenery"`。
 2. **高度补全（建筑）**
    - 优先使用 `height` 数值；否则使用 `building:levels × config.heights["1层"]`；若仍缺失则查 `config.heights[category]`，最后回退 `config.heights.默认`；结果写入 `properties.elevation` 并统计缺失次数。
 3. **场地属性补全**
@@ -42,7 +42,7 @@
    - 面状水系：补齐 `properties.name`、`properties.waterType`，并在 `sourceTag` 中保留 `{ natural, water, landuse }`。
    - 线状水系：保留 `properties.name`，写入 `properties.waterType = "river"`，并在 `sourceTag` 中记录 `{ waterway }`。
    - 围墙：写入 `properties.boundaryType = "campus"`，并保留 `{ amenity, name, id }`。同时收集 `amenity=gate` 或 `barrier=gate` 节点，匹配到最近的围墙边，写入 `properties.boundaryGates = [{ stableId, center: [lng, lat], width, depth, tangent }]`，其中 width/depth 单位为米（默认参考 `config.boundary.gateWidth`/`gateDepth`），`tangent` 为顺时针切线方向，供渲染阶段生成门洞。
-   - 绿化：保留 `properties.name`（若存在），写入 `properties.greenType = natural ?? landuse`，并在 `sourceTag` 中记录 `{ natural, landuse }`。
+   - 绿化：保留 `properties.name`（若存在），写入 `properties.greenType = natural ?? landuse`（`forest` 仅会来源于 `landuse`），并在 `sourceTag` 中记录 `{ natural, landuse }`。
    - 场地：面状要素维持清洗后的坐标，不额外偏移；统计 `summary.sites.total` 与 `summary.sites.byCategory`，并在日志中输出命中数量与缺失 name/sports 的条目。
 8. **日志**
    - 关键节点使用 `logInfo`（加载、分类统计、写入完成），异常或缺失使用 `logWarn` / `logError`。

@@ -24,6 +24,7 @@ import { buildWater } from "./three/buildWater";
 import { buildWaterway } from "./three/buildWaterway";
 import { buildGreenery } from "./three/buildGreenery";
 import { buildRoads } from "./three/buildRoads";
+import { buildSites } from "./three/buildSites";
 import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
@@ -56,6 +57,7 @@ const waterGroupRef = useRef(null);
 const waterwayGroupRef = useRef(null);
 const greeneryGroupRef = useRef(null);
 const roadsGroupRef = useRef(null);
+const sitesGroupRef = useRef(null);
 
   /**
    * 交互拾取事件处理器的清理函数或实例引用
@@ -98,6 +100,9 @@ const greeneryVisible = useSceneStore(
 const roadsVisible = useSceneStore(
   (state) => state.layerVisibility?.roads ?? true
 );
+const sitesVisible = useSceneStore(
+  (state) => state.layerVisibility?.sites ?? true
+);
 const environmentSettings = useSceneStore(
   (state) => state.environmentSettings
 );
@@ -127,6 +132,7 @@ const environmentSettings = useSceneStore(
       waterwayGroupRef.current,
       greeneryGroupRef.current,
       roadsGroupRef.current,
+      sitesGroupRef.current,
     ].forEach((group) => {
       if (!group) return;
       group.rotation.y = rotation;
@@ -190,6 +196,7 @@ const environmentSettings = useSceneStore(
         const waterwayGroup = buildWaterway(sceneContext.scene);
         const greeneryGroup = buildGreenery(sceneContext.scene);
         const roadsGroup = buildRoads(sceneContext.scene);
+        const sitesGroup = buildSites(sceneContext.scene);
 
         buildingGroupRef.current = buildingGroup;
         boundaryGroupRef.current = boundaryGroup;
@@ -197,6 +204,7 @@ const environmentSettings = useSceneStore(
         waterwayGroupRef.current = waterwayGroup;
         greeneryGroupRef.current = greeneryGroup;
         roadsGroupRef.current = roadsGroup;
+        sitesGroupRef.current = sitesGroup;
 
         // 初始化各图层可见性：从 store 读取状态，默认全部 true
         const visibility = useSceneStore.getState().layerVisibility;
@@ -204,11 +212,13 @@ const environmentSettings = useSceneStore(
         const waterState = visibility?.water ?? true;
         const greeneryState = visibility?.greenery ?? true;
         const roadState = visibility?.roads ?? true;
+        const siteState = visibility?.sites ?? true;
         if (boundaryGroup) boundaryGroup.visible = boundaryState;
         if (waterGroup) waterGroup.visible = waterState;
         if (waterwayGroup) waterwayGroup.visible = waterState;
         if (greeneryGroup) greeneryGroup.visible = greeneryState;
         if (roadsGroup) roadsGroup.visible = roadState;
+        if (sitesGroup) sitesGroup.visible = siteState;
 
         // 应用基准姿态和任何初始增量变换（通常此时为零）
         applySceneTransform(useSceneStore.getState().sceneTransform);
@@ -379,6 +389,7 @@ const environmentSettings = useSceneStore(
       waterwayGroupRef.current = null;
       greeneryGroupRef.current = null;
       roadsGroupRef.current = null;
+      sitesGroupRef.current = null;
     };
   }, []);
 
@@ -457,6 +468,15 @@ const environmentSettings = useSceneStore(
       roadPickingHandleRef.current?.clearHover?.();
     }
   }, [roadsVisible]);
+
+  /**
+   * 监听场地图层可见性
+   */
+  useEffect(() => {
+    if (sitesGroupRef.current) {
+      sitesGroupRef.current.visible = sitesVisible;
+    }
+  }, [sitesVisible]);
 
   return (
     <div className="app-root">

@@ -5,8 +5,23 @@ const { pathToFileURL } = require("url");
 const cleanCoords = require("../app/node_modules/@turf/clean-coords").default;
 const rewind = require("../app/node_modules/@turf/rewind").default;
 const centroid = require("../app/node_modules/@turf/centroid").default;
-const GREENERY_NATURAL = new Set(["wood", "forest", "tree_row", "scrub", "grass", "meadow"]);
-const GREENERY_LANDUSE = new Set(["grass"]);
+const { detectGreeneryType } = require("./greenery-tags");
+/**
+ * 场地分类优先级列表，确保按照 stadium → track → swimming_pool → parking → construction 的顺序匹配
+ * @type {Array<{ tag: "amenity"|"leisure"|"landuse", value: string }>}
+ */
+const SITE_CATEGORY_PRIORITY = [
+  { tag: "leisure", value: "stadium" },
+  { tag: "leisure", value: "track" },
+  { tag: "leisure", value: "swimming_pool" },
+  { tag: "amenity", value: "parking" },
+  { tag: "landuse", value: "construction" },
+];
+/**
+ * 场地默认展示名称，缺少 name 标签时使用
+ * @type {string}
+ */
+const SITE_DEFAULT_DISPLAY_NAME = "未命名场地";
 
 const rootDir = resolve(__dirname, "..");
 const dataDir = join(rootDir, "data");
@@ -128,14 +143,48 @@ function buildWaterSourceTag(props) {
   };
 }
 
-function detectGreeneryType(props) {
-  const natural = (props.natural || "").toLowerCase();
-  if (natural && GREENERY_NATURAL.has(natural)) {
-    return natural;
+/**
+ * 根据 OSM 标签判断场地分类
+ * @param {object} props GeoJSON 属性对象
+ * @returns {string|null} 命中的场地分类标识
+ */
+function determineSiteCategory(props) {
+  if (!props) return null;
+  const normalized = {
+    amenity: String(props.amenity || "").toLowerCase(),
+    leisure: String(props.leisure || "").toLowerCase(),
+    landuse: String(props.landuse || "").toLowerCase(),
+  };
+  for (const rule of SITE_CATEGORY_PRIORITY) {
+    if (normalized[rule.tag] === rule.value) {
+      return rule.value;
+    }
   }
-  const landuse = (props.landuse || "").toLowerCase();
-  if (landuse && GREENERY_LANDUSE.has(landuse)) {
-    return landuse;
+  return null;
+}
+
+/**
+ * 解析场地挤出高度，优先读取 config.site.height，其次回退至 config.heights.site 与默认高度
+ * @param {object} config 全局配置对象
+ * @returns {number|null} 可用于挤出的高度
+ */
+function resolveSiteElevation(config) {
+  if (!config) return null;
+  const siteHeight = parseNumeric(config.site && config.site.height);
+  if (siteHeight != null) {
+    return siteHeight;
+  }
+  const heights = config.heights || {};
+  const siteFallback = parseNumeric(heights.site);
+  if (siteFallback != null) {
+    return siteFallback;
+  }
+  const defaultCandidates = [heights["默认"], heights["榛樿"]];
+  for (const candidate of defaultCandidates) {
+    const parsed = parseNumeric(candidate);
+    if (parsed != null) {
+      return parsed;
+    }
   }
   return null;
 }
@@ -453,6 +502,8 @@ async function main() {
   const config = await loadModule("../app/src/config/index.js");
   const loggerModule = await loadModule("../app/src/logger/logger.js");
   const { logInfo, logWarn, logError } = loggerModule;
+  /** 场地矮柱挤出高度，供场地要素复用 */
+  const siteElevationValue = resolveSiteElevation(config);
 
   try {
     logInfo("数据管线", "开始清洗临时数据", { 输入: tmpPath });
@@ -471,6 +522,10 @@ async function main() {
       rivers: 0,
       boundaries: 0,
       greenery: 0,
+      sites: {
+        total: 0,
+        byCategory: {},
+      },
       filtered: 0,
       missingElevation: 0,
       categories: {},
@@ -478,6 +533,10 @@ async function main() {
     };
 
     const cleanedFeatures = [];
+    /** 记录缺少 name 的场地 stableId 列表，便于日志输出 */
+    const siteMissingName = [];
+    /** 记录缺少 sports 标签的场地 stableId 列表，主要关注 stadium/track/swimming_pool */
+    const siteMissingSports = [];
 
     raw.features.forEach((feature, index) => {
       const props = feature.properties || {};
@@ -494,6 +553,7 @@ async function main() {
       const waterFeature = isWaterFeature(props, geometry);
       const riverFeature = isRiverFeature(props, geometry);
       const boundaryFeature = isCampusBoundary(props, geometry);
+      const siteCategory = determineSiteCategory(props);
 
       if (buildingTag && buildingTag !== "no") {
         const cleanedGeometry = cleanPolygonGeometry(geometry);
@@ -648,6 +708,71 @@ async function main() {
         return;
       }
 
+      if (siteCategory) {
+        const cleanedGeometry = cleanPolygonGeometry(geometry);
+        if (!cleanedGeometry) {
+          summary.filtered++;
+          logWarn("数据管线", "场地几何不支持，已忽略", { featureId: feature.id || index });
+          return;
+        }
+
+        const stableId = buildStableId(feature, index);
+        const trimmedName = typeof props.name === "string" ? props.name.trim() : "";
+        const hasName = Boolean(trimmedName);
+        const displayName = hasName ? trimmedName : SITE_DEFAULT_DISPLAY_NAME;
+        const newProps = {
+          ...props,
+          stableId,
+          featureType: "site",
+          siteCategory,
+          displayName,
+          elevation: siteElevationValue,
+          sourceTag: {
+            name: props.name,
+            amenity: props.amenity,
+            leisure: props.leisure,
+            landuse: props.landuse,
+            sports: props.sports,
+          },
+        };
+
+        if (props.sports) {
+          newProps.sportsType = props.sports;
+        }
+
+        if (siteElevationValue == null) {
+          summary.missingElevation++;
+          logWarn("数据管线", "场地高度缺失，请检查配置", {
+            stableId,
+            siteCategory,
+          });
+        }
+
+        if (!hasName) {
+          siteMissingName.push(stableId);
+        }
+
+        const sportsRequired =
+          siteCategory === "stadium" ||
+          siteCategory === "track" ||
+          siteCategory === "swimming_pool";
+        if (sportsRequired && !props.sports) {
+          siteMissingSports.push(stableId);
+        }
+
+        cleanedFeatures.push({
+          type: "Feature",
+          geometry: cleanedGeometry,
+          properties: newProps,
+        });
+
+        summary.kept++;
+        summary.sites.total++;
+        summary.sites.byCategory[siteCategory] =
+          (summary.sites.byCategory[siteCategory] || 0) + 1;
+        return;
+      }
+
       const greeneryType = detectGreeneryType(props);
       if (greeneryType) {
         let finalGeometry = geometry;
@@ -693,6 +818,19 @@ async function main() {
       summary.filtered++;
     });
 
+    if (summary.sites.total) {
+      logInfo("数据管线", "场地分类统计", {
+        场地总数: summary.sites.total,
+        分类统计: summary.sites.byCategory,
+      });
+      if (siteMissingName.length) {
+        logWarn("数据管线", "场地缺少名称条目", { stableIds: siteMissingName });
+      }
+      if (siteMissingSports.length) {
+        logWarn("数据管线", "体育场地缺少 sports 标签", { stableIds: siteMissingSports });
+      }
+    }
+
     if (gateCandidates.length) {
       logWarn("数据管线", "仍有校门未匹配围墙", { 数量: gateCandidates.length });
     }
@@ -718,6 +856,7 @@ async function main() {
       河流数量: summary.rivers,
       围墙数量: summary.boundaries,
       绿化数量: summary.greenery,
+      场地数量: summary.sites.total,
     });
   } catch (error) {
     logError("数据管线", "清洗失败", { 错误: error.message });

@@ -1,15 +1,25 @@
 {
-  "generatedAt": "2025-11-14T03:50:23.491Z",
+  "generatedAt": "2025-11-14T08:11:04.562Z",
   "source": "M:\\MyTest\\adsjksh\\t2\\data\\tmp.json",
   "total": 2046,
-  "kept": 1201,
+  "kept": 1257,
   "buildings": 391,
   "roads": 655,
   "lakes": 10,
   "rivers": 8,
   "boundaries": 1,
-  "greenery": 136,
-  "filtered": 845,
+  "greenery": 156,
+  "sites": {
+    "total": 36,
+    "byCategory": {
+      "track": 4,
+      "stadium": 6,
+      "construction": 4,
+      "swimming_pool": 2,
+      "parking": 20
+    }
+  },
+  "filtered": 789,
   "missingElevation": 0,
   "categories": {
     "默认": 265,
