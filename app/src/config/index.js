@@ -123,31 +123,39 @@ export const config = {
   },
 
   /**
-   * waterway：河流和溪流的参数
-   * 结构：{ 水系类型: { width, height } }
-   * 使用场景：buildWaterway.js 拉伸线性水系
-   * 示例：
-   * - river: 河流，通常 5m 宽度、1m 深度（用负高度表示凹陷）
+   * waterway：水系统一参数（线状 + 面状）
+   * 字段：
+   * - width: 线状水系条带宽度（米）
+   * - height: 线状水系挤出高度（米）
+   * - baseY: 线状水系整体抬升/下沉量（米）
+   * - surfaceDepth: 面状水体挤出厚度（米）
+   * - surfaceBaseY: 面状水体底部偏移（米）
+   * 说明：所有 `featureType = "river"` 共享 width/height/baseY；所有 `featureType = "lake"` 共享 surfaceDepth/surfaceBaseY
    */
   waterway: {
-    river: {
-      width: 5,
-      height: 0.3,
-      baseY: -0.3,
-    },
+    width: 5,
+    height: 5,
+    baseY: -5.7,
+    surfaceDepth: 5,
+    surfaceBaseY: -5.75,
   },
 
   /**
-   * greenery：绿地和树木的参数（可选扩展）
-   * 结构：{ 植被类型: { width, height } }
-   * 使用场景：未来可能的绿化层渲染
+   * greenery：绿地/树行统一参数（线状 + 面状）
+   * 字段：
+   * - width: 线状绿化条带宽度（米）
+   * - height: 线状绿化挤出高度（米）
+   * - baseY: 线状绿化整体抬升/下沉量（米）
+   * - surfaceDepth: 面状绿化挤出厚度（米）
+   * - surfaceBaseY: 面状绿化底部偏移（米）
+   * 说明：所有 `featureType = "greenery"` 共用该组配置，如需特例需先在 spec 中扩展
    */
   greenery: {
-    treeRow: {
-      width: 2,
-      height: 0.3,
-      baseY: 0,
-    },
+    width: 3,
+    height: 3.5,
+    baseY: -4.2,
+    surfaceDepth: 3.5,
+    surfaceBaseY: -4.2,
   },
 
   /**
@@ -157,8 +165,8 @@ export const config = {
    * - height：条形的挺立参数，由 Three.js ExtrudeGeometry depth 设置
    */
   road: {
-    baseY: -0.4,
-    height: 0.3,
+    baseY: -2.15,
+    height: 2,
   },
 
   /**

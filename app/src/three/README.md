@@ -5,7 +5,7 @@
 - `buildRoads.js`：读取 `featureType = "road"` 线要素，结合 `config.roadWidths` 或属性宽度估算厚度，生成低矮 Extrude Mesh 并记录道路属性。
 - `buildBoundary.js`：处理 `featureType = "campusBoundary"` Polygon/MultiPolygon，`sanitizeRing` 保留 OSM 重复节点，`prepareClosedRing` 提前复制首点到末尾，再按 `config.boundary.width/height` 构建围墙 group。
 - `buildWater.js`：将 `featureType = "lake"` Polygon/MultiPolygon 投影并生成 1 m 厚的水面 Mesh，材质半透明并带 emissive，统一加入 `water` group。
-- `buildWaterway.js`：解析 `featureType = "river"` LineString/MultiLineString，按照 `config.waterway.river` 的宽高挤出河道。
+- `buildWaterway.js`：解析 `featureType = "river"` LineString/MultiLineString，按统一的 `config.waterway` 宽高/底边挤出河道。
 - `interactions/buildingPicking.js`：封装建筑拾取逻辑，监听 `pointermove`/`click`，同步 store 的 hovered/selected 状态。
 - `interactions/roadPicking.js`：道路 hover 高亮与点击日志，提供 `clearHover`/`dispose`，方便图层显隐管理。
 - `interactions/waterPicking.js`：水系 hover/click 反馈，复用回调输出命中水体信息，不写入 store。

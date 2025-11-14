@@ -215,11 +215,11 @@ export function buildWaterway(scene) {
   const origin = findProjectionOrigin(data.features);
   // 从场景基础变换读取缩放因子，用于自适应河流宽度
   const baseScale = SCENE_BASE_ALIGNMENT?.scale ?? 1;
-  const riverConfig = config.waterway?.river || {};
+  const waterwayConfig = config.waterway || {};
   // 配置中的宽度单位为米
-  const stripWidth = Number(riverConfig.width) || 5;
-  const stripHeight = Number(riverConfig.height) || 1;
-  const rawStripBaseY = Number(riverConfig.baseY);
+  const stripWidth = Number(waterwayConfig.width) || 5;
+  const stripHeight = Number(waterwayConfig.height) || 1;
+  const rawStripBaseY = Number(waterwayConfig.baseY);
   const stripBaseY = Number.isFinite(rawStripBaseY) ? rawStripBaseY : 0;
   // 补偿场景缩放，保持视觉一致性
   const thickness = stripWidth / baseScale;

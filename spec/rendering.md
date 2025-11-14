@@ -35,8 +35,8 @@
 - hover 时 emissive 变亮，click 记录 `logInfo("道路交互", ...)`，暴露 `clearHover`/`dispose` 以配合图层隐藏。
 
 ## 水系建模
-- **湖泊（`src/three/buildWater.js`）**：Polygon/MultiPolygon 生成 1m 厚 Mesh，材质半透明蓝色。
-- **河流（`src/three/buildWaterway.js`）**：LineString/MultiLineString 参考道路方案，以 `config.waterway.river.width/height` 计算 offset 挤出。
+- **湖泊（`src/three/buildWater.js`）**：Polygon/MultiPolygon 统一读取 `config.waterway.surfaceDepth/surfaceBaseY` 挤出厚度与底边高度，材质半透明蓝色，emissive 加强可见性。
+- **河流（`src/three/buildWaterway.js`）**：LineString/MultiLineString 参考道路方案，统一读取 `config.waterway.width/height/baseY` 计算 offset 挤出，不再按标签区分参数。
 
 ### 水系交互（`src/three/interactions/waterPicking.js` & `riverPicking.js`）
 - Hover 显示 emissive，高亮信息通过回调返回，不写入 store；点击输出日志。
@@ -62,14 +62,14 @@
 ## 绿化渲染（Greenery）
 - **数据输入**：清洗脚本输出的 `featureType = "greenery"` 要素，`properties.greenType` 区分 `wood/forest/tree_row/scrub/grass/meadow` 或 `landuse = grass`。
 - **几何处理（纯 Three.js）**：
-  - 面状绿化（Polygon/MultiPolygon）：参考湖泊流程，在 `src/three/buildGreenery.js` 中使用 `Shape` + `ExtrudeGeometry` 生成 0.5m 厚度的平面 Mesh，颜色取 `config.colors.绿化`（缺省 `#4caf50`），`opacity = 0.6`。
-  - 树行（LineString/MultiLineString 且 `greenType = tree_row`）：沿用 `buildWaterway` 的 offset 逻辑，使用 `config.greenery.treeRow.width/height` 挤出条带，底部贴地、沿正 Y 拉伸。
-  - 其余线状绿化暂按树行方案处理，未来可在 `config.greenery` 中补充独立宽/高。
+  - 面状绿化（Polygon/MultiPolygon）：参考湖泊流程，在 `src/three/buildGreenery.js` 中使用 `Shape` + `ExtrudeGeometry`，挤出厚度与底边来自 `config.greenery.surfaceDepth/surfaceBaseY`，颜色取 `config.colors.绿化`（缺省 `#4caf50`），`opacity = 0.6`。
+  - 线状绿化（LineString/MultiLineString）：沿用 `buildWaterway` 的 offset 逻辑，统一读取 `config.greenery.width/height/baseY` 生成条带，底部贴地、沿正 Y 拉伸；无须按 `greenType` 再划分配置。
+  - 若未来需要针对特定 `greenType` 调整尺寸，需先在 `spec/config.md` 说明扩展方案。
 - **图层与显隐**：
   - `config.layers` 需新增 `{ name: "绿化", key: "greenery", visible: true, order: 18 }`，LayerToggle/DebugPanel 读取后同步到 `useSceneStore`。
   - `App.jsx` 在水系之后调用 `buildGreenery(scene)`，缓存 `greeneryGroupRef`，纳入 `applySceneTransform` 并监听 `layerVisibility.greenery`。
 - **交互**：不实现 hover/click。
-- **测试计划**：允许新增测试后，在 `src/tests/three/buildGreenery.test.js` 准备面状与 tree_row 示例，验证 Mesh 数量、挤出厚度以及 `userData.greenType`。
+- **测试计划**：允许新增测试后，在 `src/tests/three/buildGreenery.test.js` 准备面状与线状示例，验证 Mesh 数量、挤出厚度以及 `userData.greenType`。
 
 ## 状态同步
 - `useSceneStore` 维护 `layerVisibility`、`hoveredBuilding`、`selectedBuilding` 等状态。

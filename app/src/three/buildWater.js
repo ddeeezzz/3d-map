@@ -13,15 +13,6 @@ import {
 const data = JSON.parse(rawGeojson);
 
 /**
- * WATER_DEPTH：水面挤出厚度
- * 单位：米
- * 用途：
- * - 避免与地面（高度 0）重合导致 z-fighting（闪烁）
- * - 1m 足以满足可视化需求，不会显得太高
- */
-const WATER_DEPTH = 1;
-
-/**
  * extractPolygons：从几何体中提取多边形数组
  * 
  * 参数：geometry - GeoJSON geometry 对象
@@ -147,6 +138,10 @@ export function buildWater(scene) {
   }
 
   const origin = findProjectionOrigin(data.features);
+  const waterwayConfig = config.waterway || {};
+  const waterDepth = Number(waterwayConfig.surfaceDepth) || 1;
+  const rawSurfaceBaseY = Number(waterwayConfig.surfaceBaseY);
+  const waterBaseY = Number.isFinite(rawSurfaceBaseY) ? rawSurfaceBaseY : 0;
   const materialColor = config.colors?.水系 || "#4fc3f7";
   const material = new THREE.MeshPhongMaterial({
     color: materialColor,
@@ -188,7 +183,7 @@ export function buildWater(scene) {
        * - 旋转 -90° 使其在 XZ 平面（水平面）
        */
       const geometry = new THREE.ExtrudeGeometry(shape, {
-        depth: WATER_DEPTH,
+        depth: waterDepth,
         bevelEnabled: false,
       });
       geometry.rotateX(-Math.PI / 2);
@@ -197,6 +192,7 @@ export function buildWater(scene) {
       // 水体不投影阴影、不接收阴影（保持透明效果）
       mesh.castShadow = false;
       mesh.receiveShadow = false;
+      mesh.position.y = waterBaseY;
 
       /**
        * userData：用于交互检测和信息显示

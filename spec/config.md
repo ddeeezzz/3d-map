@@ -11,15 +11,15 @@
 - `roadWidths`：道路宽度估算表（`motorway`~`footway` + `默认`）。
 - `road`：道路挤出体积的底边与高度，例如 `{ baseY: 0.05, height: 0.2 }`，用于替代脚本内硬编码。
 - `boundary`：围墙厚度/高度/底边及挖孔参数，例如 `{ width: 1, height: 2, baseY: 0.02, holeInset: 0.35, gateWidth: 6, gateDepth: 3 }`。其中 `holeInset` 控制主空腔与墙体外缘的距离，`gateWidth`/`gateDepth` 为门洞默认尺寸，可被 GeoJSON 中的 `properties.boundaryGates` 覆盖。
-- `waterway`：线状水系（如 `river`）挤出宽度、高度与底边，例如 `{ river: { width: 5, height: 0.3, baseY: 0.01 } }`。
-- `greenery`：线状或面状绿化的额外参数（含 width/height/baseY），尤其是 `treeRow` 供围墙式挤出参考。
+- `waterway`：水系统一参数，包含线状 `width/height/baseY` 与面状 `surfaceDepth/surfaceBaseY`，示例 `{ width: 5, height: 0.2, baseY: -0.4, surfaceDepth: 1, surfaceBaseY: 0 }`。
+- `greenery`：绿化统一参数，线状使用 `width/height/baseY`，面状使用 `surfaceDepth/surfaceBaseY`，示例 `{ width: 2, height: 0.15, baseY: -0.5, surfaceDepth: 0.5, surfaceBaseY: 0 }`。
 - `dataPath`：静态 GeoJSON 相对路径（当前 `/src/data/campus.geojson`）。
 - 若新增配置项，需先在本 spec 说明再更新 `index.js`。
 
 ## 使用约定
-- 数据清洗脚本：高度补全引用 `config.heights`，围墙厚度使用 `config.boundary`，河道/树行宽高分别来自 `config.waterway`、`config.greenery`。
+- 数据清洗脚本：高度补全引用 `config.heights`，围墙厚度使用 `config.boundary`，河道/绿化参数分别来自 `config.waterway`、`config.greenery`。
 - Three.js / deck.gl 渲染：材质颜色统一从 `config.colors` 获取；LayerToggle 基于 `config.layers` 初始化可见性；道路厚度读取 `config.roadWidths`；道路/围墙/河道/绿化的体积高度与底边统一从对应配置读取。
-- 线状 tree_row 建模：如需像河道一样挤出，必须读取 `config.greenery.treeRow.width/height/baseY`，避免重复配置。
+- 线状绿化建模：所有 `greenType` 共用 `config.greenery.width/height/baseY`；面状绿化挤出厚度与偏移统一取 `surfaceDepth/surfaceBaseY`，如需特例必须先扩展配置规范。
 
 ## TODO
 - [x] `src/config/index.js` 写入示例结构（已完成）。

@@ -34,6 +34,10 @@ const buildingCategoryMap = {
 const singleFloorHeightKey = "1层";
 const WATER_TYPES = new Set(["lake", "pond", "reservoir", "basin", "pool"]);
 const CAMPUS_NAME = "西南交通大学（犀浦校区）";
+/** 地球赤道半径（米），用于简化的平面投影 */
+const EARTH_RADIUS = 6378137;
+/** 角度到弧度的转换系数 */
+const DEG_TO_RAD = Math.PI / 180;
 
 async function loadModule(relativePath) {
   const url = pathToFileURL(resolve(__dirname, relativePath)).href;
@@ -155,6 +159,296 @@ function isCampusBoundary(props, geometry) {
   return name.trim() === CAMPUS_NAME;
 }
 
+/**
+ * 判断要素是否为可用的校门节点。
+ * @param {Record<string, any>} props 要素属性，需包含 amenity/barrier/highway
+ * @param {{ type: string, coordinates: any }} geometry GeoJSON 几何
+ * @returns {boolean} 是否满足门的判定
+ */
+function isGateNode(props, geometry) {
+  if (!geometry || geometry.type !== "Point") {
+    return false;
+  }
+  const amenity = (props.amenity || "").toLowerCase();
+  const barrier = (props.barrier || "").toLowerCase();
+  const highway = (props.highway || "").toLowerCase();
+  if (amenity === "gate") return true;
+  if (barrier === "gate") return true;
+  if (highway === "gate") return true;
+  return false;
+}
+
+/**
+ * 将 OSGeo 的门节点整理为后续挖孔所需的结构。
+ * @param {Array} features 原始 GeoJSON Feature 列表
+ * @param {object} config 全局配置，需包含 boundary 字段
+ * @returns {Array} [{ stableId, coordinate, width, depth, name }]
+ */
+function collectGateCandidates(features, config) {
+  const boundaryConfig = config.boundary || {};
+  const defaultWidth =
+    parseNumeric(boundaryConfig.gateWidth) ||
+    parseNumeric(boundaryConfig.width) ||
+    6;
+  const defaultDepth =
+    parseNumeric(boundaryConfig.gateDepth) ||
+    parseNumeric(boundaryConfig.width) ||
+    3;
+
+  const candidates = [];
+  features.forEach((feature, index) => {
+    const props = feature.properties || {};
+    if (!isGateNode(props, feature.geometry)) return;
+    const geometry = feature.geometry;
+    if (!geometry || !Array.isArray(geometry.coordinates)) return;
+
+    const stableId = buildStableId(feature, index);
+    const width =
+      parseNumeric(props.width) ??
+      parseNumeric(props["gate:width"]) ??
+      parseNumeric(props["opening:width"]) ??
+      defaultWidth;
+    const depth =
+      parseNumeric(props.depth) ??
+      parseNumeric(props["gate:depth"]) ??
+      defaultDepth;
+    const name = props.name || props["name:zh"] || props["name:zh-cn"] || null;
+
+    candidates.push({
+      stableId,
+      coordinate: geometry.coordinates,
+      width,
+      depth,
+      name,
+    });
+  });
+
+  return candidates;
+}
+
+/**
+ * 提取围墙的外环列表，忽略内部挖空。
+ * @param {{ type: string, coordinates: any }} geometry GeoJSON 多边形
+ * @returns {Array<Array<[number, number]>>} 外环坐标合集
+ */
+function extractBoundaryRings(geometry) {
+  if (!geometry) return [];
+  if (geometry.type === "Polygon") {
+    return geometry.coordinates && geometry.coordinates[0]
+      ? [geometry.coordinates[0]]
+      : [];
+  }
+  if (geometry.type === "MultiPolygon") {
+    return (geometry.coordinates || [])
+      .map((polygon) => polygon && polygon[0])
+      .filter((ring) => Array.isArray(ring) && ring.length >= 4);
+  }
+  return [];
+}
+
+/**
+ * 依据围墙坐标估算用于平面投影的参考纬度。
+ * @param {Array<Array<[number, number]>>} rings 围墙外环
+ * @returns {number} 参考纬度（弧度）
+ */
+function computeLatitudeReference(rings) {
+  let latSum = 0;
+  let count = 0;
+  rings.forEach((ring) => {
+    ring.forEach((coord) => {
+      latSum += coord[1];
+      count++;
+    });
+  });
+  const averageLat = count ? latSum / count : 0;
+  return averageLat * DEG_TO_RAD;
+}
+
+/**
+ * 将经纬度转换为简化平面坐标。
+ * @param {[number, number]} coord [lng, lat]
+ * @param {number} latRefRad 参考纬度（弧度）
+ * @returns {[number, number]} 平面坐标（米）
+ */
+function projectCoordinate(coord, latRefRad) {
+  const cosLat = Math.cos(latRefRad || 0);
+  const x = coord[0] * DEG_TO_RAD * EARTH_RADIUS * cosLat;
+  const y = coord[1] * DEG_TO_RAD * EARTH_RADIUS;
+  return [x, y];
+}
+
+/**
+ * 计算闭合环的带符号面积，正值代表逆时针，负值代表顺时针。
+ * @param {Array<[number, number]>} projectedRing 已投影的环
+ * @returns {number} 面积值
+ */
+function computeRingOrientation(projectedRing) {
+  let area = 0;
+  for (let i = 0; i < projectedRing.length - 1; i++) {
+    const [x1, y1] = projectedRing[i];
+    const [x2, y2] = projectedRing[i + 1];
+    area += x1 * y2 - x2 * y1;
+  }
+  return area / 2;
+}
+
+/**
+ * 计算点到线段的最近距离及投影坐标。
+ * @param {[number, number]} point 平面坐标点
+ * @param {[number, number]} start 线段起点
+ * @param {[number, number]} end 线段终点
+ * @returns {{ distance: number, closestPoint: [number, number], t: number }}
+ */
+function projectPointToSegment(point, start, end) {
+  const segX = end[0] - start[0];
+  const segY = end[1] - start[1];
+  const segLenSq = segX * segX + segY * segY;
+  let t = 0;
+  if (segLenSq > 0) {
+    t =
+      ((point[0] - start[0]) * segX + (point[1] - start[1]) * segY) /
+      segLenSq;
+  }
+  t = Math.max(0, Math.min(1, t));
+  const closestPoint = [start[0] + segX * t, start[1] + segY * t];
+  const distX = point[0] - closestPoint[0];
+  const distY = point[1] - closestPoint[1];
+  return {
+    distance: Math.hypot(distX, distY),
+    closestPoint,
+    t,
+  };
+}
+
+/**
+ * 在全部围墙环中找到距离校门最近的线段。
+ * @param {Array<{ projected: Array<[number, number]>, orientation: number }>} projectedRings 投影后的环
+ * @param {[number, number]} coordinate 原始经纬度
+ * @param {number} latRefRad 参考纬度（弧度）
+ * @returns {object|null} 最近线段信息
+ */
+function findNearestGateProjection(projectedRings, coordinate, latRefRad) {
+  if (!projectedRings.length) return null;
+  const gatePoint = projectCoordinate(coordinate, latRefRad);
+  let best = null;
+
+  projectedRings.forEach((ring, ringIndex) => {
+    const { projected } = ring;
+    for (let i = 0; i < projected.length - 1; i++) {
+      const start = projected[i];
+      const end = projected[i + 1];
+      const projection = projectPointToSegment(gatePoint, start, end);
+      if (!best || projection.distance < best.distance) {
+        best = {
+          distance: projection.distance,
+          ringIndex,
+          segmentIndex: i,
+          segmentVector: [end[0] - start[0], end[1] - start[1]],
+        };
+      }
+    }
+  });
+
+  if (!best) return null;
+  return {
+    ...best,
+    ring: projectedRings[best.ringIndex],
+  };
+}
+
+/**
+ * 根据线段方向与环朝向构建顺时针的单位切向量。
+ * @param {[number, number]} segmentVector 线段向量
+ * @param {number} orientation 带符号面积，负值表示顺时针
+ * @returns {[number, number]} 顺时针单位切向量
+ */
+function buildClockwiseTangent(segmentVector, orientation) {
+  let [dx, dy] = segmentVector;
+  const length = Math.hypot(dx, dy) || 1;
+  dx /= length;
+  dy /= length;
+  if (orientation > 0) {
+    dx *= -1;
+    dy *= -1;
+  }
+  return [Number(dx.toFixed(6)), Number(dy.toFixed(6))];
+}
+
+/**
+ * 将门节点匹配到围墙线段，并返回成功匹配的门洞数组。
+ * @param {{ type: string, coordinates: any }} geometry 围墙几何
+ * @param {Array} gateCandidates 待匹配的门节点
+ * @param {object} boundaryConfig 围墙配置
+ * @param {(scope: string, message: string, detail?: object) => void} logWarn 日志方法
+ * @returns {{ matches: Array, remaining: Array }} 匹配结果
+ */
+function attachGatesToBoundary(
+  geometry,
+  gateCandidates,
+  boundaryConfig,
+  logWarn,
+) {
+  if (!gateCandidates.length) {
+    return { matches: [], remaining: gateCandidates };
+  }
+
+  const rings = extractBoundaryRings(geometry);
+  if (!rings.length) {
+    return { matches: [], remaining: gateCandidates };
+  }
+
+  const latRefRad = computeLatitudeReference(rings);
+  const projectedRings = rings.map((ring) => {
+    const projected = ring.map((coord) => projectCoordinate(coord, latRefRad));
+    return {
+      original: ring,
+      projected,
+      orientation: computeRingOrientation(projected),
+    };
+  });
+
+  const snapDistance =
+    Math.max(boundaryConfig.width || 1, boundaryConfig.gateDepth || 3) * 4;
+  const matches = [];
+  const remaining = [];
+
+  gateCandidates.forEach((gate) => {
+    const projection = findNearestGateProjection(
+      projectedRings,
+      gate.coordinate,
+      latRefRad,
+    );
+
+    if (!projection) {
+      remaining.push(gate);
+      return;
+    }
+
+    if (projection.distance > snapDistance) {
+      logWarn("数据管线", "校门距离围墙过远，未写入 boundaryGates", {
+        gateId: gate.stableId,
+        距离米: Number(projection.distance.toFixed(2)),
+        阈值米: Number(snapDistance.toFixed(2)),
+      });
+      remaining.push(gate);
+      return;
+    }
+
+    matches.push({
+      stableId: gate.stableId,
+      center: gate.coordinate,
+      width: gate.width,
+      depth: gate.depth,
+      tangent: buildClockwiseTangent(
+        projection.segmentVector,
+        projection.ring.orientation,
+      ),
+    });
+  });
+
+  return { matches, remaining };
+}
+
 async function main() {
   const config = await loadModule("../app/src/config/index.js");
   const loggerModule = await loadModule("../app/src/logger/logger.js");
@@ -164,6 +458,10 @@ async function main() {
     logInfo("数据管线", "开始清洗临时数据", { 输入: tmpPath });
 
     const raw = JSON.parse(readFileSync(tmpPath, "utf8"));
+    let gateCandidates = collectGateCandidates(raw.features, config);
+    if (gateCandidates.length) {
+      logInfo("数据管线", "已收集校门节点", { 数量: gateCandidates.length });
+    }
     const summary = {
       total: raw.features.length,
       kept: 0,
@@ -328,6 +626,17 @@ async function main() {
           },
         };
 
+        const attachResult = attachGatesToBoundary(
+          cleanedGeometry,
+          gateCandidates,
+          config.boundary || {},
+          logWarn,
+        );
+        gateCandidates = attachResult.remaining;
+        if (attachResult.matches.length) {
+          newProps.boundaryGates = attachResult.matches;
+        }
+
         cleanedFeatures.push({
           type: "Feature",
           geometry: cleanedGeometry,
@@ -383,6 +692,10 @@ async function main() {
 
       summary.filtered++;
     });
+
+    if (gateCandidates.length) {
+      logWarn("数据管线", "仍有校门未匹配围墙", { 数量: gateCandidates.length });
+    }
 
     const output = { type: "FeatureCollection", features: cleanedFeatures };
     mkdirSync(join(rootDir, "app", "src", "data"), { recursive: true });

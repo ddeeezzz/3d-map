@@ -32,17 +32,30 @@
 - 如需更大范围或增量更新，再评估 `osmium`、`osmosis` 等工具。
 
 ## 渲染方案
-- Three.js + deck.gl：
-  - `@deck.gl/geo-layers` 解析 GeoJSON、管理属性与交互。
-  - Three.js 使用 `ExtrudeGeometry` 拉伸建筑，负责相机、光照、动画与导航效果。
-  - deck.gl 承载路径、热点、统计等图层，与 Three.js 共享 WebGL 或分层渲染。
-- React 通过 `@deck.gl/react` 承载场景，并与导航面板联动。
+
+- **纯 Three.js 架构**：
+  - `initScene.js`：初始化 WebGL 渲染器、透视相机、环境光 + 平行光（阴影支持）、OrbitControls 交互。
+  - 几何体构建：`build*.js` 模块（Buildings、Roads、Water、Waterway、Boundary、Greenery）
+    - 从 GeoJSON 投影坐标（WGS84 → 平面坐标）
+    - 使用 `ExtrudeGeometry` 拉伸平面为 3D 几何体
+    - 应用配置中的颜色、材质、高度参数
+    - 返回 Group，支持图层可见性切换与变换
+  - 交互拾取：`interactions/*.js` 模块（buildingPicking、waterPicking 等）
+    - 使用 Raycaster 检测鼠标点击
+    - 提交选中对象到 Zustand store
+    - 触发信息卡片显示或高亮效果
+- **React 集成**：
+  - `App.jsx` 作为场景容器，协调各模块初始化、事件绑定、状态同步
+  - `store/useSceneStore` 管理场景变换、图层可见性、选中状态
+  - React 组件（DebugPanel、LayerToggle、InfoCard 等）通过 store 订阅响应式更新
 
 ## 构建与运行
+
 - 统一使用 `pnpm`，提交 `pnpm-lock.yaml`。
 - 使用 Vite 作为开发/构建工具，配置在 `vite.config.js`，入口 `src/main.jsx` 如需调整需先写 spec。
 
 ## 协作流程规范
+
 - **默认模式：方案协作**
   - 所有需求先写入 `t2/spec` 对应文档，达到可执行粒度但避免过度工程。
   - 每个功能单独 spec，`spec/README.md` 负责目录与索引。
@@ -51,6 +64,7 @@
   - 直接按 `t2/spec` 最新内容实施，若发现缺口先补 spec。
 
 ## 测试规范
+
 - **命令**：`pnpm run lint` + `pnpm run test`；涉及三维/交互的页面还需 `pnpm run dev` 本地验证。
 - **单元测试**：集中在 `src/tests/`，使用 Vitest 覆盖数据解析、配置函数、日志模块等纯逻辑。
 - **端到端测试**：在 `t2/tests/e2e/` 使用 Playwright/Cypress 覆盖场景初始化、建筑拉伸、导航交互。
@@ -59,6 +73,7 @@
 - **无法执行测试**：如遇限制需在提交说明中写明原因与补测计划。
 
 ## 注释规范
+
 - 适用范围：`t2/` 目录内所有源码、脚本与文档，提交前需保证注释完整。
 - 语言与格式：注释统一使用简体中文，优先采用可解析的块注释（如 JSDoc `/** */`），必要时补充行内注释。
 - 函数要求：
@@ -72,9 +87,11 @@
   - 如果依赖外部资料或数据源，必须附上出处或文件路径。
 
 ## 日志规范
+
 - `src/logger/logger.js` 提供 `logInfo/logDebug/logWarn/logError`，除等级前缀外全中文。
 - 任何可能出错但非逐帧调用的流程（网络/IO/解析/初始化）至少记录一条 `logInfo`。
 
 ## 其他要求
+
 - 仅处理校园范围数据，避免加载全国 OSM。
 - 颜色映射、默认层高、交互参数集中在配置文件，便于与大屏联动与维护。

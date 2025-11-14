@@ -31,7 +31,8 @@
 5. **几何处理**
    - Polygon/MultiPolygon 使用 `@turf/clean-coords` 去重、`@turf/rewind` 统一方向；可选计算 `properties.centroid` 供 UI 使用。
 6. **附加字段**
-   - 线状绿化：若 `natural = tree_row`，后续建模需参考河道处理方式，并在配置中读取 `config.greenery.treeRow.width/height` 提供挤出参数。
+   - 线状绿化：若 `natural = tree_row`，后续建模沿用河道 offset，但统一读取 `config.greenery.width/height/baseY` 作为条带参数，无需再区分子类型。
+   - 面状绿化：Polygon/MultiPolygon 直接写入 `featureType = "greenery"`，渲染时读取 `config.greenery.surfaceDepth/surfaceBaseY` 控制挤出厚度与底边高度。
    - 面状水系：补齐 `properties.name`、`properties.waterType`，并在 `sourceTag` 中保留 `{ natural, water, landuse }`。
    - 线状水系：保留 `properties.name`，写入 `properties.waterType = "river"`，并在 `sourceTag` 中记录 `{ waterway }`。
    - 围墙：写入 `properties.boundaryType = "campus"`，并保留 `{ amenity, name, id }`。同时收集 `amenity=gate` 或 `barrier=gate` 节点，匹配到最近的围墙边，写入 `properties.boundaryGates = [{ stableId, center: [lng, lat], width, depth, tangent }]`，其中 width/depth 单位为米（默认参考 `config.boundary.gateWidth`/`gateDepth`），`tangent` 为顺时针切线方向，供渲染阶段生成门洞。
@@ -49,7 +50,7 @@
 - `config.heights`：提供高度补全的层高与分类默认值。
 - `config.colors`：提供建筑/水系/围墙颜色映射。
 - `config.boundary`：提供围墙厚度与挤出高度。
-- `config.waterway`：提供线状水系（如 `river`）的宽度/高度配置（示例：`river` 宽 5m、挤出高度 1m）。
+- `config.waterway`：提供线状水系（width/height/baseY）与面状水体（surfaceDepth/surfaceBaseY）的统一配置，示例：`{ width: 5, height: 0.2, baseY: -0.4, surfaceDepth: 1, surfaceBaseY: 0 }`。
 - `config.dataPath`：清洗结果写入路径（当前 `/src/data/campus.geojson`）。
 
 ## TODO

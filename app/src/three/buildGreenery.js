@@ -26,12 +26,6 @@ import { SCENE_BASE_ALIGNMENT } from "../store/useSceneStore";
 const data = JSON.parse(rawGeojson);
 
 /**
- * GREENERY_HEIGHT：面状绿化默认厚度（米）
- * 取值：0.5m，贴地但具备一定体积防止 z-fighting
- */
-const GREENERY_HEIGHT = 0.5;
-
-/**
  * GREENERY_COLOR：绿化统一配色
  * 优先取 config.colors.绿化，缺省为 #4caf50
  */
@@ -201,13 +195,16 @@ export function buildGreenery(scene) {
   group.name = "greenery";
 
   const baseScale = SCENE_BASE_ALIGNMENT?.scale ?? 1;
-  const treeRowConfig = config.greenery?.treeRow || {};
-  const stripWidth = Number(treeRowConfig.width) || 2;
-  const stripHeight = Number(treeRowConfig.height) || 0.3;
+  const greeneryConfig = config.greenery || {};
+  const stripWidth = Number(greeneryConfig.width) || 2;
+  const stripHeight = Number(greeneryConfig.height) || 0.3;
   const stripBaseY =
-    Number.isFinite(treeRowConfig.baseY) && !Number.isNaN(treeRowConfig.baseY)
-      ? Number(treeRowConfig.baseY)
+    Number.isFinite(greeneryConfig.baseY) && !Number.isNaN(greeneryConfig.baseY)
+      ? Number(greeneryConfig.baseY)
       : 0;
+  const surfaceDepth = Number(greeneryConfig.surfaceDepth) || 0.5;
+  const rawSurfaceBaseY = Number(greeneryConfig.surfaceBaseY);
+  const surfaceBaseY = Number.isFinite(rawSurfaceBaseY) ? rawSurfaceBaseY : 0;
   const thickness = stripWidth / baseScale;
 
   const material = new THREE.MeshPhongMaterial({
@@ -237,7 +234,7 @@ export function buildGreenery(scene) {
         const shape = createShapeFromPolygon(polygon, origin);
         if (!shape) return;
         const extrudeGeometry = new THREE.ExtrudeGeometry(shape, {
-          depth: GREENERY_HEIGHT,
+          depth: surfaceDepth,
           bevelEnabled: false,
         });
         extrudeGeometry.rotateX(-Math.PI / 2);
@@ -246,7 +243,7 @@ export function buildGreenery(scene) {
         const mesh = new THREE.Mesh(extrudeGeometry, material);
         mesh.receiveShadow = true;
         mesh.castShadow = false;
-        mesh.position.y = 0;
+        mesh.position.y = surfaceBaseY;
         mesh.userData = {
           stableId,
           name,
