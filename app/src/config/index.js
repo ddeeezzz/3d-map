@@ -33,6 +33,7 @@ export const config = {
     道路: "#d0d0d0",
     水系: "#4fc3f7",
     围墙: "#f5deb3",
+    绿化: "#4caf50",
   },
 
   /**
@@ -75,6 +76,7 @@ export const config = {
     { name: "建筑", key: "buildings", visible: true, order: 10 },
     { name: "围墙", key: "boundary", visible: true, order: 12 },
     { name: "水系", key: "water", visible: true, order: 15 },
+    { name: "绿化", key: "greenery", visible: true, order: 18 },
     { name: "道路", key: "roads", visible: true, order: 20 },
     { name: "热点", key: "pois", visible: false, order: 30 },
   ],
@@ -117,6 +119,7 @@ export const config = {
   boundary: {
     width: 1,
     height: 20,
+    baseY: 0.08,
   },
 
   /**
@@ -129,7 +132,8 @@ export const config = {
   waterway: {
     river: {
       width: 5,
-      height: 1,
+      height: 0.3,
+      baseY: -0.3,
     },
   },
 
@@ -141,8 +145,20 @@ export const config = {
   greenery: {
     treeRow: {
       width: 2,
-      height: 4,
+      height: 0.3,
+      baseY: 0,
     },
+  },
+
+  /**
+   * road：道路线框场景的边框偏移高度
+   * 字段：
+   * - baseY：条形顶点方向和后续前进下面上抬的边距，通过小数调整防止 z-fighting
+   * - height：条形的挺立参数，由 Three.js ExtrudeGeometry depth 设置
+   */
+  road: {
+    baseY: -0.4,
+    height: 0.3,
   },
 
   /**

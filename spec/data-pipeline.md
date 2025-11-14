@@ -30,10 +30,11 @@
    - `properties.sourceTag` 记录原始标签（`building`、`highway`、`natural`、`waterway`、`amenity` 等）。
 5. **几何处理**
    - Polygon/MultiPolygon 使用 `@turf/clean-coords` 去重、`@turf/rewind` 统一方向；可选计算 `properties.centroid` 供 UI 使用。
-6. **附加字段**`n   - 线状绿化：若 `natural = tree_row`，后续建模需参考河道处理方式，并在配置中读取 `config.greenery.treeRow.width/height` 提供挤出参数。
+6. **附加字段**
+   - 线状绿化：若 `natural = tree_row`，后续建模需参考河道处理方式，并在配置中读取 `config.greenery.treeRow.width/height` 提供挤出参数。
    - 面状水系：补齐 `properties.name`、`properties.waterType`，并在 `sourceTag` 中保留 `{ natural, water, landuse }`。
    - 线状水系：保留 `properties.name`，写入 `properties.waterType = "river"`，并在 `sourceTag` 中记录 `{ waterway }`。
-   - 围墙：写入 `properties.boundaryType = "campus"`，并保留 `{ amenity, name, id }`。
+   - 围墙：写入 `properties.boundaryType = "campus"`，并保留 `{ amenity, name, id }`。同时收集 `amenity=gate` 或 `barrier=gate` 节点，匹配到最近的围墙边，写入 `properties.boundaryGates = [{ stableId, center: [lng, lat], width, depth, tangent }]`，其中 width/depth 单位为米（默认参考 `config.boundary.gateWidth`/`gateDepth`），`tangent` 为顺时针切线方向，供渲染阶段生成门洞。
    - 绿化：保留 `properties.name`（若存在），写入 `properties.greenType = natural ?? landuse`，并在 `sourceTag` 中记录 `{ natural, landuse }`。
 7. **日志**
    - 关键节点使用 `logInfo`（加载、分类统计、写入完成），异常或缺失使用 `logWarn` / `logError`。

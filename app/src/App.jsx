@@ -22,6 +22,7 @@ import { buildBuildings } from "./three/buildBuildings";
 import { buildBoundary } from "./three/buildBoundary";
 import { buildWater } from "./three/buildWater";
 import { buildWaterway } from "./three/buildWaterway";
+import { buildGreenery } from "./three/buildGreenery";
 import { buildRoads } from "./three/buildRoads";
 import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
@@ -47,11 +48,12 @@ function App() {
    * - waterwayGroupRef：河流等线性水系的 Group
    * - roadsGroupRef：道路网络的 Group
    */
-  const buildingGroupRef = useRef(null);
-  const boundaryGroupRef = useRef(null);
-  const waterGroupRef = useRef(null);
-  const waterwayGroupRef = useRef(null);
-  const roadsGroupRef = useRef(null);
+const buildingGroupRef = useRef(null);
+const boundaryGroupRef = useRef(null);
+const waterGroupRef = useRef(null);
+const waterwayGroupRef = useRef(null);
+const greeneryGroupRef = useRef(null);
+const roadsGroupRef = useRef(null);
 
   /**
    * 交互拾取事件处理器的清理函数或实例引用
@@ -85,12 +87,15 @@ function App() {
   const boundaryVisible = useSceneStore(
     (state) => state.layerVisibility?.boundary ?? true
   );
-  const waterVisible = useSceneStore(
-    (state) => state.layerVisibility?.water ?? true
-  );
-  const roadsVisible = useSceneStore(
-    (state) => state.layerVisibility?.roads ?? true
-  );
+const waterVisible = useSceneStore(
+  (state) => state.layerVisibility?.water ?? true
+);
+const greeneryVisible = useSceneStore(
+  (state) => state.layerVisibility?.greenery ?? true
+);
+const roadsVisible = useSceneStore(
+  (state) => state.layerVisibility?.roads ?? true
+);
 
   /**
    * applySceneTransform：应用场景变换到所有几何体 Group
@@ -115,6 +120,7 @@ function App() {
       boundaryGroupRef.current,
       waterGroupRef.current,
       waterwayGroupRef.current,
+      greeneryGroupRef.current,
       roadsGroupRef.current,
     ].forEach((group) => {
       if (!group) return;
@@ -163,28 +169,33 @@ function App() {
       const boundaryGroup = buildBoundary(sceneContext.scene);
       const waterGroup = buildWater(sceneContext.scene);
       const waterwayGroup = buildWaterway(sceneContext.scene);
+      const greeneryGroup = buildGreenery(sceneContext.scene);
       const roadsGroup = buildRoads(sceneContext.scene);
 
       buildingGroupRef.current = buildingGroup;
       boundaryGroupRef.current = boundaryGroup;
       waterGroupRef.current = waterGroup;
       waterwayGroupRef.current = waterwayGroup;
+      greeneryGroupRef.current = greeneryGroup;
       roadsGroupRef.current = roadsGroup;
 
       // 初始化各图层可见性：从 store 读取状态，默认全部 true
       const visibility = useSceneStore.getState().layerVisibility;
       const boundaryState = visibility?.boundary ?? true;
       const waterState = visibility?.water ?? true;
+      const greeneryState = visibility?.greenery ?? true;
       const roadState = visibility?.roads ?? true;
       if (boundaryGroup) boundaryGroup.visible = boundaryState;
       if (waterGroup) waterGroup.visible = waterState;
       if (waterwayGroup) waterwayGroup.visible = waterState;
+      if (greeneryGroup) greeneryGroup.visible = greeneryState;
       if (roadsGroup) roadsGroup.visible = roadState;
 
       // 应用基准姿态和任何初始增量变换（通常此时为零）
       applySceneTransform(useSceneStore.getState().sceneTransform);
       logInfo("三维渲染", "围墙几何构建完成");
       logInfo("三维渲染", "水系几何构建完成");
+      logInfo("三维渲染", "绿化几何构建完成");
       logInfo("三维渲染", "道路几何构建完成");
 
       /**
@@ -340,6 +351,7 @@ function App() {
       boundaryGroupRef.current = null;
       waterGroupRef.current = null;
       waterwayGroupRef.current = null;
+      greeneryGroupRef.current = null;
       roadsGroupRef.current = null;
     };
   }, []);
@@ -385,6 +397,15 @@ function App() {
       riverPickingHandleRef.current?.clearHover?.();
     }
   }, [waterVisible]);
+
+  /**
+   * 监听绿化图层可见性
+   */
+  useEffect(() => {
+    if (greeneryGroupRef.current) {
+      greeneryGroupRef.current.visible = greeneryVisible;
+    }
+  }, [greeneryVisible]);
 
   /**
    * 监听道路可见性变化

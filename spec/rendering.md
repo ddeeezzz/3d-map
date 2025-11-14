@@ -42,13 +42,18 @@
 - Hover 显示 emissive，高亮信息通过回调返回，不写入 store；点击输出日志。
 
 ## 围墙建模（`src/three/buildBoundary.js`）
-- 使用清洗脚本输出的 `featureType = "campusBoundary"`。
-- `sanitizeRing` 仅过滤非法坐标，不去除重复点；`prepareClosedRing` 在 offset 前复制首点。
-- 挤出厚度/高度来自 `config.boundary.width/height`，底部贴地，最终 group 套用 `SCENE_BASE_ALIGNMENT + sceneTransform`。
-- **已知缺口**：仍有一段边缺失（节点 2178276210 ↔ 5194469641）。排查方向：
-  1. 在 `sanitizeRing`、`prepareClosedRing` 打印调试点，确认闭合节点未被过滤。
-  2. 检查 `buildBoundaryGeometry` 对零长度段是否直接跳过，可考虑复用前后方向。
-  3. 确认 `boundary` group 应用的 transform 是否造成偏移。
+- 继续消费 `featureType = "campusBoundary"`，但渲染模式从「开放式搭建」改为「闭合挤出 + 挖孔」，先生成实心区域再减去内部空腔，从而确保墙体连续且门洞可控。
+- 实施步骤：
+  1. `prepareClosedRing` 仅负责去重与首尾闭合，原始坐标仍然作为外环 `outerRing`。
+  2. 新增 `buildClosedWallShape(outerRing)`：利用 `clipper-lib`（或 `@turf/transformScale` 退化方案）沿法线向内偏移 `wallThickness + config.boundary.holeInset`，得到与外环方向相反的 `innerRing`，并将其写入 `Shape.holes`，实现主空腔。
+  3. 若 `properties.boundaryGates` 存在（数据清洗阶段写入 gate 中点、朝向、净宽/深度），调用 `buildGateHolePolygons` 构造矩形洞并追加到 `Shape.holes`，形成「挖孔」门洞。
+  4. 使用单次 `ExtrudeGeometry`（`depth = config.boundary.height`，`bevelEnabled = false`）生成 Mesh，`mesh.userData = { stableId, boundaryType, wallMode: "closedSubtractive", gateIds }`，并开启 `castShadow/receiveShadow`。
+  5. `applySceneTransform` 只对最终 Mesh 执行一次即可，Group 只作为集中控制 `layerVisibility.boundary`。
+- 编码范围：仅允许运行 `app/src/three/buildBoundary.js`（闭合建模）、`app/src/config/index.js`（追加 `boundary.holeInset`、`boundary.gateDepth` 等参数）、`tools/clean-geojson.js`（写 `properties.boundaryGates`）与对应测试/数据示例，禁止修改其他模块。
+- 排障要点：
+  1. 若 offset 失败则写日志并回退到旧的开放式构建，便于比较差异。
+  2. 记录 `boundary` Mesh 的 `geometry.boundingBox`，用于 DebugPanel 校验墙高/宽是否符合 `config.boundary`。
+  3. 2178276210 ↔ 5194469641 缺段优先通过插值补点，再观察闭合偏移后是否仍然断裂。
 
 ### 围墙交互（`src/three/interactions/boundaryPicking.js`）
 - hover：材质 emissive 置为 `#ffe082` 并缓存原值；click：`logInfo("围墙交互", "点击 ${name||stableId||未命名围墙}", { stableId, boundaryType })`。
@@ -63,7 +68,7 @@
 - **图层与显隐**：
   - `config.layers` 需新增 `{ name: "绿化", key: "greenery", visible: true, order: 18 }`，LayerToggle/DebugPanel 读取后同步到 `useSceneStore`。
   - `App.jsx` 在水系之后调用 `buildGreenery(scene)`，缓存 `greeneryGroupRef`，纳入 `applySceneTransform` 并监听 `layerVisibility.greenery`。
-- **交互**：当前不实现 hover/click，若未来需要可复用 `boundaryPicking` 的 emissive 方案。
+- **交互**：不实现 hover/click。
 - **测试计划**：允许新增测试后，在 `src/tests/three/buildGreenery.test.js` 准备面状与 tree_row 示例，验证 Mesh 数量、挤出厚度以及 `userData.greenType`。
 
 ## 状态同步

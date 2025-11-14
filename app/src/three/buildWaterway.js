@@ -219,6 +219,8 @@ export function buildWaterway(scene) {
   // 配置中的宽度单位为米
   const stripWidth = Number(riverConfig.width) || 5;
   const stripHeight = Number(riverConfig.height) || 1;
+  const rawStripBaseY = Number(riverConfig.baseY);
+  const stripBaseY = Number.isFinite(rawStripBaseY) ? rawStripBaseY : 0;
   // 补偿场景缩放，保持视觉一致性
   const thickness = stripWidth / baseScale;
 
@@ -254,6 +256,7 @@ export function buildWaterway(scene) {
       if (!geometry) return;
 
       const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y = stripBaseY;
       // 河流不投影/接收阴影（保持透明效果）
       mesh.castShadow = false;
       mesh.receiveShadow = false;

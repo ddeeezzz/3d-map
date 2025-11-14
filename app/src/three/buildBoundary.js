@@ -275,6 +275,8 @@ export function buildBoundary(scene) {
   const color = config.colors?.围墙 || "#f5deb3";
   const boundaryWidth = Number(config.boundary?.width) || 1;
   const boundaryHeight = Number(config.boundary?.height) || 2;
+  const rawBoundaryBaseY = Number(config.boundary?.baseY);
+  const boundaryBaseY = Number.isFinite(rawBoundaryBaseY) ? rawBoundaryBaseY : 0;
   const baseScale = SCENE_BASE_ALIGNMENT?.scale ?? 1;
   const thickness = boundaryWidth / baseScale;
 
@@ -324,6 +326,7 @@ export function buildBoundary(scene) {
        * 创建 Mesh
        */
       const mesh = new THREE.Mesh(stripGeometry, material);
+      mesh.position.y = boundaryBaseY;
       mesh.castShadow = false;
       mesh.receiveShadow = false;
       mesh.userData = {

@@ -7,7 +7,7 @@
  * 
  * 特点：
  * - 多级道路宽度推断系统
- * - 轻微挤出（ROAD_HEIGHT 0.2m）形成立体感
+ * - 轻微挤出（config.road.height 0.2m）形成立体感
  * - 支持 LineString 和 MultiLineString
  * - 每条道路独立材质（避免全局材质复用导致的配色问题）
  * 
@@ -29,12 +29,15 @@ import { SCENE_BASE_ALIGNMENT } from "../store/useSceneStore";
 const data = JSON.parse(rawGeojson);
 
 /**
- * ROAD_HEIGHT：道路挤出高度
+ * config.road.height：道路挤出高度
  * 单位：米
  * 用途：增加立体感，使道路不仅仅是平面
  * 值 0.2 足够小，不会遮挡建筑底部，但能显示层级
  */
-const ROAD_HEIGHT = 0.2;
+const DEFAULT_ROAD_VOLUME = {
+  height: 0.2,
+  baseY: 0.04,
+};
 
 /**
  * DEFAULT_LANE_WIDTH：单车道标准宽度
@@ -42,6 +45,18 @@ const ROAD_HEIGHT = 0.2;
  * 用途：当道路属性中有 lanes（车道数）但无 width 时，用此宽度乘以车道数
  */
 const DEFAULT_LANE_WIDTH = 3.5;
+
+/**
+ * resolveRoadVolume锛氫粠 config 涓瘡娆¤В鏋愭潯褰㈡亸绉婚珮搴︽弿杩板拰榛樿鍊?
+ */
+function resolveRoadVolume() {
+  const rawHeight = Number(config.road?.height);
+  const rawBaseY = Number(config.road?.baseY);
+  const height =
+    Number.isFinite(rawHeight) && rawHeight > 0 ? rawHeight : DEFAULT_ROAD_VOLUME.height;
+  const baseY = Number.isFinite(rawBaseY) ? rawBaseY : DEFAULT_ROAD_VOLUME.baseY;
+  return { height, baseY };
+}
 
 /**
  * determineRoadColor：获取道路颜色
@@ -194,7 +209,7 @@ function projectLineString(coordinates, origin) {
  * 3. 正规化法向量，处理零向量（折返）情况
  * 4. 沿法向量两侧平行扩展，形成左右两条边界
  * 5. 闭合轮廓，创建 THREE.Shape
- * 6. 用 ExtrudeGeometry 挤出成 3D（高度 ROAD_HEIGHT）
+ * 6. 用 ExtrudeGeometry 挤出成 3D（高度 config.road.height）
  * 
  * 区别于 buildWaterway：
  * - buildWaterway 使用循环法向量（闭合路径）
@@ -207,8 +222,11 @@ function projectLineString(coordinates, origin) {
  * - 零长度段：跳过该边
  * - 轮廓 < 3 点：返回 null（无法形成面）
  */
-function buildRoadGeometry(points, thickness) {
+function buildRoadGeometry(points, thickness, depth) {
   if (points.length < 2 || thickness <= 0) {
+    return null;
+  }
+  if (!Number.isFinite(depth) || depth <= 0) {
     return null;
   }
 
@@ -277,7 +295,7 @@ function buildRoadGeometry(points, thickness) {
   // 创建 3D 几何
   const shape = new THREE.Shape(contour);
   const geometry = new THREE.ExtrudeGeometry(shape, {
-    depth: ROAD_HEIGHT,
+    depth,
     bevelEnabled: false,
   });
   geometry.rotateX(-Math.PI / 2);
@@ -354,6 +372,7 @@ export function buildRoads(scene) {
 
   // 从场景基础变换获取缩放因子，用于补偿
   const baseSceneScale = SCENE_BASE_ALIGNMENT?.scale ?? 1;
+  const roadVolume = resolveRoadVolume();
 
   /**
    * 遍历所有 GeoJSON 要素
@@ -379,12 +398,13 @@ export function buildRoads(scene) {
      */
     for (const segment of segments) {
       const projected = projectLineString(segment, origin);
-      const geometry = buildRoadGeometry(projected, thickness);
+      const geometry = buildRoadGeometry(projected, thickness, roadVolume.height);
       if (!geometry) continue;
 
       // 创建独立材质
       const meshMaterial = createRoadMaterial();
       const mesh = new THREE.Mesh(geometry, meshMaterial);
+      mesh.position.y = roadVolume.baseY;
       // 道路接收阴影（增加立体感）
       mesh.receiveShadow = true;
       
