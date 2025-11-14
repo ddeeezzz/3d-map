@@ -54,4 +54,23 @@ describe("useSceneStore", () => {
     expect(transform.offset.x).toBe(10);
     expect(transform.offset.z).toBe(0);
   });
+
+  it("updates environment settings", () => {
+    useSceneStore
+      .getState()
+      .updateEnvironmentSettings({ exposure: 1.7, enabled: false });
+    const env = useSceneStore.getState().environmentSettings;
+    expect(env.exposure).toBe(1.7);
+    expect(env.enabled).toBe(false);
+  });
+
+  it("resets environment settings to defaults", () => {
+    useSceneStore
+      .getState()
+      .updateEnvironmentSettings({ skybox: "custom.hdr", enabled: false });
+    useSceneStore.getState().resetEnvironmentSettings();
+    const env = useSceneStore.getState().environmentSettings;
+    expect(env.enabled).toBe(true);
+    expect(env.skybox).toBe("citrus_orchard_road_puresky_4k.hdr");
+  });
 });

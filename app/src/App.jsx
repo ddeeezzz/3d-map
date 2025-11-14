@@ -37,8 +37,10 @@ function App() {
   /**
    * containerRef：Three.js 渲染容器 DOM 节点引用
    * 用途：作为场景创建时的挂载点
-   */
+  */
   const containerRef = useRef(null);
+  // 缓存 initScene 返回的上下文，便于响应环境参数变更
+  const sceneContextRef = useRef(null);
 
   /**
    * 各类几何体 Group 引用，便于后续可见性切换和变换应用
@@ -95,6 +97,9 @@ const greeneryVisible = useSceneStore(
 );
 const roadsVisible = useSceneStore(
   (state) => state.layerVisibility?.roads ?? true
+);
+const environmentSettings = useSceneStore(
+  (state) => state.environmentSettings
 );
 
   /**
@@ -155,165 +160,183 @@ const roadsVisible = useSceneStore(
 
     let sceneContext;
     let detachBuildingPicking;
+    let disposed = false;
 
     // 窗口 resize 时重新计算相机和渲染器尺寸
     const handleResize = () => sceneContext?.resize();
 
-    try {
-      // 创建 Three.js 场景基础设施：渲染器、相机、光源等
-      sceneContext = initScene(container);
-      logInfo("三维渲染", "Three.js 场景初始化完成");
+    const setupScene = async () => {
+      try {
+        const initialEnvironment =
+          useSceneStore.getState().environmentSettings;
+        sceneContext = initScene(container, {
+          environment: initialEnvironment,
+        });
+        sceneContextRef.current = sceneContext;
 
-      // 构建各类几何体并获得对应的 Group 引用
-      const buildingGroup = buildBuildings(sceneContext.scene);
-      const boundaryGroup = buildBoundary(sceneContext.scene);
-      const waterGroup = buildWater(sceneContext.scene);
-      const waterwayGroup = buildWaterway(sceneContext.scene);
-      const greeneryGroup = buildGreenery(sceneContext.scene);
-      const roadsGroup = buildRoads(sceneContext.scene);
+        await sceneContext.environmentReady;
+        if (disposed) {
+          sceneContext.disposeEnvironment?.();
+          return;
+        }
 
-      buildingGroupRef.current = buildingGroup;
-      boundaryGroupRef.current = boundaryGroup;
-      waterGroupRef.current = waterGroup;
-      waterwayGroupRef.current = waterwayGroup;
-      greeneryGroupRef.current = greeneryGroup;
-      roadsGroupRef.current = roadsGroup;
+        // 创建 Three.js 场景基础设施：渲染器、相机、光源等
+        logInfo("三维渲染", "Three.js 场景初始化完成");
 
-      // 初始化各图层可见性：从 store 读取状态，默认全部 true
-      const visibility = useSceneStore.getState().layerVisibility;
-      const boundaryState = visibility?.boundary ?? true;
-      const waterState = visibility?.water ?? true;
-      const greeneryState = visibility?.greenery ?? true;
-      const roadState = visibility?.roads ?? true;
-      if (boundaryGroup) boundaryGroup.visible = boundaryState;
-      if (waterGroup) waterGroup.visible = waterState;
-      if (waterwayGroup) waterwayGroup.visible = waterState;
-      if (greeneryGroup) greeneryGroup.visible = greeneryState;
-      if (roadsGroup) roadsGroup.visible = roadState;
+        // 构建各类几何体并获得对应的 Group 引用
+        const buildingGroup = buildBuildings(sceneContext.scene);
+        const boundaryGroup = buildBoundary(sceneContext.scene);
+        const waterGroup = buildWater(sceneContext.scene);
+        const waterwayGroup = buildWaterway(sceneContext.scene);
+        const greeneryGroup = buildGreenery(sceneContext.scene);
+        const roadsGroup = buildRoads(sceneContext.scene);
 
-      // 应用基准姿态和任何初始增量变换（通常此时为零）
-      applySceneTransform(useSceneStore.getState().sceneTransform);
-      logInfo("三维渲染", "围墙几何构建完成");
-      logInfo("三维渲染", "水系几何构建完成");
-      logInfo("三维渲染", "绿化几何构建完成");
-      logInfo("三维渲染", "道路几何构建完成");
+        buildingGroupRef.current = buildingGroup;
+        boundaryGroupRef.current = boundaryGroup;
+        waterGroupRef.current = waterGroup;
+        waterwayGroupRef.current = waterwayGroup;
+        greeneryGroupRef.current = greeneryGroup;
+        roadsGroupRef.current = roadsGroup;
 
-      /**
-       * 绑定建筑拾取交互：支持 Hover（高亮）和 Click（选中）
-       * onHover：更新 store 中的悬停建筑信息
-       * onSelect：更新 store 中的选中建筑 ID，并记录日志
-       */
-      detachBuildingPicking = attachBuildingPicking({
-        domElement: sceneContext.renderer.domElement,
-        camera: sceneContext.camera,
-        buildingGroup,
-        onHover: (info) => {
-          useSceneStore.getState().setHoveredBuilding(info);
-        },
-        onSelect: (info) => {
-          if (!info) return;
-          const { stableId, name } = info;
-          if (stableId) {
-            useSceneStore.getState().setSelectedBuilding(stableId);
-          }
-          logInfo("三维交互", `选中 ${name ?? stableId ?? "未知建筑"}`);
-        },
-      });
+        // 初始化各图层可见性：从 store 读取状态，默认全部 true
+        const visibility = useSceneStore.getState().layerVisibility;
+        const boundaryState = visibility?.boundary ?? true;
+        const waterState = visibility?.water ?? true;
+        const greeneryState = visibility?.greenery ?? true;
+        const roadState = visibility?.roads ?? true;
+        if (boundaryGroup) boundaryGroup.visible = boundaryState;
+        if (waterGroup) waterGroup.visible = waterState;
+        if (waterwayGroup) waterwayGroup.visible = waterState;
+        if (greeneryGroup) greeneryGroup.visible = greeneryState;
+        if (roadsGroup) roadsGroup.visible = roadState;
 
-      /**
-       * 绑定边界（围墙）拾取交互
-       * 主要用于显示边界信息，支持 Hover 效果
-       */
-      const boundaryPickingHandle = boundaryGroup
-        ? attachBoundaryPicking({
-            domElement: sceneContext.renderer.domElement,
-            camera: sceneContext.camera,
-            boundaryGroup,
-          })
-        : null;
-      boundaryPickingHandleRef.current = boundaryPickingHandle;
+        // 应用基准姿态和任何初始增量变换（通常此时为零）
+        applySceneTransform(useSceneStore.getState().sceneTransform);
+        logInfo("三维渲染", "围墙几何构建完成");
+        logInfo("三维渲染", "水系几何构建完成");
+        logInfo("三维渲染", "绿化几何构建完成");
+        logInfo("三维渲染", "道路几何构建完成");
 
-      /**
-       * 绑定水体拾取交互：支持 Hover 和 Click
-       * onHover：存储到 hoveredWaterInfoRef 以备查询
-       * onSelect：记录选中的水体信息
-       */
-      const waterPickingHandle = attachWaterPicking({
-        domElement: sceneContext.renderer.domElement,
-        camera: sceneContext.camera,
-        waterGroup,
-        onHover: (info) => {
-          hoveredWaterInfoRef.current = info;
-        },
-        onSelect: (info) => {
-          if (!info) return;
-          const { stableId, name, waterType } = info;
-          logInfo(
-            "水系交互",
-            `选中 ${name ?? stableId ?? "未命名水体"} (${waterType ?? "未知类型"})`
-          );
-        },
-      });
-      waterPickingHandleRef.current = waterPickingHandle;
+        /**
+         * 绑定建筑拾取交互：支持 Hover（高亮）和 Click（选中）
+         * onHover：更新 store 中的悬停建筑信息
+         * onSelect：更新 store 中的选中建筑 ID，并记录日志
+         */
+        detachBuildingPicking = attachBuildingPicking({
+          domElement: sceneContext.renderer.domElement,
+          camera: sceneContext.camera,
+          buildingGroup,
+          onHover: (info) => {
+            useSceneStore.getState().setHoveredBuilding(info);
+          },
+          onSelect: (info) => {
+            if (!info) return;
+            const { stableId, name } = info;
+            if (stableId) {
+              useSceneStore.getState().setSelectedBuilding(stableId);
+            }
+            logInfo("三维交互", `选中 ${name ?? stableId ?? "未知建筑"}`);
+          },
+        });
 
-      /**
-       * 绑定河流拾取交互：针对 waterway 线性要素
-       * 逻辑同水体，但专门处理河流数据
-       */
-      const riverPickingHandle = attachRiverPicking({
-        domElement: sceneContext.renderer.domElement,
-        camera: sceneContext.camera,
-        riverGroup: waterwayGroup,
-        onHover: (info) => {
-          hoveredRiverInfoRef.current = info;
-        },
-        onSelect: (info) => {
-          if (!info) return;
-          const { stableId, name } = info;
-          logInfo("河流交互", `选中 ${name ?? stableId ?? "未知河流"}`);
-        },
-      });
-      riverPickingHandleRef.current = riverPickingHandle;
+        /**
+         * 绑定边界（围墙）拾取交互
+         * 主要用于显示边界信息，支持 Hover 效果
+         */
+        const boundaryPickingHandle = boundaryGroup
+          ? attachBoundaryPicking({
+              domElement: sceneContext.renderer.domElement,
+              camera: sceneContext.camera,
+              boundaryGroup,
+            })
+          : null;
+        boundaryPickingHandleRef.current = boundaryPickingHandle;
 
-      /**
-       * 绑定道路拾取交互：支持 Hover 和 Click
-       * onHover：存储到 hoveredRoadInfoRef 以备查询
-       * onSelect：记录选中的道路信息及其等级
-       */
-      const roadPickingHandle = attachRoadPicking({
-        domElement: sceneContext.renderer.domElement,
-        camera: sceneContext.camera,
-        roadsGroup,
-        onHover: (info) => {
-          hoveredRoadInfoRef.current = info;
-        },
-        onSelect: (info) => {
-          if (!info) return;
-          const { stableId, name, highway } = info;
-          logInfo(
-            "道路交互",
-            `选中 ${name ?? stableId ?? "未知道路"} (${highway ?? "未知等级"})`
-          );
-        },
-      });
-      roadPickingHandleRef.current = roadPickingHandle;
+        /**
+         * 绑定水体拾取交互：支持 Hover 和 Click
+         * onHover：存储到 hoveredWaterInfoRef 以备查询
+         * onSelect：记录选中的水体信息
+         */
+        const waterPickingHandle = attachWaterPicking({
+          domElement: sceneContext.renderer.domElement,
+          camera: sceneContext.camera,
+          waterGroup,
+          onHover: (info) => {
+            hoveredWaterInfoRef.current = info;
+          },
+          onSelect: (info) => {
+            if (!info) return;
+            const { stableId, name, waterType } = info;
+            logInfo(
+              "水系交互",
+              `选中 ${name ?? stableId ?? "未命名水体"} (${waterType ?? "未知类型"})`
+            );
+          },
+        });
+        waterPickingHandleRef.current = waterPickingHandle;
 
-      // 启动主渲染循环
-      sceneContext.start();
-      // 监听窗口大小改变事件
-      window.addEventListener("resize", handleResize);
-    } catch (error) {
-      // 初始化失败时记录错误信息
-      logError("三维渲染", "Three.js 场景初始化失败", {
-        错误: error?.message ?? "未知错误",
-      });
-    }
+        /**
+         * 绑定河流拾取交互：针对 waterway 线性要素
+         * 逻辑同水体，但专门处理河流数据
+         */
+        const riverPickingHandle = attachRiverPicking({
+          domElement: sceneContext.renderer.domElement,
+          camera: sceneContext.camera,
+          riverGroup: waterwayGroup,
+          onHover: (info) => {
+            hoveredRiverInfoRef.current = info;
+          },
+          onSelect: (info) => {
+            if (!info) return;
+            const { stableId, name } = info;
+            logInfo("河流交互", `选中 ${name ?? stableId ?? "未知河流"}`);
+          },
+        });
+        riverPickingHandleRef.current = riverPickingHandle;
+
+        /**
+         * 绑定道路拾取交互：支持 Hover 和 Click
+         * onHover：存储到 hoveredRoadInfoRef 以备查询
+         * onSelect：记录选中的道路信息及其等级
+         */
+        const roadPickingHandle = attachRoadPicking({
+          domElement: sceneContext.renderer.domElement,
+          camera: sceneContext.camera,
+          roadsGroup,
+          onHover: (info) => {
+            hoveredRoadInfoRef.current = info;
+          },
+          onSelect: (info) => {
+            if (!info) return;
+            const { stableId, name, highway } = info;
+            logInfo(
+              "道路交互",
+              `选中 ${name ?? stableId ?? "未知道路"} (${highway ?? "未知等级"})`
+            );
+          },
+        });
+        roadPickingHandleRef.current = roadPickingHandle;
+
+        // 启动主渲染循环
+        sceneContext.start();
+        // 监听窗口大小改变事件
+        window.addEventListener("resize", handleResize);
+      } catch (error) {
+        // 初始化失败时记录错误信息
+        logError("三维渲染", "Three.js 场景初始化失败", {
+          错误: error?.message ?? "未知错误",
+        });
+      }
+    };
+
+    setupScene();
 
     /**
      * 清理函数：在组件卸载或重新初始化时执行
      * 职责：释放所有事件监听、拾取句柄、渲染资源
      */
     return () => {
+      disposed = true;
       // 移除窗口 resize 监听
       window.removeEventListener("resize", handleResize);
       
@@ -337,7 +360,8 @@ const roadsVisible = useSceneStore(
       // 清理建筑拾取交互
       detachBuildingPicking?.();
       
-      // 停止渲染循环
+      // 停止渲染循环并释放天空盒资源
+      sceneContext?.disposeEnvironment?.();
       sceneContext?.stop();
       
       // 从 DOM 中移除 canvas 元素
@@ -346,6 +370,8 @@ const roadsVisible = useSceneStore(
         container.removeChild(canvas);
       }
       
+      sceneContextRef.current = null;
+
       // 清空所有 Group 引用
       buildingGroupRef.current = null;
       boundaryGroupRef.current = null;
@@ -363,6 +389,16 @@ const roadsVisible = useSceneStore(
   useEffect(() => {
     applySceneTransform(sceneTransform);
   }, [sceneTransform]);
+
+  /**
+   * 监听天空盒参数变化：实时更新 Three.js 场景背景与环境贴图
+   */
+  useEffect(() => {
+    if (!sceneContextRef.current?.applyEnvironmentSettings) {
+      return;
+    }
+    sceneContextRef.current.applyEnvironmentSettings(environmentSettings);
+  }, [environmentSettings]);
 
   /**
    * 监听边界可见性变化

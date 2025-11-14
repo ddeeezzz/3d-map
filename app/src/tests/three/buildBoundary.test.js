@@ -7,7 +7,7 @@ const boundaryCoordinates = [
   [103.9005, 30.7005],
   [103.9002, 30.7005],
   [103.9002, 30.7002],
-  [103.9002, 30.7002], // duplicate closing node
+  [103.9002, 30.7002],
 ];
 
 const mockData = JSON.stringify({
@@ -32,6 +32,15 @@ const mockData = JSON.stringify({
         featureType: "campusBoundary",
         stableId: "relation/1",
         name: "校园围墙",
+        boundaryGates: [
+          {
+            stableId: "gate/1",
+            center: [103.90035, 30.70035],
+            width: 4,
+            depth: 5,
+            tangent: [0, 1],
+          },
+        ],
       },
       geometry: {
         type: "Polygon",
@@ -47,7 +56,13 @@ vi.mock("../../data/campus.geojson?raw", () => ({
 
 const boundaryModule = await import("../../three/buildBoundary");
 const { buildBoundary, __boundaryInternals } = boundaryModule;
-const { projectRingWithDuplicates, prepareClosedRing } = __boundaryInternals;
+const {
+  projectRingWithDuplicates,
+  prepareClosedRing,
+  computeSignedArea,
+  offsetRing,
+  buildClosedWallShape,
+} = __boundaryInternals;
 
 describe("buildBoundary", () => {
   let scene;
@@ -56,13 +71,13 @@ describe("buildBoundary", () => {
     scene = new THREE.Scene();
   });
 
-  it("保留重复节点也能生成围墙 Mesh", () => {
+  it("生成包含 gateIds 的闭合围墙 Mesh", () => {
     const group = buildBoundary(scene);
     expect(scene.children).toContain(group);
-    expect(group.name).toBe("boundary");
-    expect(group.children.length).toBeGreaterThan(0);
     const mesh = group.children[0];
     expect(mesh.userData.stableId).toBe("relation/1");
+    expect(mesh.userData.wallMode).toBe("closedSubtractive");
+    expect(mesh.userData.gateIds).toContain("gate/1");
     expect(mesh.geometry).toBeDefined();
   });
 
@@ -72,7 +87,7 @@ describe("buildBoundary", () => {
 });
 
 describe("__boundaryInternals", () => {
-  it("projectRingWithDuplicates 不移除重复坐标", () => {
+  it("projectRingWithDuplicates 保留重复节点", () => {
     const ring = [
       [103.9, 30.7],
       [103.9, 30.7],
@@ -84,7 +99,7 @@ describe("__boundaryInternals", () => {
     expect(projected[0].equals(projected[1])).toBe(true);
   });
 
-  it("prepareClosedRing 会复制首点到末尾且使用新对象", () => {
+  it("prepareClosedRing 会复制首点到末尾", () => {
     const input = [
       new THREE.Vector2(0, 0),
       new THREE.Vector2(1, 0),
@@ -95,5 +110,47 @@ describe("__boundaryInternals", () => {
     expect(closed.length).toBe(input.length);
     expect(closed[closed.length - 1].equals(closed[0])).toBe(true);
     expect(closed[closed.length - 1]).not.toBe(closed[0]);
+  });
+
+  it("offsetRing 向外拓展后面积增大", () => {
+    const ring = [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(10, 0),
+      new THREE.Vector2(10, 10),
+      new THREE.Vector2(0, 10),
+    ];
+    const baseArea = Math.abs(computeSignedArea(ring));
+    const outward = offsetRing(ring, 2, true);
+    const outwardArea = Math.abs(computeSignedArea(outward));
+    expect(outwardArea).toBeGreaterThan(baseArea);
+  });
+
+  it("buildClosedWallShape 使用 innerRing 作为 hole 并记录门洞", () => {
+    const innerRing = [
+      new THREE.Vector2(0, 0),
+      new THREE.Vector2(10, 0),
+      new THREE.Vector2(10, 10),
+      new THREE.Vector2(0, 10),
+    ];
+    const result = buildClosedWallShape({
+      innerRing,
+      wallThickness: 2,
+      gates: [
+        {
+          stableId: "gate/unit",
+          center: [0.00005, 0.00005],
+          width: 4,
+          depth: 3,
+          tangent: [1, 0],
+        },
+      ],
+      origin: { lng: 0, lat: 0 },
+      gateWidth: 4,
+      gateDepth: 3,
+    });
+
+    expect(result).not.toBeNull();
+    expect(result.shape.holes.length).toBeGreaterThanOrEqual(2);
+    expect(result.appliedGateIds).toContain("gate/unit");
   });
 });

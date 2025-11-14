@@ -177,17 +177,40 @@ export const config = {
   },
 
   /**
-   * dataPath：GeoJSON 数据文件路径（相对于 public/ 或项目根）
+   * dataPath：GeoJSON 数据文件路径（相对于 public/）
    * 使用场景：
    * - 各个 build*.js 模块通过 fetch(config.dataPath) 获取数据
    * - Vite 开发服务器会在此路径提供文件
    * 
    * 说明：
-   * - 绝对路径 /src/data/campus.geojson 不推荐（会被 Vite 处理）
-   * - 建议改为 /data/campus.geojson 并放在 public/ 目录
-   * - 或使用相对导入：import campusData from '../data/campus.geojson'
+   * - 不建议直接引用 /src/data/campus.geojson（会被 Vite 处理）
+   * - 推荐放置在 public/data/ 并通过绝对路径访问
+   * - 也可通过相对导入：import campusData from "../data/campus.geojson"
    */
   dataPath: "/src/data/campus.geojson",
+  
+  /**
+   * environment：软模式下环境描述
+   * 字段说明：
+   * - enabled：开启人眼认知的 HDR 背景、光态和饱和效果
+   * - skybox：重视自定义天空盒图片的 HDR 文件名称，子目录地址一定应存在 `/app/public/textures/skyboxes/`
+   * - exposure：亮度、灵活量并描述
+   * - toneMapping：支持实业用的 renderer.toneMapping 的过滤任何亮度
+   * - skyboxes：表示可选化的 HDR 集合，主初始名称
+   */
+  environment: {
+    enabled: true,
+    skybox: "citrus_orchard_road_puresky_4k.hdr",
+    exposure: 1,
+    toneMapping: "ACESFilmic",
+    skyboxes: [
+      {
+        label: "柑橘果园晴空（4K HDR）",
+        value: "citrus_orchard_road_puresky_4k.hdr",
+      },
+    ],
+  },
+
 };
 
 export default config;

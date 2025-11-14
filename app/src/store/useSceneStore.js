@@ -12,6 +12,8 @@
  */
 
 import { create } from "zustand";
+// 导入全局配置以便获取环境贴图等默认参数
+import config from "../config";
 
 /**
  * MAX_LOG_PREVIEW：日志预览列表的最大长度
@@ -84,6 +86,23 @@ const getInitialSceneTransform = () => ({
 });
 
 /**
+ * getInitialEnvironmentSettings：生成天空盒/环境贴图的初始配置
+ *
+ * 返回结构：{ enabled, skybox, exposure, toneMapping }
+ *
+ * 说明：
+ * - 直接拷贝 config.environment，避免组件之间共享引用
+ * - 如果配置缺省，使用兜底值（true + 1 + "ACESFilmic"）
+ */
+const getInitialEnvironmentSettings = () => ({
+  enabled: config.environment?.enabled ?? true,
+  skybox:
+    config.environment?.skybox ?? "citrus_orchard_road_puresky_4k.hdr",
+  exposure: config.environment?.exposure ?? 1,
+  toneMapping: config.environment?.toneMapping ?? "ACESFilmic",
+});
+
+/**
  * getInitialData：集中定义 store 的所有初始状态
  * 
  * 返回值：包含以下字段的对象
@@ -108,6 +127,7 @@ const getInitialData = () => ({
   layerVisibility: {},
   logsPreview: [],
   sceneTransform: getInitialSceneTransform(),
+  environmentSettings: getInitialEnvironmentSettings(),
 });
 
 /**
@@ -271,6 +291,29 @@ export const useSceneStore = create((set, get) => ({
   resetSceneTransform: () =>
     set({
       sceneTransform: getInitialSceneTransform(),
+    }),
+
+  /**
+   * updateEnvironmentSettings：更新天空盒/环境配置
+   * 参数：partial - 需要覆盖的字段（enabled/skybox/exposure/toneMapping）
+   * 调用方：DebugPanel 天空盒表单、未来的配置同步逻辑
+   * 仅覆盖传入字段，其他保持当前值
+   */
+  updateEnvironmentSettings: (partial) =>
+    set((state) => ({
+      environmentSettings: {
+        ...state.environmentSettings,
+        ...partial,
+      },
+    })),
+
+  /**
+   * resetEnvironmentSettings：恢复天空盒配置到默认值
+   * 说明：常用于“恢复默认”或全局 Reset
+   */
+  resetEnvironmentSettings: () =>
+    set({
+      environmentSettings: getInitialEnvironmentSettings(),
     }),
 
   /**

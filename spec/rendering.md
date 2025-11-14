@@ -12,6 +12,13 @@
 2. 暴露 `resize(width, height)` 与 `render()`，供上层响应窗口尺寸与主动重绘。
 3. 返回 `{ scene, camera, renderer, controls, start(), stop() }`，start/stop 管理 RAF。
 
+## 天空盒与环境贴图
+- **资源与路径**：统一在 `app/public/textures/skyboxes/` 存放 HDR 贴图，本阶段使用 `citrus_orchard_road_puresky_4k.hdr`（蓝天晴朗环境），后续如需替换必须在该目录内保留原素材并更新命名规范。
+- **加载方式**：`src/three/initScene.js` 中使用 `HDRLoader`（原 `RGBELoader` 已废弃）读取 HDR，配合 `PMREMGenerator` 转换为 `WebGLRenderTarget`，完成后将 `scene.background` 与 `scene.environment` 指向同一纹理，确保天空背景与 PBR 反射一致，加载过程出现异常时写入 `logWarn("天空盒加载", ...)`。
+- **初始化 Hook**：在 `initScene` 初始化 renderer 后立即创建 `pmremGenerator`，并在 `start()` 前加载 HDR；渲染循环销毁时调用 `pmremGenerator.dispose()` 与纹理 `dispose()`，避免内存泄漏。
+- **配置项**：`app/src/config/index.js` 追加 `environment` 段（如 `{ skybox: "citrus_orchard_road_puresky_4k.hdr", exposure: 1.0, toneMapping: "ACESFilmic" }`），供 DebugPanel/场景初始化读取，支持未来切换贴图、调整曝光或 tone mapping。
+- **调试面板**：DebugPanel 新增“天空盒”折叠面板，提供贴图选择（下拉）、曝光滑杆、环境强度开关，并通过 `useSceneStore` 的 `environmentSettings` 同步到 Three.js；变更参数时立即刷新 renderer 的 tone mapping 与背景。
+
 ### 建筑建模（`src/three/buildBuildings.js`）
 1. 过滤 `featureType = "building"`，将地理坐标投影为平面点。
 2. 每个 Polygon/MultiPolygon -> `Shape` + `ExtrudeGeometry`，高度取 `properties.elevation`。
@@ -70,6 +77,21 @@
   - `App.jsx` 在水系之后调用 `buildGreenery(scene)`，缓存 `greeneryGroupRef`，纳入 `applySceneTransform` 并监听 `layerVisibility.greenery`。
 - **交互**：不实现 hover/click。
 - **测试计划**：允许新增测试后，在 `src/tests/three/buildGreenery.test.js` 准备面状与线状示例，验证 Mesh 数量、挤出厚度以及 `userData.greenType`。
+
+## 场地渲染（Sites）
+- **数据输入**：`featureType = "site"` 要素，包含 `properties.siteCategory`、`displayName`、`sportsType` 与 `stableId`。
+- **几何构建**：
+  - 在 `src/three/buildSites.js` 内复用建筑的投影工具，将 Polygon/MultiPolygon 转为 `Shape`，再以 `ExtrudeGeometry` 挤出矮柱体；
+  - `depth` 读取 `properties.elevation ?? config.site.height`，挤出后统一 `geometry.rotateX(-Math.PI / 2)`，`mesh.position.y = config.site.baseY`，确保与道路/绿化共享的基准面一致。
+- **材质与分组**：
+  - 颜色取 `config.colors.site[siteCategory] ?? config.colors.site.默认`，使用半透明 `MeshPhongMaterial`（`opacity ≈ 0.85`、`side = THREE.DoubleSide`）；
+  - 所有 Mesh 挂入 `sites` Group，统一交给 `applySceneTransform`，禁止额外平移/旋转以保持与建筑坐标一致。
+- **userData**：写入 `{ stableId, displayName, siteCategory, sportsType }`，便于后续拾取或信息面板使用。
+- **图层控制**：
+  - `config.layers` 新增 `{ name: "场地", key: "sites", visible: true, order: 16 }`；
+  - `App.jsx` 创建 `sitesGroupRef`，在初始化阶段 `buildSites(scene)`，并监听 `layerVisibility.sites` 控制显隐。
+- **交互与日志**：当前不实现拾取；保留扩展点，可复用道路/边界拾取模式。加载成功、数据缺失等仍需调用 `logInfo/logWarn`。
+- **测试建议**：在 `src/tests/three/buildSites.test.js` 构造多种 `siteCategory` 输入，校验挤出高度、`position.y`、材质颜色与 `userData`。
 
 ## 状态同步
 - `useSceneStore` 维护 `layerVisibility`、`hoveredBuilding`、`selectedBuilding` 等状态。

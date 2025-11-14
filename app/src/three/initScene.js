@@ -15,19 +15,25 @@
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+// HDR 贴图加载与环境贴图生成（使用 HDRLoader 替代 RGBELoader）
+import { HDRLoader } from "three/examples/jsm/loaders/HDRLoader.js";
+// 引入日志模块记录天空盒加载状态
+import { logWarn } from "../logger/logger";
 
 /**
  * isDev：判断是否在开发环境
  * 用于决定是否显示调试网格和坐标轴
  */
 const isDev = typeof import.meta !== "undefined" && import.meta.env?.DEV;
+const DEFAULT_BACKGROUND_COLOR = "#0f172a";
 
 /**
  * initScene：初始化 Three.js 场景
- * 
+ *
  * 参数：
  * - container: DOM 节点，用于挂载 WebGL canvas
- * 
+ * - options: { environment? } - 指定初始 HDR 贴图配置
+ *
  * 返回：sceneContext 对象，结构如下：
  * {
  *   scene: THREE.Scene,
@@ -39,10 +45,10 @@ const isDev = typeof import.meta !== "undefined" && import.meta.env?.DEV;
  *   start: Function - 启动渲染循环
  *   stop: Function - 停止渲染循环
  * }
- * 
+ *
  * 异常：若 container 为空，抛出 Error
  */
-export function initScene(container) {
+export function initScene(container, options = {}) {
   if (!container) {
     throw new Error("必须提供容器节点以挂载 Three.js 场景");
   }
@@ -52,7 +58,7 @@ export function initScene(container) {
    * 使用深蓝灰色背景 (#0f172a) 与应用整体主题一致
    */
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color("#0f172a");
+  scene.background = new THREE.Color(DEFAULT_BACKGROUND_COLOR);
 
   /**
    * 渲染器配置
@@ -63,6 +69,112 @@ export function initScene(container) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
+
+  /**
+   * HDR 贴图加载与 PMREM 生成器
+   */
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+  const hdrLoader = new HDRLoader();
+  hdrLoader.type = THREE.FloatType;
+  let currentEnvironmentTarget = null;
+  let environmentRequestId = 0;
+  let environmentDisposed = false;
+
+  const toneMappingMap = {
+    ACESFilmic: THREE.ACESFilmicToneMapping,
+    Reinhard: THREE.ReinhardToneMapping,
+    Cineon: THREE.CineonToneMapping,
+    Linear: THREE.LinearToneMapping,
+  };
+
+  const getToneMapping = (name = "ACESFilmic") =>
+    toneMappingMap[name] ?? THREE.ACESFilmicToneMapping;
+
+  const restoreFallbackBackground = () => {
+    scene.environment = null;
+    scene.background = new THREE.Color(DEFAULT_BACKGROUND_COLOR);
+  };
+
+  const disposeCurrentEnvironment = () => {
+    if (currentEnvironmentTarget) {
+      currentEnvironmentTarget.texture?.dispose?.();
+      currentEnvironmentTarget.dispose?.();
+      currentEnvironmentTarget = null;
+    }
+  };
+
+  const resolveSkyboxUrl = (filename) =>
+    filename ? `/textures/skyboxes/${filename}` : null;
+
+  /**
+   * applyEnvironmentSettings：加载或关闭天空盒
+   */
+  const applyEnvironmentSettings = async (settings = {}) => {
+    if (environmentDisposed) return;
+    const requestId = ++environmentRequestId;
+    const {
+      enabled = true,
+      skybox,
+      exposure = 1,
+      toneMapping = "ACESFilmic",
+    } = settings;
+
+    renderer.toneMapping = getToneMapping(toneMapping);
+    renderer.toneMappingExposure = exposure;
+
+    if (!enabled) {
+      disposeCurrentEnvironment();
+      restoreFallbackBackground();
+      return;
+    }
+
+    const skyboxUrl = resolveSkyboxUrl(skybox);
+    if (!skyboxUrl) {
+      disposeCurrentEnvironment();
+      restoreFallbackBackground();
+      logWarn("天空盒加载", "未提供 HDR 贴图文件，已回退默认背景");
+      return;
+    }
+
+    try {
+      const hdrTexture = await hdrLoader.loadAsync(skyboxUrl);
+      if (environmentDisposed || requestId !== environmentRequestId) {
+        hdrTexture?.dispose?.();
+        return;
+      }
+      const target = pmremGenerator.fromEquirectangular(hdrTexture);
+      hdrTexture.dispose();
+      disposeCurrentEnvironment();
+      currentEnvironmentTarget = target;
+      scene.environment = target.texture;
+      scene.background = target.texture;
+    } catch (error) {
+      if (environmentDisposed || requestId !== environmentRequestId) {
+        return;
+      }
+      disposeCurrentEnvironment();
+      restoreFallbackBackground();
+      logWarn("天空盒加载", "HDR 贴图加载失败，已回退默认背景", {
+        文件: skyboxUrl,
+        错误: error?.message ?? "未知错误",
+      });
+    }
+  };
+
+  /**
+   * disposeEnvironment锛氳В鍐冲伐璧勪紶鍙峰拰 PMREM 缓存
+   */
+  const disposeEnvironment = () => {
+    environmentDisposed = true;
+    environmentRequestId += 1;
+    disposeCurrentEnvironment();
+    pmremGenerator.dispose();
+  };
+
+  const environmentReady = options?.environment
+    ? applyEnvironmentSettings(options.environment)
+    : Promise.resolve();
 
   /**
    * 相机配置
@@ -223,5 +335,8 @@ export function initScene(container) {
     render,
     start,
     stop,
+    applyEnvironmentSettings,
+    disposeEnvironment,
+    environmentReady,
   };
 }

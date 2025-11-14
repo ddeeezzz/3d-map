@@ -11,6 +11,8 @@
  */
 
 import { useMemo } from "react";
+// 读取配置以提供 HDR 选项
+import config from "../config";
 import { useSceneStore } from "../store/useSceneStore";
 
 /**
@@ -43,6 +45,12 @@ function DebugPanel() {
   const resetSceneTransform = useSceneStore(
     (state) => state.resetSceneTransform
   );
+  const environmentSettings = useSceneStore(
+    (state) => state.environmentSettings
+  );
+  const updateEnvironmentSettings = useSceneStore(
+    (state) => state.updateEnvironmentSettings
+  );
 
   /**
    * 在非开发环境中隐藏调试面板
@@ -60,6 +68,20 @@ function DebugPanel() {
     () => Math.round((sceneTransform.rotationY * 180) / Math.PI),
     [sceneTransform.rotationY]
   );
+  const skyboxOptions = useMemo(() => {
+    if (Array.isArray(config.environment?.skyboxes) && config.environment.skyboxes.length > 0) {
+      return config.environment.skyboxes;
+    }
+    if (!environmentSettings.skybox) {
+      return [];
+    }
+    return [
+      {
+        label: environmentSettings.skybox,
+        value: environmentSettings.skybox,
+      },
+    ];
+  }, [environmentSettings.skybox]);
 
   /**
    * handleRotationChange：旋转角度 range 输入的改变处理
@@ -104,6 +126,28 @@ function DebugPanel() {
         [axis]: value,
       },
     });
+  };
+
+  /**
+   * handleSkyboxChange：切换 HDR 贴图文件
+   */
+  const handleSkyboxChange = (event) => {
+    updateEnvironmentSettings({ skybox: event.target.value });
+  };
+
+  /**
+   * handleExposureChange：调整曝光值
+   */
+  const handleExposureChange = (event) => {
+    const value = clamp(Number(event.target.value), 0.1, 2.5);
+    updateEnvironmentSettings({ exposure: value });
+  };
+
+  /**
+   * handleEnvironmentToggle：开关天空盒
+   */
+  const handleEnvironmentToggle = (event) => {
+    updateEnvironmentSettings({ enabled: event.target.checked });
   };
 
   return (
@@ -162,10 +206,57 @@ function DebugPanel() {
           type="number"
           min={-500}
           max={500}
-          value={sceneTransform.offset.z}
-          onChange={handleOffsetChange("z")}
-        />
-      </label>
+      value={sceneTransform.offset.z}
+      onChange={handleOffsetChange("z")}
+    />
+  </label>
+
+      <details className="debug-panel__section" open>
+        <summary>天空盒</summary>
+        <div className="debug-panel__section-content">
+          <label className="debug-panel__row">
+            <span>HDR 贴图</span>
+            <select
+              aria-label="HDR 贴图选项"
+              value={environmentSettings.skybox}
+              onChange={handleSkyboxChange}
+              disabled={skyboxOptions.length === 0}
+            >
+              {skyboxOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="debug-panel__row">
+            <span>曝光</span>
+            <input
+              type="range"
+              min={0.1}
+              max={2.5}
+              step={0.05}
+              value={environmentSettings.exposure}
+              onChange={handleExposureChange}
+              aria-label="曝光调节"
+            />
+            <span className="debug-panel__value">
+              {environmentSettings.exposure.toFixed(2)}
+            </span>
+          </label>
+
+          <label className="debug-panel__checkbox-row">
+            <input
+              type="checkbox"
+              checked={environmentSettings.enabled}
+              onChange={handleEnvironmentToggle}
+              aria-label="启用环境光"
+            />
+            <span>启用环境光</span>
+          </label>
+        </div>
+      </details>
     </div>
   );
 }
