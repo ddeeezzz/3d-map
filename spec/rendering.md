@@ -29,7 +29,7 @@
 ## 道路建模（`src/three/buildRoads.js`）
 1. 读取 `featureType = "road"` LineString/MultiLineString。
 2. 宽度优先取 `properties.width/lanes`，否则查 `config.roadWidths[highwayType]`。
-3. 通过左右 offset + `ExtrudeGeometry` 生成低矮条带，材质取浅灰 `config.colors.道路`。
+3. 通过左右 offset + `ExtrudeGeometry` 生成条带，材质取浅灰 `config.colors.道路`；`config.road.height` 固定为 2m，`config.road.baseY` 负责整体下沉，使道路顶面（`baseY + height`）保持原有高度。
 
 ### 道路交互（`src/three/interactions/roadPicking.js`）
 - hover 时 emissive 变亮，click 记录 `logInfo("道路交互", ...)`，暴露 `clearHover`/`dispose` 以配合图层隐藏。
@@ -44,12 +44,12 @@
 ## 围墙建模（`src/three/buildBoundary.js`）
 - 继续消费 `featureType = "campusBoundary"`，但渲染模式从「开放式搭建」改为「闭合挤出 + 挖孔」，先生成实心区域再减去内部空腔，从而确保墙体连续且门洞可控。
 - 实施步骤：
-  1. `prepareClosedRing` 仅负责去重与首尾闭合，原始坐标仍然作为外环 `outerRing`。
-  2. 新增 `buildClosedWallShape(outerRing)`：利用 `clipper-lib`（或 `@turf/transformScale` 退化方案）沿法线向内偏移 `wallThickness + config.boundary.holeInset`，得到与外环方向相反的 `innerRing`，并将其写入 `Shape.holes`，实现主空腔。
-  3. 若 `properties.boundaryGates` 存在（数据清洗阶段写入 gate 中点、朝向、净宽/深度），调用 `buildGateHolePolygons` 构造矩形洞并追加到 `Shape.holes`，形成「挖孔」门洞。
-  4. 使用单次 `ExtrudeGeometry`（`depth = config.boundary.height`，`bevelEnabled = false`）生成 Mesh，`mesh.userData = { stableId, boundaryType, wallMode: "closedSubtractive", gateIds }`，并开启 `castShadow/receiveShadow`。
+  1. `prepareClosedRing` 去重并闭合原始坐标圈，将清洗后的多边形视为「围墙的内侧基准」，即最终 Shape 的第一个 hole。
+  2. `buildClosedWallShape(innerRing)`：根据 `config.boundary.width` 与 `holeInset` 把基准环沿外法线偏移 `width + holeInset`，得到更大的 `outerRing`，再以 `outerRing` 构建 Shape 外轮廓，实现「围墙完全向外拓展，内侧不侵入校园范围」。偏移算法需处理凹角、重复点与自交情况。
+  3. 若 `properties.boundaryGates` 存在（数据清洗阶段写入 gate 中点、切向量、净宽/深度），使用 `gate.tangent` 与 `gate.depth` 沿外法线放置矩形洞，洞体默认朝外拓展，并依次 push 到 `Shape.holes`。未匹配的 gate 需写日志。
+  4. 使用单次 `ExtrudeGeometry`（`depth = config.boundary.height = 2`，`bevelEnabled = false`）生成 Mesh，`mesh.userData = { stableId, boundaryType, wallMode: "closedSubtractive", gateIds }`，并开启 `castShadow/receiveShadow`；`config.boundary.baseY` 会抬升底面，确保围墙顶面仍与既有高度对齐。
   5. `applySceneTransform` 只对最终 Mesh 执行一次即可，Group 只作为集中控制 `layerVisibility.boundary`。
-- 编码范围：仅允许运行 `app/src/three/buildBoundary.js`（闭合建模）、`app/src/config/index.js`（追加 `boundary.holeInset`、`boundary.gateDepth` 等参数）、`tools/clean-geojson.js`（写 `properties.boundaryGates`）与对应测试/数据示例，禁止修改其他模块。
+- 编码范围：仅允许运行 `app/src/three/buildBoundary.js`（闭合建模）、`app/src/config/index.js`（`width/height/baseY/holeInset/gateWidth/gateDepth`）、`tools/clean-geojson.js`（写 `properties.boundaryGates`）与对应测试/数据示例，禁止修改其他模块。
 - 排障要点：
   1. 若 offset 失败则写日志并回退到旧的开放式构建，便于比较差异。
   2. 记录 `boundary` Mesh 的 `geometry.boundingBox`，用于 DebugPanel 校验墙高/宽是否符合 `config.boundary`。
@@ -62,8 +62,8 @@
 ## 绿化渲染（Greenery）
 - **数据输入**：清洗脚本输出的 `featureType = "greenery"` 要素，`properties.greenType` 区分 `wood/forest/tree_row/scrub/grass/meadow` 或 `landuse = grass`。
 - **几何处理（纯 Three.js）**：
-  - 面状绿化（Polygon/MultiPolygon）：参考湖泊流程，在 `src/three/buildGreenery.js` 中使用 `Shape` + `ExtrudeGeometry`，挤出厚度与底边来自 `config.greenery.surfaceDepth/surfaceBaseY`，颜色取 `config.colors.绿化`（缺省 `#4caf50`），`opacity = 0.6`。
-  - 线状绿化（LineString/MultiLineString）：沿用 `buildWaterway` 的 offset 逻辑，统一读取 `config.greenery.width/height/baseY` 生成条带，底部贴地、沿正 Y 拉伸；无须按 `greenType` 再划分配置。
+  - 面状绿化（Polygon/MultiPolygon）：参考湖泊流程，在 `src/three/buildGreenery.js` 中使用 `Shape` + `ExtrudeGeometry`，挤出厚度固定为 2m（`config.greenery.surfaceDepth`），底边 `surfaceBaseY` 用于统一下沉，从而保持顶面高度；颜色取 `config.colors.绿化`（缺省 `#4caf50`），`opacity = 0.6`。
+  - 线状绿化（LineString/MultiLineString）：沿用 `buildWaterway` 的 offset 逻辑，统一读取 `config.greenery.width/height/baseY` 生成条带，其中 `height` 亦固定为 2m，`baseY` 调整下沉量，确保顶面位置与面状一致；无须按 `greenType` 再划分配置。
   - 若未来需要针对特定 `greenType` 调整尺寸，需先在 `spec/config.md` 说明扩展方案。
 - **图层与显隐**：
   - `config.layers` 需新增 `{ name: "绿化", key: "greenery", visible: true, order: 18 }`，LayerToggle/DebugPanel 读取后同步到 `useSceneStore`。
@@ -83,5 +83,3 @@
 - [ ] 建筑 hover/click 的 UI 联动。
 - [ ] 道路速度/颜色/纹理等细节描述。
 - [ ] 绿化 deck.gl 方案评估及交互扩展。
-
-

@@ -114,12 +114,19 @@ export const config = {
    * boundary：边界（围墙）几何参数
    * 字段：
    * - width: 围墙在地面上的宽度（米），通常为 1m
-   * - height: 围墙的垂直高度（米），通常为 20m
+   * - height: 围墙的垂直高度（米）
+   * - baseY: 围墙整体抬升量
+   * - holeInset: 闭合墙体内缩量，避免主空腔贴在外缘
+   * - gateWidth: 默认门洞净宽（米），用于 boundaryGates 缺省值
+   * - gateDepth: 默认门洞进深（米）
    */
   boundary: {
     width: 1,
     height: 20,
     baseY: 0.08,
+    holeInset: 0.35,
+    gateWidth: 6,
+    gateDepth: 3,
   },
 
   /**

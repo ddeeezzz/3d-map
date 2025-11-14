@@ -237,6 +237,212 @@ function buildBoundaryGeometry(points, thickness, height) {
   return geometry;
 }
 
+function computeSignedArea(points) {
+  if (!Array.isArray(points) || points.length < 3) return 0;
+  let area = 0;
+  for (let i = 0; i < points.length; i += 1) {
+    const current = points[i];
+    const next = points[(i + 1) % points.length];
+    area += current.x * next.y - next.x * current.y;
+  }
+  return area / 2;
+}
+
+function ensureCounterClockwise(points) {
+  const cloned = points
+    .map((point) =>
+      point instanceof THREE.Vector2 ? point.clone() : new THREE.Vector2(point.x, point.y),
+    )
+    .filter(Boolean);
+  if (cloned.length >= 2) {
+    const first = cloned[0];
+    const last = cloned[cloned.length - 1];
+    if (first.equals(last)) {
+      cloned.pop();
+    }
+  }
+  if (computeSignedArea(cloned) < 0) cloned.reverse();
+  return cloned;
+}
+
+function intersectLines(originA, dirA, originB, dirB) {
+  const det = dirA.x * dirB.y - dirA.y * dirB.x;
+  if (Math.abs(det) < EPSILON) {
+    return null;
+  }
+  const diff = new THREE.Vector2().subVectors(originB, originA);
+  const t = (diff.x * dirB.y - diff.y * dirB.x) / det;
+  return new THREE.Vector2(
+    originA.x + dirA.x * t,
+    originA.y + dirA.y * t,
+  );
+}
+
+function offsetRing(points, offsetDistance, outward = false) {
+  if (!Array.isArray(points) || points.length < 3 || offsetDistance <= 0) {
+    return [];
+  }
+  const closed = prepareClosedRing(points);
+  const length = closed.length - 1;
+  if (length < 3) return [];
+  const result = [];
+  const orientationSign = Math.sign(computeSignedArea(points));
+
+  for (let i = 0; i < length; i += 1) {
+    const prev = closed[(i - 1 + length) % length];
+    const current = closed[i];
+    const next = closed[(i + 1) % length];
+
+    const dirPrev = new THREE.Vector2().subVectors(current, prev);
+    const dirNext = new THREE.Vector2().subVectors(next, current);
+
+    if (dirPrev.lengthSq() === 0 || dirNext.lengthSq() === 0) {
+      continue;
+    }
+
+    dirPrev.normalize();
+    dirNext.normalize();
+
+    const makeInteriorNormal = (direction) =>
+      orientationSign > 0
+        ? new THREE.Vector2(-direction.y, direction.x)
+        : new THREE.Vector2(direction.y, -direction.x);
+
+    const interiorNormalPrev = makeInteriorNormal(dirPrev).normalize();
+    const interiorNormalNext = makeInteriorNormal(dirNext).normalize();
+
+    const targetNormalPrev = interiorNormalPrev.clone().multiplyScalar(outward ? -1 : 1);
+    const targetNormalNext = interiorNormalNext.clone().multiplyScalar(outward ? -1 : 1);
+
+    const originA = current.clone().add(targetNormalPrev.clone().multiplyScalar(offsetDistance));
+    const originB = current.clone().add(targetNormalNext.clone().multiplyScalar(offsetDistance));
+    const intersection = intersectLines(originA, dirPrev, originB, dirNext);
+    if (intersection) {
+      result.push(intersection);
+    } else {
+      const fallback = targetNormalPrev.clone().add(targetNormalNext).normalize();
+      if (fallback.lengthSq() === 0) {
+        fallback.copy(targetNormalPrev);
+      }
+      result.push(current.clone().add(fallback.multiplyScalar(offsetDistance)));
+    }
+  }
+
+  return result;
+}
+
+function createPathFromRing(ringPoints, ensureClockwise = true) {
+  if (!Array.isArray(ringPoints) || ringPoints.length < 3) {
+    return null;
+  }
+  const cloned = ringPoints.map((point) => point.clone());
+  const area = computeSignedArea(cloned);
+  const shouldReverse = ensureClockwise ? area > 0 : area < 0;
+  if (shouldReverse) cloned.reverse();
+  return new THREE.Path(cloned);
+}
+
+function createGateHolePath(gate, origin, options) {
+  if (!gate || !Array.isArray(gate.center) || gate.center.length < 2) {
+    return null;
+  }
+  const [gx, gy] = projectCoordinate(gate.center, origin);
+  if (!Number.isFinite(gx) || !Number.isFinite(gy)) return null;
+  const center = new THREE.Vector2(gx, gy);
+  const width = Number(gate.width) || options.width;
+  const depth = Number(gate.depth) || options.depth;
+  if (!(width > 0) || !(depth > 0)) return null;
+  const tangent = Array.isArray(gate.tangent)
+    ? new THREE.Vector2(
+        Number(gate.tangent[0]) || 0,
+        Number(gate.tangent[1]) || 0,
+      )
+    : new THREE.Vector2(1, 0);
+  if (tangent.lengthSq() === 0) {
+    tangent.set(1, 0);
+  }
+  tangent.normalize();
+
+  const outwardNormal = new THREE.Vector2(-tangent.y, tangent.x).normalize();
+  if (outwardNormal.lengthSq() === 0) {
+    outwardNormal.set(0, 1);
+  }
+
+  const maxDepth = Math.max(options.maxDepth - 0.05, 0.1);
+  const clampedDepth = Math.min(depth, maxDepth);
+  const halfWidth = width / 2;
+  const halfDepth = clampedDepth / 2;
+
+  const widthVec = tangent.clone().multiplyScalar(halfWidth);
+  const depthVec = outwardNormal.clone().multiplyScalar(halfDepth);
+  const gateCenter = center.clone().add(outwardNormal.clone().multiplyScalar(halfDepth));
+
+  const corners = [
+    gateCenter.clone().add(widthVec).add(depthVec),
+    gateCenter.clone().sub(widthVec).add(depthVec),
+    gateCenter.clone().sub(widthVec).sub(depthVec),
+    gateCenter.clone().add(widthVec).sub(depthVec),
+  ];
+
+  const area = computeSignedArea(corners);
+  if (area > 0) {
+    corners.reverse();
+  }
+
+  return {
+    path: new THREE.Path(corners),
+    id: gate.stableId || gate.id || null,
+  };
+}
+
+function buildClosedWallShape({
+  innerRing,
+  wallThickness,
+  gates,
+  origin,
+  gateWidth,
+  gateDepth,
+}) {
+  if (!innerRing || innerRing.length < 3 || wallThickness <= 0) {
+    return null;
+  }
+
+  const normalizedInner = ensureCounterClockwise(innerRing);
+  if (normalizedInner.length < 3) return null;
+
+  const outerRing = offsetRing(normalizedInner, wallThickness, true);
+  if (outerRing.length < 3) return null;
+
+  const outerShapePoints = ensureCounterClockwise(outerRing);
+  if (outerShapePoints.length < 3) return null;
+
+  const shape = new THREE.Shape(outerShapePoints);
+  const appliedGateIds = [];
+
+  const innerPath = createPathFromRing(normalizedInner, true);
+  if (innerPath) {
+    shape.holes.push(innerPath);
+  }
+
+  if (Array.isArray(gates) && gates.length) {
+    gates.forEach((gate) => {
+      const hole = createGateHolePath(gate, origin, {
+        width: gateWidth,
+        depth: gateDepth,
+        maxDepth: wallThickness,
+      });
+      if (hole?.path) {
+        shape.holes.push(hole.path);
+        if (hole.id) {
+          appliedGateIds.push(hole.id);
+        }
+      }
+    });
+  }
+
+  return { shape, appliedGateIds };
+}
+
 /**
  * __boundaryInternals：导出内部工具函数供测试使用
  * 不建议在生产代码中使用
@@ -246,6 +452,10 @@ export const __boundaryInternals = {
   projectRingWithDuplicates: sanitizeRing,
   prepareClosedRing,
   buildBoundaryGeometry,
+  computeSignedArea,
+  ensureCounterClockwise,
+  offsetRing,
+  buildClosedWallShape,
 };
 
 /**
@@ -274,11 +484,17 @@ export function buildBoundary(scene) {
   const origin = findProjectionOrigin(data.features);
   const color = config.colors?.围墙 || "#f5deb3";
   const boundaryWidth = Number(config.boundary?.width) || 1;
+  const boundaryHoleInset = Number(config.boundary?.holeInset) || 0;
   const boundaryHeight = Number(config.boundary?.height) || 2;
   const rawBoundaryBaseY = Number(config.boundary?.baseY);
   const boundaryBaseY = Number.isFinite(rawBoundaryBaseY) ? rawBoundaryBaseY : 0;
+  const boundaryGateWidth = Number(config.boundary?.gateWidth) || boundaryWidth;
+  const boundaryGateDepth = Number(config.boundary?.gateDepth) || boundaryWidth;
   const baseScale = SCENE_BASE_ALIGNMENT?.scale ?? 1;
-  const thickness = boundaryWidth / baseScale;
+  const stripThickness = boundaryWidth / baseScale;
+  const wallThickness = (boundaryWidth + boundaryHoleInset) / baseScale;
+  const gateWidthScaled = boundaryGateWidth / baseScale;
+  const gateDepthScaled = boundaryGateDepth / baseScale;
 
   const material = new THREE.MeshPhongMaterial({
     color,
@@ -315,25 +531,53 @@ export function buildBoundary(scene) {
        */
       const outerRing = sanitizeRing(polygon[0], origin);
       if (outerRing.length < 2) return;
+      const gates = Array.isArray(props.boundaryGates) ? props.boundaryGates : [];
 
-      /**
-       * 构建条带几何体
-       */
-      const stripGeometry = buildBoundaryGeometry(outerRing, thickness, boundaryHeight);
-      if (!stripGeometry) return;
+      const closedShapeResult =
+        wallThickness > EPSILON
+          ? buildClosedWallShape({
+              innerRing: outerRing,
+              wallThickness,
+              gates,
+              origin,
+              gateWidth: gateWidthScaled,
+              gateDepth: gateDepthScaled,
+            })
+          : null;
 
-      /**
-       * 创建 Mesh
-       */
-      const mesh = new THREE.Mesh(stripGeometry, material);
+      let mesh = null;
+
+      if (closedShapeResult?.shape) {
+        const extrudeGeometry = new THREE.ExtrudeGeometry(closedShapeResult.shape, {
+          depth: boundaryHeight,
+          bevelEnabled: false,
+        });
+        extrudeGeometry.rotateX(-Math.PI / 2);
+        extrudeGeometry.computeVertexNormals();
+        mesh = new THREE.Mesh(extrudeGeometry, material);
+        mesh.userData = {
+          stableId: props.stableId || feature.id || `boundary-${featureIndex}`,
+          name: props.name || "校园围墙",
+          boundaryType: props.boundaryType || "campus",
+          wallMode: "closedSubtractive",
+          gateIds: closedShapeResult.appliedGateIds,
+        };
+      } else {
+        const stripGeometry = buildBoundaryGeometry(outerRing, stripThickness, boundaryHeight);
+        if (!stripGeometry) return;
+        mesh = new THREE.Mesh(stripGeometry, material);
+        mesh.userData = {
+          stableId: props.stableId || feature.id || `boundary-${featureIndex}`,
+          name: props.name || "校园围墙",
+          boundaryType: props.boundaryType || "campus",
+          wallMode: "stripFallback",
+          gateIds: [],
+        };
+      }
+
       mesh.position.y = boundaryBaseY;
       mesh.castShadow = false;
       mesh.receiveShadow = false;
-      mesh.userData = {
-        stableId: props.stableId || feature.id || `boundary-${featureIndex}`,
-        name: props.name || "校园围墙",
-        boundaryType: props.boundaryType || "campus",
-      };
 
       group.add(mesh);
     });

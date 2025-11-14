@@ -9,10 +9,10 @@
   - `heights`：默认高度或层高映射，支持 `1层`、分类默认值等。
   - `layers`：LayerToggle 与 Debug 面板使用的图层配置，例如 `{ name: "围墙", key: "boundary", visible: true, order: 12 }`。
 - `roadWidths`：道路宽度估算表（`motorway`~`footway` + `默认`）。
-- `road`：道路挤出体积的底边与高度，例如 `{ baseY: 0.05, height: 0.2 }`，用于替代脚本内硬编码。
-- `boundary`：围墙厚度/高度/底边及挖孔参数，例如 `{ width: 1, height: 2, baseY: 0.02, holeInset: 0.35, gateWidth: 6, gateDepth: 3 }`。其中 `holeInset` 控制主空腔与墙体外缘的距离，`gateWidth`/`gateDepth` 为门洞默认尺寸，可被 GeoJSON 中的 `properties.boundaryGates` 覆盖。
+- `road`：道路挤出体积的底边与高度，例如 `{ baseY: -2.15, height: 2 }`，通过统一的 2m 体积高度保持顶面高度不变（`baseY + height = -0.15m`）。
+- `boundary`：围墙厚度/高度/底边及挖孔参数，例如 `{ width: 1, height: 2, baseY: 18.08, holeInset: 0.35, gateWidth: 6, gateDepth: 3 }`。其中 `height = 2` 统一体积厚度，`baseY` 仅用于维持原有顶面高度；`width + holeInset` 决定向校园外扩展的主墙厚度，不会侵入内侧。
 - `waterway`：水系统一参数，包含线状 `width/height/baseY` 与面状 `surfaceDepth/surfaceBaseY`，示例 `{ width: 5, height: 0.2, baseY: -0.4, surfaceDepth: 1, surfaceBaseY: 0 }`。
-- `greenery`：绿化统一参数，线状使用 `width/height/baseY`，面状使用 `surfaceDepth/surfaceBaseY`，示例 `{ width: 2, height: 0.15, baseY: -0.5, surfaceDepth: 0.5, surfaceBaseY: 0 }`。
+- `greenery`：绿化统一参数，线状使用 `width/height/baseY`，面状使用 `surfaceDepth/surfaceBaseY`，示例 `{ width: 3, height: 2, baseY: -2.35, surfaceDepth: 2, surfaceBaseY: -2.35 }`，同样遵循“体积高度 2m、顶面保持原位”的约束。
 - `dataPath`：静态 GeoJSON 相对路径（当前 `/src/data/campus.geojson`）。
 - 若新增配置项，需先在本 spec 说明再更新 `index.js`。
 
