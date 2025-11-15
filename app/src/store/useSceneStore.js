@@ -123,6 +123,8 @@ const getInitialEnvironmentSettings = () => ({
 const getInitialData = () => ({
   selectedBuilding: null,
   hoveredBuilding: null,
+  selectedSite: null,
+  hoveredSite: null,
   route: null,
   layerVisibility: {},
   logsPreview: [],
@@ -165,6 +167,26 @@ export const useSceneStore = create((set, get) => ({
    */
   // Hover 建筑 ID（用于 tooltip/高亮）
   setHoveredBuilding: (info) => set({ hoveredBuilding: info }),
+
+  /**
+   * setSelectedSite���������õ�ǰѡ�еĳ��� ID
+   * ������id - �ȶ� stableId ���� null����ʾ��ѡ
+   * �����ߣ�site ʰȡ���Ӻ͵�ͼ������к���Ҫ��
+   * �����ã�ʹ UI/ͼ��ģ���Ե�λ��Ӧ�ĳ���
+   *
+   * ����setSelectedSite("SITE_TRACK_01")
+   */
+  setSelectedSite: (id) => set({ selectedSite: id }),
+
+  /**
+   * setHoveredSite��������ͣ�ĳ�����Ϣ
+   * ������info - ��ҵ������� null �����ƿ�
+   * �����ߣ�site ʰȡ pointermove �¼�
+   * �����ã�Ϊ Tooltip �� InfoCard �ṩ��ǰ������Ϣ
+   *
+   * ����setHoveredSite({ stableId: "SITE-01", displayName: "��������" })
+   */
+  setHoveredSite: (info) => set({ hoveredSite: info }),
 
   /**
    * setRoute：设置当前规划的路线

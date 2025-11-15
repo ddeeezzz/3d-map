@@ -23,6 +23,25 @@ describe("useSceneStore", () => {
     expect(useSceneStore.getState().hoveredBuilding).toBeNull();
   });
 
+  it("updates selectedSite", () => {
+    useSceneStore.getState().setSelectedSite("site-01");
+    expect(useSceneStore.getState().selectedSite).toBe("site-01");
+    useSceneStore.getState().setSelectedSite(null);
+    expect(useSceneStore.getState().selectedSite).toBeNull();
+  });
+
+  it("updates hoveredSite info", () => {
+    const siteInfo = {
+      stableId: "site-02",
+      displayName: "田径场",
+      siteCategory: "track",
+    };
+    useSceneStore.getState().setHoveredSite(siteInfo);
+    expect(useSceneStore.getState().hoveredSite).toEqual(siteInfo);
+    useSceneStore.getState().setHoveredSite(null);
+    expect(useSceneStore.getState().hoveredSite).toBeNull();
+  });
+
   it("toggles layer visibility", () => {
     const key = "roads";
     useSceneStore.getState().toggleLayerVisibility(key);

@@ -33,6 +33,7 @@ import { attachWaterPicking } from "./three/interactions/waterPicking";
 import { attachRiverPicking } from "./three/interactions/riverPicking";
 import { attachRoadPicking } from "./three/interactions/roadPicking";
 import { attachBoundaryPicking } from "./three/interactions/boundaryPicking";
+import { attachSitePicking } from "./three/interactions/sitePicking";
 
 function App() {
   /**
@@ -71,6 +72,8 @@ const sitesGroupRef = useRef(null);
   const roadPickingHandleRef = useRef(null);
   const waterPickingHandleRef = useRef(null);
   const riverPickingHandleRef = useRef(null);
+  // site 图层拾取句柄，负责 hover/click 清理
+  const sitePickingHandleRef = useRef(null);
 
   /**
    * Hover 状态临时存储（用于交互反馈）
@@ -226,6 +229,7 @@ const environmentSettings = useSceneStore(
         logInfo("三维渲染", "水系几何构建完成");
         logInfo("三维渲染", "绿化几何构建完成");
         logInfo("三维渲染", "道路几何构建完成");
+        logInfo("三维渲染", "场地几何构建完成");
 
         /**
          * 绑定建筑拾取交互：支持 Hover（高亮）和 Click（选中）
@@ -327,6 +331,29 @@ const environmentSettings = useSceneStore(
         });
         roadPickingHandleRef.current = roadPickingHandle;
 
+        const sitePickingHandle = sitesGroup
+          ? attachSitePicking({
+              domElement: sceneContext.renderer.domElement,
+              camera: sceneContext.camera,
+              sitesGroup,
+              onHover: (info) => {
+                useSceneStore.getState().setHoveredSite(info);
+              },
+              onSelect: (info) => {
+                if (!info) return;
+                const { stableId, displayName, siteCategory } = info;
+                if (stableId) {
+                  useSceneStore.getState().setSelectedSite(stableId);
+                }
+                logInfo(
+                  "场地交互",
+                  `选中 ${displayName ?? stableId ?? "未知场地"} (${siteCategory ?? "未分类"})`
+                );
+              },
+            })
+          : null;
+        sitePickingHandleRef.current = sitePickingHandle;
+
         // 启动主渲染循环
         sceneContext.start();
         // 监听窗口大小改变事件
@@ -366,6 +393,10 @@ const environmentSettings = useSceneStore(
       riverPickingHandleRef.current?.clearHover?.();
       riverPickingHandleRef.current?.dispose?.();
       riverPickingHandleRef.current = null;
+      
+      sitePickingHandleRef.current?.clearHover?.();
+      sitePickingHandleRef.current?.dispose?.();
+      sitePickingHandleRef.current = null;
 
       // 清理建筑拾取交互
       detachBuildingPicking?.();
@@ -475,6 +506,10 @@ const environmentSettings = useSceneStore(
   useEffect(() => {
     if (sitesGroupRef.current) {
       sitesGroupRef.current.visible = sitesVisible;
+    }
+    if (!sitesVisible) {
+      sitePickingHandleRef.current?.clearHover?.();
+      useSceneStore.getState().setHoveredSite(null);
     }
   }, [sitesVisible]);
 
