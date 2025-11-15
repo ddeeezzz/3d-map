@@ -1,0 +1,5824 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9754256,
+          30.7710206
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/2178276207",
+        "osmId": "node/2178276207",
+        "name": "消防通道",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/239380412",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "access": "no",
+          "barrier": "gate",
+          "name": "消防通道"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9897905,
+          30.7629679
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/2178309445",
+        "osmId": "node/2178309445",
+        "name": "南门",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/207570521",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "barrier": "gate",
+          "name": "南门",
+          "name:en": "South Gate"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9751882,
+          30.7699378
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/2178323767",
+        "osmId": "node/2178323767",
+        "name": "西北一门",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1220208141",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "barrier": "gate",
+          "name": "西北一门"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9860297,
+          30.7646573
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/2690053937",
+        "osmId": "node/2690053937",
+        "name": "英语沙龙",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "club": "yes",
+          "denomination": "Language",
+          "name": "英语沙龙"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9865713,
+          30.7700552
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150910035",
+        "osmId": "node/4150910035",
+        "name": "升旗台",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "man_made": "flagpole",
+          "name": "升旗台",
+          "name:en": "Flag station"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9767541,
+          30.7689388
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911395",
+        "osmId": "node/4150911395",
+        "name": "招生就业处",
+        "poiType": "university",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/413859292",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "university",
+          "name": "招生就业处",
+          "name:en": "Admissions and Employment Office",
+          "name:zh": "招生就业处"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.980886,
+          30.7636352
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911398",
+        "osmId": "node/4150911398",
+        "name": "好美佳超市",
+        "poiType": "supermarket",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098797675",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "好美佳超市",
+          "name:en": "Haomeijia Supermarket",
+          "name:zh": "好美佳超市",
+          "shop": "supermarket"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9807397,
+          30.7721302
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911410",
+        "osmId": "node/4150911410",
+        "name": "钟",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "sculpture",
+          "name": "钟",
+          "name:en": "Bell",
+          "name:zh": "钟",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9912685,
+          30.7717597
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911420",
+        "osmId": "node/4150911420",
+        "name": "东门",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/532472151",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "barrier": "gate",
+          "name": "东门"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9845972,
+          30.7624385
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911423",
+        "osmId": "node/4150911423",
+        "name": "铁桥",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "relation/2819871",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "铁桥",
+          "place": "locality"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9814271,
+          30.7629141
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911437",
+        "osmId": "node/4150911437",
+        "name": "中国银行",
+        "poiType": "bank",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098797672",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "bank",
+          "atm": "yes",
+          "name": "中国银行",
+          "name:en": "Bank of China",
+          "name:zh": "中国银行"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9768189,
+          30.7690195
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911440",
+        "osmId": "node/4150911440",
+        "name": "中国建设银行",
+        "poiType": "bank",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "bank",
+          "atm": "yes",
+          "brand": "中国建设银行",
+          "brand:en": "China Construction Bank",
+          "brand:wikidata": "Q26299",
+          "brand:zh": "中国建设银行",
+          "name": "中国建设银行",
+          "name:en": "China Construction Bank",
+          "name:zh": "中国建设银行"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9770748,
+          30.7681968
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911444",
+        "osmId": "node/4150911444",
+        "name": "正宗荤豆花",
+        "poiType": "restaurant",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098603279",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "restaurant",
+          "name": "正宗荤豆花",
+          "name:en": "Authentic Kidney Bean Flower",
+          "name:zh": "正宗荤豆花"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9769971,
+          30.7681522
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911445",
+        "osmId": "node/4150911445",
+        "name": "奇味干锅",
+        "poiType": "restaurant",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098603279",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "restaurant",
+          "name": "奇味干锅",
+          "name:en": "Weiwei dry pot",
+          "name:zh": "奇味干锅"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9783255,
+          30.767258
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911446",
+        "osmId": "node/4150911446",
+        "name": "艺术与传播学院音乐系",
+        "poiType": "university",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098797665",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "university",
+          "name": "艺术与传播学院音乐系",
+          "name:en": "Department of Music, School of Art and Communication",
+          "name:zh": "艺术与传播学院音乐系"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9789236,
+          30.766034
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/4150911447",
+        "osmId": "node/4150911447",
+        "name": "体质健康测验实验室",
+        "poiType": "pitch",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098797665",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "leisure": "pitch",
+          "name": "体质健康测验实验室",
+          "name:zh": "体质健康测验实验室"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9795785,
+          30.7710769
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/5167083931",
+        "osmId": "node/5167083931",
+        "name": "浙亭",
+        "poiType": "shelter",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/532492064",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "shelter",
+          "name": "浙亭",
+          "name:zh": "浙亭"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9809918,
+          30.7663175
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/5192820049",
+        "osmId": "node/5192820049",
+        "name": "攀岩场",
+        "poiType": "sports_centre",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/536259160",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "leisure": "sports_centre",
+          "name": "攀岩场",
+          "name:en": "Climbing wall",
+          "name:zh": "攀岩场",
+          "sport": "climbing"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9857469,
+          30.7683692
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/5192904113",
+        "osmId": "node/5192904113",
+        "name": "校史馆",
+        "poiType": "museum",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14637052",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "building": "university",
+          "name": "校史馆",
+          "name:en": "School history museum",
+          "tourism": "museum"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9894855,
+          30.7639359
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/7314305637",
+        "osmId": "node/7314305637",
+        "name": "韶山1型电力机车SS1-0818",
+        "poiType": "attraction",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "韶山1型电力机车SS1-0818",
+          "operator": "西南交通大学",
+          "tourism": "attraction"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9897256,
+          30.7635856
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/7314305638",
+        "osmId": "node/7314305638",
+        "name": "东风4型内燃机车DF4-7019",
+        "poiType": "attraction",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "东风4型内燃机车DF4-7019",
+          "operator": "西南交通大学",
+          "tourism": "attraction"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9761923,
+          30.7698666
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/7912594068",
+        "osmId": "node/7912594068",
+        "name": "全家",
+        "poiType": "convenience",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "brand": "全家",
+          "brand:en": "FamilyMart",
+          "brand:wikidata": "Q1191685",
+          "brand:wikipedia": "en:FamilyMart",
+          "brand:zh": "全家",
+          "name": "全家",
+          "name:en": "FamilyMart",
+          "name:zh": "全家",
+          "shop": "convenience"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9801381,
+          30.7731062
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/8386702126",
+        "osmId": "node/8386702126",
+        "name": "风洞门",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/532472176",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "barrier": "gate",
+          "name": "风洞门"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9883654,
+          30.7638673
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9387589810",
+        "osmId": "node/9387589810",
+        "name": "罗忠忱先生纪念碑",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "罗忠忱先生纪念碑",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.980809,
+          30.7637331
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893290692",
+        "osmId": "node/9893290692",
+        "name": "地下美食城",
+        "poiType": "restaurant",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098797675",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "restaurant",
+          "name": "地下美食城",
+          "name:en": "Underground Food City"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9892787,
+          30.7645276
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893299698",
+        "osmId": "node/9893299698",
+        "name": "交大磁浮CFC-01",
+        "poiType": "attraction",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "交大磁浮CFC-01",
+          "tourism": "attraction"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9879783,
+          30.7649997
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893299745",
+        "osmId": "node/9893299745",
+        "name": "竢实扬华碑",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/536135133",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "sculpture",
+          "name": "竢实扬华碑",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9862567,
+          30.7666886
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893299746",
+        "osmId": "node/9893299746",
+        "name": "孙中山像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "孙中山像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9846278,
+          30.7645934
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893299747",
+        "osmId": "node/9893299747",
+        "name": "启示",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "sculpture",
+          "name": "启示",
+          "name:en": "Inspiration",
+          "name:zh": "启示",
+          "note": "Günter Wolfsberger雕塑作品",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9819398,
+          30.7620691
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893305422",
+        "osmId": "node/9893305422",
+        "name": "舞东风",
+        "poiType": "convenience",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098800630",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "brand": "舞东风",
+          "brand:en": "WUDONGFENG",
+          "brand:wikidata": "Q111051442",
+          "brand:zh": "舞东风",
+          "name": "舞东风",
+          "name:en": "WUDONGFENG",
+          "name:zh": "舞东风",
+          "shop": "convenience"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9825779,
+          30.7612897
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893305423",
+        "osmId": "node/9893305423",
+        "name": "中国邮政",
+        "poiType": "post_office",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098800632",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "post_office",
+          "brand": "中国邮政",
+          "brand:en": "China Post",
+          "brand:wikidata": "Q1066476",
+          "brand:zh": "中国邮政",
+          "name": "中国邮政",
+          "name:en": "China Post",
+          "name:zh": "中国邮政"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9825419,
+          30.759961
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/9893305424",
+        "osmId": "node/9893305424",
+        "name": "西南门",
+        "poiType": "unknown",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/413859301",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "barrier": "gate",
+          "locked": "yes",
+          "name": "西南门"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9821148,
+          30.7664294
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10059030856",
+        "osmId": "node/10059030856",
+        "name": "堂吉诃德",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "sculpture",
+          "name": "堂吉诃德",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9762163,
+          30.7690421
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10059030904",
+        "osmId": "node/10059030904",
+        "name": "菜鸟驿站",
+        "poiType": "post_box",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "post_box",
+          "brand": "菜鸟驿站",
+          "brand:en": "CAI NIAO",
+          "brand:wikidata": "Q16947973",
+          "brand:zh": "菜鸟驿站",
+          "name:en": "CAI NIAO",
+          "name:zh": "菜鸟驿站",
+          "operator": "菜鸟驿站",
+          "operator:wikidata": "Q16947973"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9892179,
+          30.7643303
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10059031550",
+        "osmId": "node/10059031550",
+        "name": "詹天佑",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "詹天佑",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9881481,
+          30.7637537
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10060656324",
+        "osmId": "node/10060656324",
+        "name": "黄万里像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "黄万里像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9760842,
+          30.769209
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10060753399",
+        "osmId": "node/10060753399",
+        "name": "红旗连锁",
+        "poiType": "convenience",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "brand": "红旗连锁",
+          "brand:en": "Hongqi Chain",
+          "brand:wikidata": "Q15932971",
+          "brand:zh": "红旗连锁",
+          "name": "红旗连锁",
+          "name:en": "Hongqi Chain",
+          "name:zh": "红旗连锁",
+          "shop": "convenience"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9758374,
+          30.770163
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10060753413",
+        "osmId": "node/10060753413",
+        "name": "菜鸟驿站",
+        "poiType": "post_box",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "post_box",
+          "brand": "菜鸟驿站",
+          "brand:en": "CAI NIAO",
+          "brand:wikidata": "Q16947973",
+          "brand:zh": "菜鸟驿站",
+          "name:en": "CAI NIAO",
+          "name:zh": "菜鸟驿站",
+          "operator": "菜鸟驿站",
+          "operator:wikidata": "Q16947973"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9763252,
+          30.7693317
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10060818531",
+        "osmId": "node/10060818531",
+        "name": "蜜雪冰城",
+        "poiType": "cafe",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "cafe",
+          "brand": "蜜雪冰城",
+          "brand:en": "MIXUEBINGCHENG",
+          "brand:wikidata": "Q107406476",
+          "brand:zh": "蜜雪冰城",
+          "cuisine": "ice_cream;bubble_tea",
+          "name": "蜜雪冰城",
+          "name:en": "MIXUEBINGCHENG",
+          "name:zh": "蜜雪冰城",
+          "takeaway": "yes"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9761322,
+          30.7699445
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10060818535",
+        "osmId": "node/10060818535",
+        "name": "京东物流",
+        "poiType": "post_office",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "post_office",
+          "brand": "京东物流",
+          "brand:en": "JD Logistics",
+          "brand:wikidata": "Q67936681",
+          "brand:zh": "京东物流",
+          "name": "京东物流",
+          "name:en": "JD Logistics",
+          "name:zh": "京东物流",
+          "short_name": "京东"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9768747,
+          30.7682644
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10060818537",
+        "osmId": "node/10060818537",
+        "name": "澡堂",
+        "poiType": "public_bath",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/239380420",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "public_bath",
+          "name": "澡堂",
+          "name:en": "Bath house",
+          "name:zh": "澡堂"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9759476,
+          30.7700352
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10156545557",
+        "osmId": "node/10156545557",
+        "name": "华莱士",
+        "poiType": "fast_food",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14640071",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "fast_food",
+          "brand": "华莱士",
+          "brand:en": "CNHLS",
+          "brand:wikidata": "Q15939607",
+          "brand:zh": "华莱士",
+          "cuisine": "burger;chicken",
+          "name": "华莱士",
+          "name:en": "CNHLS",
+          "name:zh": "华莱士",
+          "takeaway": "yes"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9845586,
+          30.7683845
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10156545612",
+        "osmId": "node/10156545612",
+        "name": "林同炎纪念像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "林同炎纪念像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.986358,
+          30.7719056
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10175215102",
+        "osmId": "node/10175215102",
+        "name": "曹建猷先生纪念像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "曹建猷先生纪念像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9858623,
+          30.7675154
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10175215103",
+        "osmId": "node/10175215103",
+        "name": "严恺先生纪念像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/530350942",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "严恺先生纪念像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9868395,
+          30.7658734
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10175215104",
+        "osmId": "node/10175215104",
+        "name": "力学家张维塑像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "力学家张维塑像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9844895,
+          30.7660004
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10175215105",
+        "osmId": "node/10175215105",
+        "name": "方俊先生纪念像",
+        "poiType": "artwork",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14636620",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "artwork_type": "statue",
+          "name": "方俊先生纪念像",
+          "tourism": "artwork"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9829098,
+          30.7690049
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10175220211",
+        "osmId": "node/10175220211",
+        "name": "西南交大广播台",
+        "poiType": "studio",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "way/1098786977",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "amenity": "studio",
+          "name": "西南交大广播台",
+          "studio": "radio"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.985039,
+          30.7655746
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/10175244219",
+        "osmId": "node/10175244219",
+        "name": "师生服务中心",
+        "poiType": "kiosk",
+        "elevation": 0,
+        "parentType": "building",
+        "parentId": "relation/14636620",
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "师生服务中心",
+          "shop": "kiosk"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9890952,
+          30.7642246
+        ]
+      },
+      "properties": {
+        "poiId": "poi-node/11357582822",
+        "osmId": "node/11357582822",
+        "name": "建设型蒸汽机车JS-8328",
+        "poiType": "attraction",
+        "elevation": 0,
+        "parentType": null,
+        "parentId": null,
+        "sourceType": "poi",
+        "labelTargetType": null,
+        "modelType": null,
+        "sourceTags": {
+          "name": "建设型蒸汽机车JS-8328",
+          "operator": "西南交通大学",
+          "tourism": "attraction"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9821037,
+          30.77353944
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/3725612-1",
+        "osmId": "relation/3725612",
+        "name": "艺术造型实验中心",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "relation/3725612",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98444156666666,
+          30.767227661111114
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/12265385-2",
+        "osmId": "relation/12265385",
+        "name": "西南交大犀浦3号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/12265385",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98022204276442,
+          30.79406223041827
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14097988-3",
+        "osmId": "relation/14097988",
+        "name": "府河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "relation/14097988",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98622613500001,
+          30.764905432499994
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14361782-4",
+        "osmId": "relation/14361782",
+        "name": "1号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14361782",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98353194615386,
+          30.7705982923077
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14636619-5",
+        "osmId": "relation/14636619",
+        "name": "9号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14636619",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98523166956521,
+          30.766062147826084
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14636620-6",
+        "osmId": "relation/14636620",
+        "name": "2号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14636620",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98859359999999,
+          30.765228900000004
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14637050-7",
+        "osmId": "relation/14637050",
+        "name": "7号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14637050",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9871776,
+          30.767429207407403
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14637051-8",
+        "osmId": "relation/14637051",
+        "name": "5号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14637051",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98608103571428,
+          30.76853787142857
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14637052-9",
+        "osmId": "relation/14637052",
+        "name": "4号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14637052",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98542888333334,
+          30.77066921666666
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14637053-10",
+        "osmId": "relation/14637053",
+        "name": "综合楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14637053",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98780923333334,
+          30.76621058666666
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-relation/14637080-11",
+        "osmId": "relation/14637080",
+        "name": "6号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "relation/14637080",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97917751428572,
+          30.767057606122457
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207570530-15",
+        "osmId": "way/207570530",
+        "name": "北区体育场",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/207570530",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98117014117645,
+          30.76710582941177
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207570532-16",
+        "osmId": "way/207570532",
+        "name": "体育馆",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/207570532",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98051471250001,
+          30.7661615125
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207596095-31",
+        "osmId": "way/207596095",
+        "name": "游泳馆",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/207596095",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98174198333334,
+          30.76667053333333
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207596096-32",
+        "osmId": "way/207596096",
+        "name": "健美操馆",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/207596096",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98121214285716,
+          30.766275
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207596101-33",
+        "osmId": "way/207596101",
+        "name": "羽毛球馆",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/207596101",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9816007875,
+          30.766435162499995
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207596103-34",
+        "osmId": "way/207596103",
+        "name": "乒乓球馆",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/207596103",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97956034375,
+          30.768514268750003
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207596107-35",
+        "osmId": "way/207596107",
+        "name": "大学生创新创业教育中心",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/207596107",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97892501999999,
+          30.770356099999997
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210164002-36",
+        "osmId": "way/210164002",
+        "name": "游泳池",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/210164002",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97917332,
+          30.77049248
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210164009-37",
+        "osmId": "way/210164009",
+        "name": "游泳池",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/210164009",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97763026666667,
+          30.76879158888889
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/239380399-38",
+        "osmId": "way/239380399",
+        "name": "天佑斋16号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/239380399",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9755337,
+          30.770360239999995
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/239380414-39",
+        "osmId": "way/239380414",
+        "name": "五食堂",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/239380414",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96922662000001,
+          30.775235079999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/262755135-48",
+        "osmId": "way/262755135",
+        "name": "unknow",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/262755135",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98098682,
+          30.77358344
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/280172936-147",
+        "osmId": "way/280172936",
+        "name": "风洞实验室",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/280172936",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98166513999999,
+          30.773082879999997
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/280172939-148",
+        "osmId": "way/280172939",
+        "name": "环境科学与工程实验教学中心",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/280172939",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96933207142858,
+          30.760816757142855
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/284230931-188",
+        "osmId": "way/284230931",
+        "name": "犀浦站",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/284230931",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9792128857143,
+          30.76953908571429
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/324950171-295",
+        "osmId": "way/324950171",
+        "name": "北区校车站",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/324950171",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98174714000001,
+          30.76322692
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859253-296",
+        "osmId": "way/413859253",
+        "name": "天佑斋7号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859253",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98234964000001,
+          30.76360914
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859254-297",
+        "osmId": "way/413859254",
+        "name": "天佑斋6号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859254",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9826963,
+          30.764057559999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859256-298",
+        "osmId": "way/413859256",
+        "name": "天佑斋5号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859256",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98214787142857,
+          30.764004957142856
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859258-299",
+        "osmId": "way/413859258",
+        "name": "天佑斋9号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859258",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98164941249999,
+          30.764668212500002
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859263-300",
+        "osmId": "way/413859263",
+        "name": "天佑斋11号楼",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/413859263",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97698636666668,
+          30.769530733333333
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859273-301",
+        "osmId": "way/413859273",
+        "name": "天佑斋18号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859273",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97768943600003,
+          30.770114512000006
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859275-302",
+        "osmId": "way/413859275",
+        "name": "天佑斋17号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859275",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.977108792,
+          30.770894776000006
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859279-303",
+        "osmId": "way/413859279",
+        "name": "天佑斋19号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859279",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97643984444446,
+          30.77032394444445
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859283-304",
+        "osmId": "way/413859283",
+        "name": "天佑斋20号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859283",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9767465307692,
+          30.771384538461533
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859286-305",
+        "osmId": "way/413859286",
+        "name": "天佑斋21号楼",
+        "poiType": "label",
+        "elevation": 24,
+        "parentType": "building",
+        "parentId": "way/413859286",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97591076,
+          30.770938410000003
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859290-306",
+        "osmId": "way/413859290",
+        "name": "天佑斋22号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/413859290",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97662129999999,
+          30.768780979999995
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859292-307",
+        "osmId": "way/413859292",
+        "name": "四食堂（馨园）",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/413859292",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98199054,
+          30.77256656
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859294-308",
+        "osmId": "way/413859294",
+        "name": "土木工程实验教学中心",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/413859294",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98623292000002,
+          30.772404299999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472143-320",
+        "osmId": "way/532472143",
+        "name": "陆地交通地质灾害防治技术国家工程实验室",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472143",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98727418000001,
+          30.772856759999996
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472144-321",
+        "osmId": "way/532472144",
+        "name": "机械学院馆外实验室",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472144",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98773624,
+          30.77225864
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472145-322",
+        "osmId": "way/532472145",
+        "name": "工程训练中心 B座",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472145",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9872043,
+          30.772069440000003
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472146-323",
+        "osmId": "way/532472146",
+        "name": "磁浮试验中心",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472146",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98668554285715,
+          30.77183212857143
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472147-324",
+        "osmId": "way/532472147",
+        "name": "电气馆",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472147",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98712971999998,
+          30.77119942
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472148-325",
+        "osmId": "way/532472148",
+        "name": "交通运输与磁悬浮实验室",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472148",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98808175714287,
+          30.771471299999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/532472149-326",
+        "osmId": "way/532472149",
+        "name": "工程训练中心 A座",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/532472149",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97469847894737,
+          30.77130374736842
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/533720230-330",
+        "osmId": "way/533720230",
+        "name": "西南交通大学校医院",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/533720230",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98252277692306,
+          30.76575204615384
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/535892698-331",
+        "osmId": "way/535892698",
+        "name": "鸿哲斋7号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/535892698",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98287260769231,
+          30.765311
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/535892699-332",
+        "osmId": "way/535892699",
+        "name": "鸿哲斋6号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/535892699",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98319446153846,
+          30.76484544615385
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/535892700-333",
+        "osmId": "way/535892700",
+        "name": "鸿哲斋5号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/535892700",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98351096153849,
+          30.764414453846147
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/535892701-334",
+        "osmId": "way/535892701",
+        "name": "鸿哲斋4号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/535892701",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97752231999998,
+          30.772024
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/584261708-357",
+        "osmId": "way/584261708",
+        "name": "鸿哲斋11号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/584261708",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97786116,
+          30.771576300000003
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/584261710-358",
+        "osmId": "way/584261710",
+        "name": "鸿哲斋10号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/584261710",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97819822,
+          30.771138199999996
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/584261711-359",
+        "osmId": "way/584261711",
+        "name": "鸿哲斋9号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/584261711",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97867814000001,
+          30.77077258
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/584261713-360",
+        "osmId": "way/584261713",
+        "name": "鸿哲斋8号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/584261713",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97847274666667,
+          30.763298679999995
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/632176715-362",
+        "osmId": "way/632176715",
+        "name": "犀浦春天",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/632176715",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98302878245613,
+          30.768803263157885
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098786977-399",
+        "osmId": "way/1098786977",
+        "name": "图书馆",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098786977",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98120810370374,
+          30.770572992592594
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098786979-401",
+        "osmId": "way/1098786979",
+        "name": "8号教学楼",
+        "poiType": "label",
+        "elevation": 18,
+        "parentType": "building",
+        "parentId": "way/1098786979",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98431633809523,
+          30.759974833333324
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098786995-403",
+        "osmId": "way/1098786995",
+        "name": "南区体育场",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/1098786995",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9793435,
+          30.765330485714287
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098797650-418",
+        "osmId": "way/1098797650",
+        "name": "北区排球场",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/1098797650",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97775362307692,
+          30.76759187692307
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098797659-420",
+        "osmId": "way/1098797659",
+        "name": "北区篮球场",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/1098797659",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98150229999999,
+          30.762796099999996
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098797672-425",
+        "osmId": "way/1098797672",
+        "name": "二食堂（梁园）",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098797672",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98024283076924,
+          30.764114323076925
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098797674-426",
+        "osmId": "way/1098797674",
+        "name": "3号学生生活服务区",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098797674",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9807091761905,
+          30.76373054761906
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098797675-427",
+        "osmId": "way/1098797675",
+        "name": "三食堂（粟园）",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098797675",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98100836666669,
+          30.763218055555555
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098797678-430",
+        "osmId": "way/1098797678",
+        "name": "2号学生生活服务区",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098797678",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98180411111112,
+          30.762159522222216
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098800630-432",
+        "osmId": "way/1098800630",
+        "name": "1号学生生活服务区",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098800630",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98228643928572,
+          30.761702796428576
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098800631-433",
+        "osmId": "way/1098800631",
+        "name": "一食堂（黍园）",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098800631",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98255218461537,
+          30.761254523076925
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098800632-434",
+        "osmId": "way/1098800632",
+        "name": "后勤保卫处",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1098800632",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9865546,
+          30.76287744
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098808299-437",
+        "osmId": "way/1098808299",
+        "name": "南区网球场",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/1098808299",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98758152,
+          30.763239100000003
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098808301-439",
+        "osmId": "way/1098808301",
+        "name": "南区羽毛球场",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/1098808301",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98307608148146,
+          30.76288664074073
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098823504-444",
+        "osmId": "way/1098823504",
+        "name": "天佑斋3号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1098823504",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9824617,
+          30.762534092857145
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098823505-445",
+        "osmId": "way/1098823505",
+        "name": "天佑斋4号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1098823505",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97841874186048,
+          30.769326502325587
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098823506-446",
+        "osmId": "way/1098823506",
+        "name": "天佑斋15号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1098823506",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98134189999999,
+          30.764996522222223
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098823507-447",
+        "osmId": "way/1098823507",
+        "name": "天佑斋14号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1098823507",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98103607777779,
+          30.764314111111112
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098823508-448",
+        "osmId": "way/1098823508",
+        "name": "天佑斋12号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1098823508",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98195343999998,
+          30.76513794
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098823509-449",
+        "osmId": "way/1098823509",
+        "name": "天佑斋10号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1098823509",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98073136666667,
+          30.764622977777776
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1099258263-477",
+        "osmId": "way/1099258263",
+        "name": "天佑斋13号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1099258263",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98154682222224,
+          30.76365658888889
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1099340039-480",
+        "osmId": "way/1099340039",
+        "name": "天佑斋8号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1099340039",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98319689444443,
+          30.761590686111106
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1099340056-495",
+        "osmId": "way/1099340056",
+        "name": "天佑斋2号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1099340056",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98399708666668,
+          30.762048348888886
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1099340057-496",
+        "osmId": "way/1099340057",
+        "name": "天佑斋1号楼",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1099340057",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97746487142857,
+          30.761319957142856
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1125230310-516",
+        "osmId": "way/1125230310",
+        "name": "3",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1125230310",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9765253,
+          30.761001699999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1125230311-517",
+        "osmId": "way/1125230311",
+        "name": "5",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1125230311",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9774474,
+          30.76059041428572
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1125230312-518",
+        "osmId": "way/1125230312",
+        "name": "4",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1125230312",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97784118181818,
+          30.762725136363642
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1125230313-519",
+        "osmId": "way/1125230313",
+        "name": "1",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1125230313",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97808136666669,
+          30.76238263333333
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1125230314-520",
+        "osmId": "way/1125230314",
+        "name": "2",
+        "poiType": "label",
+        "elevation": 15,
+        "parentType": "building",
+        "parentId": "way/1125230314",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98427654285716,
+          30.75722207142857
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1166122634-522",
+        "osmId": "way/1166122634",
+        "name": "校园路公交场站",
+        "poiType": "label",
+        "elevation": 2,
+        "parentType": "site",
+        "parentId": "way/1166122634",
+        "sourceType": "label",
+        "labelTargetType": "site",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "site"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98542706,
+          30.77781692
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1242274080-532",
+        "osmId": "way/1242274080",
+        "name": "成都绕城高速蜀源大道收费站B出口",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1242274080",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96858533999998,
+          30.762795340000004
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1423243353-543",
+        "osmId": "way/1423243353",
+        "name": "犀浦街道办事处",
+        "poiType": "label",
+        "elevation": 10,
+        "parentType": "building",
+        "parentId": "way/1423243353",
+        "sourceType": "label",
+        "labelTargetType": "building",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "building"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98022204276442,
+          30.79406223041827
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/37635190-544",
+        "osmId": "way/37635190",
+        "name": "府河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "way/37635190",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98804685,
+          30.760930199999997
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/42451205-545",
+        "osmId": "way/42451205",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/42451205",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99864084270709,
+          30.765625880652077
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/42451251-546",
+        "osmId": "way/42451251",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/42451251",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98817352964103,
+          30.767505625766663
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207570494-549",
+        "osmId": "way/207570494",
+        "name": "知行路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/207570494",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98684820099372,
+          30.76356474670455
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207570514-560",
+        "osmId": "way/207570514",
+        "name": "知行路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/207570514",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98933379310499,
+          30.763459553721557
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207570521-564",
+        "osmId": "way/207570521",
+        "name": "承唐路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/207570521",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9846377584362,
+          30.761491978611254
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207573050-597",
+        "osmId": "way/207573050",
+        "name": "精勤路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/207573050",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98241132888633,
+          30.766902406132075
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/207573054-600",
+        "osmId": "way/207573054",
+        "name": "精勤路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/207573054",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9803126,
+          30.769914749999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210164035-633",
+        "osmId": "way/210164035",
+        "name": "石桥",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/210164035",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9697868759298,
+          30.76563997068283
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210779410-636",
+        "osmId": "way/210779410",
+        "name": "犀方路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/210779410",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98467617427306,
+          30.7533530174329
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210779412-637",
+        "osmId": "way/210779412",
+        "name": "龙吟路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/210779412",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97020287073438,
+          30.773216459036245
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210779935-638",
+        "osmId": "way/210779935",
+        "name": "锦园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/210779935",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99263874815367,
+          30.748849814675204
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/210779938-639",
+        "osmId": "way/210779938",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/210779938",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99631429935718,
+          30.753120986450273
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/218595717-641",
+        "osmId": "way/218595717",
+        "name": "沱江河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "way/218595717",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97579973511387,
+          30.761130262065297
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/262043482-654",
+        "osmId": "way/262043482",
+        "name": "华都路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/262043482",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97352165204379,
+          30.768889248056738
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263483956-656",
+        "osmId": "way/263483956",
+        "name": "犀方路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263483956",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97473715502869,
+          30.76206312879831
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263483958-657",
+        "osmId": "way/263483958",
+        "name": "天府路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263483958",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97796763953447,
+          30.75878536174538
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263483960-658",
+        "osmId": "way/263483960",
+        "name": "兴业北街",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263483960",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97488862911892,
+          30.769013868442094
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263670258-659",
+        "osmId": "way/263670258",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263670258",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97244635,
+          30.76788275
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263670262-662",
+        "osmId": "way/263670262",
+        "name": "犀方路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263670262",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97239865,
+          30.7679416
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263670266-664",
+        "osmId": "way/263670266",
+        "name": "犀方路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263670266",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97358707645176,
+          30.768802836184456
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263670271-666",
+        "osmId": "way/263670271",
+        "name": "犀方路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263670271",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96949315,
+          30.7707485
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263670272-667",
+        "osmId": "way/263670272",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263670272",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96971279143436,
+          30.76568000910619
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/263670285-675",
+        "osmId": "way/263670285",
+        "name": "犀方路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/263670285",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96748878953153,
+          30.762897329499715
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/284224185-683",
+        "osmId": "way/284224185",
+        "name": "红光大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/284224185",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97127535544384,
+          30.755040677132875
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/284243170-699",
+        "osmId": "way/284243170",
+        "name": "下街",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/284243170",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97952022341838,
+          30.76001281144377
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/361474332-702",
+        "osmId": "way/361474332",
+        "name": "锦宁巷",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/361474332",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9788799105536,
+          30.765214791147347
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859296-703",
+        "osmId": "way/413859296",
+        "name": "菁华路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/413859296",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9832901767973,
+          30.760396515312742
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/413859301-704",
+        "osmId": "way/413859301",
+        "name": "精勤路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/413859301",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98373038232536,
+          30.757872227810086
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/442204792-705",
+        "osmId": "way/442204792",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/442204792",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96937539999999,
+          30.7708698
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/442204793-706",
+        "osmId": "way/442204793",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/442204793",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9750155301638,
+          30.769165286190486
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/442204794-707",
+        "osmId": "way/442204794",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/442204794",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96745490792802,
+          30.769706297186488
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/442204795-708",
+        "osmId": "way/442204795",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/442204795",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99936195267811,
+          30.774263839589732
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/461777229-710",
+        "osmId": "way/461777229",
+        "name": "蜀绣长廊绿道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/461777229",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97388373896109,
+          30.75954338377499
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/505330090-711",
+        "osmId": "way/505330090",
+        "name": "学园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/505330090",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97385115,
+          30.758451049999998
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/505330091-712",
+        "osmId": "way/505330091",
+        "name": "岚牌街",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/505330091",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97146611599786,
+          30.76340724766284
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/505330092-713",
+        "osmId": "way/505330092",
+        "name": "园林路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/505330092",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97400157334766,
+          30.765021171148067
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/505330094-714",
+        "osmId": "way/505330094",
+        "name": "锦宁巷",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/505330094",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98500288558054,
+          30.76258820739458
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/530350950-724",
+        "osmId": "way/530350950",
+        "name": "精勤路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/530350950",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98482444999999,
+          30.7619319
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/530350951-725",
+        "osmId": "way/530350951",
+        "name": "精勤路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/530350951",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98401222241317,
+          30.76580164658201
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/535905490-803",
+        "osmId": "way/535905490",
+        "name": "X桥",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/535905490",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98402677949385,
+          30.76580985028134
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/535905493-804",
+        "osmId": "way/535905493",
+        "name": "X桥",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/535905493",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.00061739742826,
+          30.751141931009638
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/655301852-857",
+        "osmId": "way/655301852",
+        "name": "西华大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/655301852",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97743969640383,
+          30.790449524583646
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/655301853-858",
+        "osmId": "way/655301853",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/655301853",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97712653374921,
+          30.790563247098802
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/655301855-859",
+        "osmId": "way/655301855",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/655301855",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97586571889701,
+          30.755118852523044
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/687708565-862",
+        "osmId": "way/687708565",
+        "name": "红光大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/687708565",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97803697448941,
+          30.758717760809773
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/687708566-863",
+        "osmId": "way/687708566",
+        "name": "兴业北街",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/687708566",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.95085697678968,
+          30.77885372379912
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/687932355-864",
+        "osmId": "way/687932355",
+        "name": "沱江河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "way/687932355",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98279365,
+          30.76018995
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759132560-872",
+        "osmId": "way/759132560",
+        "name": "菁华路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/759132560",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98264915,
+          30.76038085
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759132561-873",
+        "osmId": "way/759132561",
+        "name": "菁华路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/759132561",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96757828681474,
+          30.762968052444958
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759354201-874",
+        "osmId": "way/759354201",
+        "name": "红光大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/759354201",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97473404249172,
+          30.755987095444127
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759354202-875",
+        "osmId": "way/759354202",
+        "name": "红光大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/759354202",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98061830910676,
+          30.755301550711856
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759367807-878",
+        "osmId": "way/759367807",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/759367807",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98603681511518,
+          30.759456832965647
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759367808-879",
+        "osmId": "way/759367808",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/759367808",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97840875,
+          30.7639104
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759367811-880",
+        "osmId": "way/759367811",
+        "name": "沱江河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "way/759367811",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9787485361824,
+          30.763504127284545
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759367812-881",
+        "osmId": "way/759367812",
+        "name": "沱江河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "way/759367812",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97948355,
+          30.763263600000002
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/759367814-882",
+        "osmId": "way/759367814",
+        "name": "沱江河",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "water",
+        "parentId": "way/759367814",
+        "sourceType": "label",
+        "labelTargetType": "river",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "river"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96632391188405,
+          30.76590602840511
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/849664762-903",
+        "osmId": "way/849664762",
+        "name": "犀团路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/849664762",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96626562556017,
+          30.765838691244415
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/849664764-904",
+        "osmId": "way/849664764",
+        "name": "犀团路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/849664764",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96742475466382,
+          30.769471466493695
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/849664769-905",
+        "osmId": "way/849664769",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/849664769",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.00078369940356,
+          30.75116785263406
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/849735258-906",
+        "osmId": "way/849735258",
+        "name": "西华大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/849735258",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98600526831635,
+          30.759340959966217
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748810-932",
+        "osmId": "way/969748810",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748810",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98392665,
+          30.7579362
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748811-933",
+        "osmId": "way/969748811",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748811",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99259965920587,
+          30.74872216161477
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748813-935",
+        "osmId": "way/969748813",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748813",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98401175000001,
+          30.7580266
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748814-936",
+        "osmId": "way/969748814",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748814",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98056591386711,
+          30.755533048729035
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748815-937",
+        "osmId": "way/969748815",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748815",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98392709999999,
+          30.75782685
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748816-938",
+        "osmId": "way/969748816",
+        "name": "犀安路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748816",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98395535,
+          30.757725200000003
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/969748817-939",
+        "osmId": "way/969748817",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/969748817",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98548235,
+          30.7637449
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1098787031-1021",
+        "osmId": "way/1098787031",
+        "name": "玻璃桥/蓝桥",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1098787031",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98448688217921,
+          30.755721676252243
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1166122631-1140",
+        "osmId": "way/1166122631",
+        "name": "龙梓路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1166122631",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97494515,
+          30.7703095
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1220208142-1144",
+        "osmId": "way/1220208142",
+        "name": "菁华路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1220208142",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9793747,
+          30.76328855
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1255210380-1157",
+        "osmId": "way/1255210380",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1255210380",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.979663,
+          30.7632052
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1255210381-1158",
+        "osmId": "way/1255210381",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1255210381",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9818271082813,
+          30.760561697783242
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1255210382-1159",
+        "osmId": "way/1255210382",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1255210382",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.98156707479433,
+          30.760570447656832
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1255210390-1162",
+        "osmId": "way/1255210390",
+        "name": "校园路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1255210390",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.00155580406918,
+          30.77139417618462
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1280900255-1165",
+        "osmId": "way/1280900255",
+        "name": "蜀绣长廊绿道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1280900255",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.96683219892373,
+          30.759578608651196
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1387577086-1180",
+        "osmId": "way/1387577086",
+        "name": "浦兴街",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1387577086",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97306867232142,
+          30.757791053434385
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1396580081-1186",
+        "osmId": "way/1396580081",
+        "name": "红光大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1396580081",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.97479753909758,
+          30.761995032664622
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1423243354-1192",
+        "osmId": "way/1423243354",
+        "name": "天府路",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1423243354",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99621225525212,
+          30.76024924391551
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1423243355-1193",
+        "osmId": "way/1423243355",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1423243355",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99189640305555,
+          30.772400435698113
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1430299386-1194",
+        "osmId": "way/1430299386",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1430299386",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99160124532776,
+          30.772476882620087
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1430299387-1195",
+        "osmId": "way/1430299387",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1430299387",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9945916,
+          30.7645574
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1430299388-1196",
+        "osmId": "way/1430299388",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1430299388",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99475050000001,
+          30.7645962
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1430299389-1197",
+        "osmId": "way/1430299389",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1430299389",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.99595450525007,
+          30.76023533391819
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-way/1430299390-1198",
+        "osmId": "way/1430299390",
+        "name": "蜀源大道",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "way/1430299390",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9697838,
+          30.7611262
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-node/10692894907-1244",
+        "osmId": "node/10692894907",
+        "name": "犀浦快铁站",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "node/10692894907",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.9697818,
+          30.7605581
+        ]
+      },
+      "properties": {
+        "poiId": "poi-derived-node/10692894909-1245",
+        "osmId": "node/10692894909",
+        "name": "犀浦快铁站",
+        "poiType": "label",
+        "elevation": 0,
+        "parentType": "road",
+        "parentId": "node/10692894909",
+        "sourceType": "label",
+        "labelTargetType": "road",
+        "modelType": null,
+        "sourceTags": {
+          "sourceFeatureType": "road"
+        }
+      }
+    }
+  ]
+}

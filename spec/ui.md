@@ -29,6 +29,11 @@
   - `logsPreview`：LoggerViewer（若实现）展示的最新 N 条日志。
   - `sceneTransform`：调试面板使用，结构 `{ rotationY: number, scale: number, offset: { x: number, z: number } }`，用于控制建筑群绕 Y 轴旋转、整体缩放、平移。
 
+## 鏍″洯鑼冨洿搴旂敤
+- **RangeToggle 鎺т欢**锛氭殏鏃朵綋涓?LayerToggle 澶氬憡鍔ㄦ€乄I锛岄€氳繃鎻愪緵鈥滀笓闄愯涓€/鍚庢按鐜牎浜ら€氱殑鍒囨崲閫夋嫨鈥濓紝璇诲啓/璇绘槑 store 涓殑 `campusOnly` 鍜?`roadBufferMeters`銆?鎵ц鍒囨崲鏃讹紝闇€涓€鑷撮噸璇曞睘鎬у璇讳笁缁勭殑 Group 鎺у埗鏄鹃殣锛堟妸鎻愪緵鐨勯潰鏉匡級銆?
+- **InfoCard 鎵╁睍**锛氬湴閬撹矾鐒跺悗闇€鍦?Detail 鍖哄煙涓樉绀篔properties.distanceToCampus`锛岀敤涓枃瀛楀彿闄愬埗涓嶅埄鐩稿紡锛屼互渚跨疆娲茶疆椹紝姣斿鈥滃綋鍓嶄綅缃瘮鏍″尯鐣欐嫢鍥?215 绫筹紟鈥濓紝鍖呮嫭 hover 鍜宼elect 璺宠浆棰勫伐銆?
+- **DebugPanel 鏄剧ず**锛氳鍔犲叆褰撳墠鍚勪綅 `campusOnly` 鐘舵€佸拰 `roadBufferMeters` 鍊硷紝骞堕噸鐐逛俊鍙凤紝渚夸簬闃叉鍙鍖栫О鍙ｈЕ鍙戜笂娆′腑鏂彿鍙枫€?
+
 ## TODO
 - [ ] 设计主界面布局（断点、响应式策略）。
 - [ ] 确定 panel 与 3D 视图的通信 API。

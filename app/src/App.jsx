@@ -25,6 +25,7 @@ import { buildWaterway } from "./three/buildWaterway";
 import { buildGreenery } from "./three/buildGreenery";
 import { buildRoads } from "./three/buildRoads";
 import { buildSites } from "./three/buildSites";
+import { buildPois } from "./three/buildPois";
 import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
@@ -59,6 +60,8 @@ const waterwayGroupRef = useRef(null);
 const greeneryGroupRef = useRef(null);
 const roadsGroupRef = useRef(null);
 const sitesGroupRef = useRef(null);
+const poisGroupRef = useRef(null);
+const poiScaleListenerRef = useRef(null);
 
   /**
    * 交互拾取事件处理器的清理函数或实例引用
@@ -106,6 +109,9 @@ const roadsVisible = useSceneStore(
 const sitesVisible = useSceneStore(
   (state) => state.layerVisibility?.sites ?? true
 );
+const poisVisible = useSceneStore(
+  (state) => state.poiLayerVisible ?? state.layerVisibility?.pois ?? true
+);
 const environmentSettings = useSceneStore(
   (state) => state.environmentSettings
 );
@@ -136,6 +142,7 @@ const environmentSettings = useSceneStore(
       greeneryGroupRef.current,
       roadsGroupRef.current,
       sitesGroupRef.current,
+      poisGroupRef.current,
     ].forEach((group) => {
       if (!group) return;
       group.rotation.y = rotation;
@@ -200,6 +207,8 @@ const environmentSettings = useSceneStore(
         const greeneryGroup = buildGreenery(sceneContext.scene);
         const roadsGroup = buildRoads(sceneContext.scene);
         const sitesGroup = buildSites(sceneContext.scene);
+        const poiLayer = buildPois(sceneContext.scene);
+        const poiGroup = poiLayer?.group ?? poiLayer;
 
         buildingGroupRef.current = buildingGroup;
         boundaryGroupRef.current = boundaryGroup;
@@ -208,6 +217,7 @@ const environmentSettings = useSceneStore(
         greeneryGroupRef.current = greeneryGroup;
         roadsGroupRef.current = roadsGroup;
         sitesGroupRef.current = sitesGroup;
+        poisGroupRef.current = poiGroup;
 
         // 初始化各图层可见性：从 store 读取状态，默认全部 true
         const visibility = useSceneStore.getState().layerVisibility;
@@ -216,12 +226,17 @@ const environmentSettings = useSceneStore(
         const greeneryState = visibility?.greenery ?? true;
         const roadState = visibility?.roads ?? true;
         const siteState = visibility?.sites ?? true;
+        const poiState =
+          visibility?.pois ??
+          useSceneStore.getState().poiLayerVisible ??
+          true;
         if (boundaryGroup) boundaryGroup.visible = boundaryState;
         if (waterGroup) waterGroup.visible = waterState;
         if (waterwayGroup) waterwayGroup.visible = waterState;
         if (greeneryGroup) greeneryGroup.visible = greeneryState;
         if (roadsGroup) roadsGroup.visible = roadState;
         if (sitesGroup) sitesGroup.visible = siteState;
+        if (poiGroup) poiGroup.visible = poiState;
 
         // 应用基准姿态和任何初始增量变换（通常此时为零）
         applySceneTransform(useSceneStore.getState().sceneTransform);
@@ -230,6 +245,32 @@ const environmentSettings = useSceneStore(
         logInfo("三维渲染", "绿化几何构建完成");
         logInfo("三维渲染", "道路几何构建完成");
         logInfo("三维渲染", "场地几何构建完成");
+        logInfo("三维渲染", "POI 图层构建完成", {
+          总数: poiLayer?.stats?.total ?? poiGroup?.children?.length ?? 0,
+          独立: poiLayer?.stats?.independent ?? 0,
+        });
+
+        if (poiLayer?.updateLabelScale && sceneContext.controls) {
+          const handleControlChange = () =>
+            poiLayer.updateLabelScale(sceneContext.camera);
+          poiScaleListenerRef.current = handleControlChange;
+          sceneContext.controls.addEventListener(
+            "change",
+            handleControlChange
+          );
+          handleControlChange();
+        }
+
+        if (typeof useSceneStore.getState().updatePoiStatistics === "function") {
+          useSceneStore
+            .getState()
+            .updatePoiStatistics(
+              poiLayer?.stats ?? {
+                total: poiGroup?.children?.length ?? 0,
+                independent: poiLayer?.stats?.independent ?? 0,
+              }
+            );
+        }
 
         /**
          * 绑定建筑拾取交互：支持 Hover（高亮）和 Click（选中）
@@ -398,6 +439,14 @@ const environmentSettings = useSceneStore(
       sitePickingHandleRef.current?.dispose?.();
       sitePickingHandleRef.current = null;
 
+      if (poiScaleListenerRef.current && sceneContext?.controls) {
+        sceneContext.controls.removeEventListener(
+          "change",
+          poiScaleListenerRef.current
+        );
+      }
+      poiScaleListenerRef.current = null;
+
       // 清理建筑拾取交互
       detachBuildingPicking?.();
       
@@ -421,6 +470,7 @@ const environmentSettings = useSceneStore(
       greeneryGroupRef.current = null;
       roadsGroupRef.current = null;
       sitesGroupRef.current = null;
+      poisGroupRef.current = null;
     };
   }, []);
 
@@ -512,6 +562,15 @@ const environmentSettings = useSceneStore(
       useSceneStore.getState().setHoveredSite(null);
     }
   }, [sitesVisible]);
+
+  /**
+   * 监听 POI 图层可见性变化
+   */
+  useEffect(() => {
+    if (poisGroupRef.current) {
+      poisGroupRef.current.visible = poisVisible;
+    }
+  }, [poisVisible]);
 
   return (
     <div className="app-root">

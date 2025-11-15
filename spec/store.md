@@ -49,6 +49,12 @@ type SceneStore = {
   updateEnvironmentSettings: (partial: Partial<SceneStore["environmentSettings"]>) => void
   resetEnvironmentSettings: () => void
 
+  campusOnly: boolean
+  setCampusOnly: (value: boolean) => void
+
+  roadBufferMeters: number
+  setRoadBufferMeters: (value: number) => void
+
   hoveredBuilding: Record<string, any> | null
   setHoveredBuilding: (info: Record<string, any> | null) => void
 
@@ -64,6 +70,9 @@ type SceneStore = {
 - **selectedSite**：site 拾取或 UI 场地列表写入的 stableId，InfoCard/日志根据该字段切换到体育场地视角。
 - **route**：路线模块写入的路径数据，deck.gl PathLayer、Three.js 行动画线只读该字段。
 - **layerVisibility**：LayerToggle 调用 `toggleLayerVisibility` 修改；Three.js、deck.gl 图层监听对应 key 控制显隐。
+
+- **campusOnly**锛氳〃绀烘槸鍚︽寜榛樿鍙樉绀烘牎鍐呮粦鍚堛€?true 鏃剁紦鍐插眰闄愮骇鏄剧ず锛屽仛寮€鏃跺鐞嗘幆鏍￠亾璺殑 Group 鏄鹃殣锛岄€氳繃 DebugPanel / LayerToggle 涓婁紶銆?
+- **roadBufferMeters**锛氢繚瀛樺綋鍓嶅叿榫勬渶杩戣寖鐨勬带浠芥暟鍊硷紝缁?UI 鎴栨棩蹇楁樉绀哄灞傞厤缃噺锛岀瓑鍊奸儴鍊煎緢閲嶈啿鎹曢珮搴︽斂绛栧苟瀵瑰寲鍙婄暍缂╃殑鏍囧噯銆?
 - **logsPreview**：DebugPanel/LoggerViewer（规划中）读取最近日志，`pushLogPreview` 负责滚动窗口裁剪（默认 50 条）。
 - **sceneTransform**：DebugPanel 写入增量旋转/缩放/平移，Three.js 在 `applySceneTransform` 中与基准对齐值合成后应用到全局 Group。
 - **environmentSettings**：存放天空盒与环境贴图的实时配置，`App.jsx` 监听并调用 `sceneContext.applyEnvironmentSettings`；DebugPanel 使用 update/reset 接口驱动 UI 控件。
@@ -94,5 +103,6 @@ type SceneStore = {
   - DebugPanel 读写 `sceneTransform`、`environmentSettings`；
   - NavigationPanel / InfoCard 读取 `selectedBuilding`、`selectedSite`、`route`；
   - LayerToggle 操作 `layerVisibility`；
+  - 鑼冨洿鍒囨崲闈㈡澘/InfoCard 璇诲啓 `campusOnly` 鍜?`roadBufferMeters`锛岀户缁鎬х紦瑙掔敤鎴峰彲瑙佺殑鏁版嵁锛岄€氳繃 setter 鎺ㄨ崘涓夌淮鍥惧眰鏄鹃殣銆?
   - LoggerViewer（若实现）读取 `logsPreview`。
 - 本文仅描述 store 字段与职责，涉及 UI、渲染、数据流程的具体交互需参照对应 spec（如 `spec/ui.md`、`spec/rendering.md`、`spec/data-pipeline.md` 等）。

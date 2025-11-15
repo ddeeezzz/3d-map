@@ -88,7 +88,7 @@ export const config = {
     { name: "场地", key: "sites", visible: true, order: 16 },
     { name: "绿化", key: "greenery", visible: true, order: 18 },
     { name: "道路", key: "roads", visible: true, order: 20 },
-    { name: "热点", key: "pois", visible: false, order: 30 },
+    { name: "热点", key: "pois", visible: true, order: 30 },
   ],
 
   /**
@@ -187,6 +187,34 @@ export const config = {
     categoryHeights: {
       track: 7,
     },
+  },
+
+  /**
+   * poi：POI 图层的文字与样式设定
+   * 字段：
+   * - labelFont：Sprite Canvas 的字体
+   * - labelColor：文字颜色
+   * - labelBackground：文字背景色
+   * - labelBorderColor：边框颜色
+   * - labelBorderWidth：边框线宽（px）
+   * - labelPadding：左右/上下内边距（px）
+   * - labelHeight：Sprite 相对地面的抬升高度（米）
+   * - spriteScale：像素到世界坐标的缩放系数
+   * - scaleReferenceDistance：镜头距离基准，用于自动缩放
+   * - minScale/maxScale：自动缩放的上下限
+   */
+  poi: {
+    labelFont: "24px 'Microsoft YaHei', 'Noto Sans SC', sans-serif",
+    labelColor: "#ffffff",
+    labelBackground: "rgba(15, 23, 42, 0.85)",
+    labelBorderColor: "rgba(56, 189, 248, 0.9)",
+    labelBorderWidth: 2,
+    labelPadding: { x: 14, y: 8 },
+    labelHeight: 8,
+    spriteScale: 0.25,
+    scaleReferenceDistance: 400,
+    minScale: 0.5,
+    maxScale: 2,
   },
 
   /**

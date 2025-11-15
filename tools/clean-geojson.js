@@ -6,7 +6,6 @@ const cleanCoords = require("../app/node_modules/@turf/clean-coords").default;
 const rewind = require("../app/node_modules/@turf/rewind").default;
 const centroid = require("../app/node_modules/@turf/centroid").default;
 const { detectGreeneryType } = require("./greenery-tags");
-const { parseNumeric, resolveSiteElevation } = require("./site-elevation");
 /**
  * 场地分类优先级列表，确保按照 stadium → track → swimming_pool → parking → construction 的顺序匹配
  * @type {Array<{ tag: "amenity"|"leisure"|"landuse", value: string }>}
@@ -54,6 +53,20 @@ const CAMPUS_NAME = "西南交通大学（犀浦校区）";
 const EARTH_RADIUS = 6378137;
 /** 角度到弧度的转换系数 */
 const DEG_TO_RAD = Math.PI / 180;
+
+/**
+ * 解析数值字段，兼容字符串带单位等场景
+ * @param {unknown} value 原始输入
+ * @returns {number|null} 解析结果
+ */
+function parseNumeric(value) {
+  if (value == null) return null;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  const numeric = Number(String(value).replace(/[^0-9.+-]/g, ""));
+  return Number.isFinite(numeric) ? numeric : null;
+}
 
 async function loadModule(relativePath) {
   const url = pathToFileURL(resolve(__dirname, relativePath)).href;
@@ -162,25 +175,27 @@ function determineSiteCategory(props) {
  * @param {object} config 全局配置对象
  * @returns {number|null} 可用于挤出的高度
  */
-function resolveSiteElevation(config) {
-  if (!config) return null;
-  const siteHeight = parseNumeric(config.site && config.site.height);
-  if (siteHeight != null) {
-    return siteHeight;
+function resolveSiteElevation(props, siteCategory, config) {
+  const siteConfig = config.site || {};
+  const categoryHeights = siteConfig.categoryHeights || {};
+  const categoryValue = parseNumeric(categoryHeights[siteCategory]);
+  if (categoryValue != null) {
+    return categoryValue;
+  }
+  const elevationFromProps = parseNumeric(props && props.elevation);
+  if (elevationFromProps != null) {
+    return elevationFromProps;
+  }
+  const siteDefault = parseNumeric(siteConfig.height);
+  if (siteDefault != null) {
+    return siteDefault;
   }
   const heights = config.heights || {};
-  const siteFallback = parseNumeric(heights.site);
-  if (siteFallback != null) {
-    return siteFallback;
-  }
-  const defaultCandidates = [heights["默认"], heights["榛樿"]];
-  for (const candidate of defaultCandidates) {
-    const parsed = parseNumeric(candidate);
-    if (parsed != null) {
-      return parsed;
-    }
-  }
-  return null;
+  const fallback =
+    parseNumeric(heights.site) ||
+    parseNumeric(heights["默认"]) ||
+    parseNumeric(heights.default);
+  return fallback ?? null;
 }
 
 function isRiverFeature(props, geometry) {
@@ -711,12 +726,7 @@ async function main() {
         const trimmedName = typeof props.name === "string" ? props.name.trim() : "";
         const hasName = Boolean(trimmedName);
         const displayName = hasName ? trimmedName : SITE_DEFAULT_DISPLAY_NAME;
-        const elevation = resolveSiteElevation(
-          props,
-          siteCategory,
-          config,
-          parseNumeric,
-        );
+        const elevation = resolveSiteElevation(props, siteCategory, config);
 
         const newProps = {
           ...props,

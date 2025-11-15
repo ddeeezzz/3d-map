@@ -62,6 +62,12 @@
 ## 数据加载
 - 三维模块通过静态导入 `import data from "../data/campus.geojson?raw"` 解析 GeoJSON 数据；如果需要增量更新，需先提升 data pipeline spec。
 
+## 校园范围控制
+- **数据范围**：Three.js 仅加载 `properties.region = "xipu-campus"` 的建筑/场地/绿化/水系；围墙 Group 提供 `toggleVisibility`，默认开启以强调校区边界。
+- **道路拆分**：`buildRoads.js` 需根据 `properties.roadScope` 将道路拆成“校内 + 环校”两个 Group，环校道路使用更淡材质、降低厚度，并在 `userData` 中带上 `distanceToCampus` 便于交互面板显示。
+- **Store 联动**：通过 `useSceneStore` 新增的 `campusOnly`、`roadBufferMeters` 控制两组道路显隐与缓冲提示；DebugPanel / LayerToggle 需读写该状态，并在切换时调用相应 Group 的 `toggleVisibility`。
+- **UI 展示**：道路 InfoCard/日志输出需要读取 `distanceToCampus` 并以中文显示“距校界 xx 米”；范围切换操作需记录 `logInfo("范围切换", ...)`，以便排查误操作。
+
 ## TODO
 - [ ] 完善 hover/click 与 UI 面板的联动方案。
 - [ ] 道路宽度、材质与阴影的细节调优。

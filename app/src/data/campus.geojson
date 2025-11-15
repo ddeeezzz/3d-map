@@ -4247,7 +4247,7 @@
         "featureType": "site",
         "siteCategory": "track",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 7,
         "sourceTag": {
           "leisure": "track"
         }
@@ -4475,7 +4475,7 @@
         "featureType": "site",
         "siteCategory": "stadium",
         "displayName": "北区体育场",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "北区体育场",
           "leisure": "stadium"
@@ -6249,7 +6249,7 @@
         "featureType": "site",
         "siteCategory": "construction",
         "displayName": "大学生创新创业教育中心",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "大学生创新创业教育中心",
           "landuse": "construction"
@@ -6301,7 +6301,7 @@
         "featureType": "site",
         "siteCategory": "swimming_pool",
         "displayName": "游泳池",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "游泳池",
           "leisure": "swimming_pool"
@@ -6353,7 +6353,7 @@
         "featureType": "site",
         "siteCategory": "swimming_pool",
         "displayName": "游泳池",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "游泳池",
           "leisure": "swimming_pool"
@@ -6647,7 +6647,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -7055,7 +7055,7 @@
         "featureType": "site",
         "siteCategory": "track",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 7,
         "sourceTag": {
           "leisure": "track"
         }
@@ -10990,7 +10990,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -14473,7 +14473,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -20818,7 +20818,7 @@
         "featureType": "site",
         "siteCategory": "track",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 7,
         "sourceTag": {
           "leisure": "track"
         }
@@ -20869,7 +20869,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -22269,7 +22269,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -22360,7 +22360,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -23454,7 +23454,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -23505,7 +23505,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -24702,7 +24702,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -25282,7 +25282,7 @@
         "featureType": "site",
         "siteCategory": "track",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 7,
         "sourceTag": {
           "leisure": "track"
         }
@@ -25329,7 +25329,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -25416,7 +25416,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -25475,7 +25475,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -25878,7 +25878,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -28126,7 +28126,7 @@
         "featureType": "site",
         "siteCategory": "stadium",
         "displayName": "南区体育场",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "南区体育场",
           "leisure": "stadium"
@@ -28278,7 +28278,7 @@
         "featureType": "site",
         "siteCategory": "construction",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "landuse": "construction"
         }
@@ -28757,7 +28757,7 @@
         "featureType": "site",
         "siteCategory": "construction",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "landuse": "construction"
         }
@@ -29020,7 +29020,7 @@
         "featureType": "site",
         "siteCategory": "construction",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "landuse": "construction"
         }
@@ -29077,7 +29077,7 @@
         "featureType": "site",
         "siteCategory": "stadium",
         "displayName": "北区排球场",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "北区排球场",
           "leisure": "stadium"
@@ -29208,7 +29208,7 @@
         "featureType": "site",
         "siteCategory": "stadium",
         "displayName": "北区篮球场",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "北区篮球场",
           "leisure": "stadium"
@@ -30514,7 +30514,7 @@
         "featureType": "site",
         "siteCategory": "stadium",
         "displayName": "南区网球场",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "南区网球场",
           "leisure": "stadium"
@@ -30612,7 +30612,7 @@
         "featureType": "site",
         "siteCategory": "stadium",
         "displayName": "南区羽毛球场",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "南区羽毛球场",
           "leisure": "stadium"
@@ -35666,7 +35666,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -35973,7 +35973,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -36076,7 +36076,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -36123,7 +36123,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -36483,7 +36483,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }
@@ -36540,7 +36540,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "校园路公交场站",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "name": "校园路公交场站",
           "amenity": "parking"
@@ -37230,7 +37230,7 @@
         "featureType": "site",
         "siteCategory": "parking",
         "displayName": "未命名场地",
-        "elevation": 4,
+        "elevation": 2,
         "sourceTag": {
           "amenity": "parking"
         }

@@ -15,6 +15,9 @@ import { create } from "zustand";
 // 导入全局配置以便获取环境贴图等默认参数
 import config from "../config";
 
+const DEFAULT_POI_VISIBLE =
+  (config.layers || []).find((layer) => layer?.key === "pois")?.visible ?? true;
+
 /**
  * MAX_LOG_PREVIEW：日志预览列表的最大长度
  * 单位：条数
@@ -127,6 +130,11 @@ const getInitialData = () => ({
   hoveredSite: null,
   route: null,
   layerVisibility: {},
+  poiLayerVisible: DEFAULT_POI_VISIBLE,
+  poiStatistics: {
+    total: 0,
+    independent: 0,
+  },
   logsPreview: [],
   sceneTransform: getInitialSceneTransform(),
   environmentSettings: getInitialEnvironmentSettings(),
@@ -219,12 +227,23 @@ export const useSceneStore = create((set, get) => ({
    */
   // 切换图层可见性；若不存在则视为 false → true
   toggleLayerVisibility: (layerKey) =>
-    set((state) => ({
-      layerVisibility: {
+    set((state) => {
+      const currentValue = Object.prototype.hasOwnProperty.call(
+        state.layerVisibility,
+        layerKey
+      )
+        ? state.layerVisibility[layerKey]
+        : false;
+      const nextValue = !currentValue;
+      const layerVisibility = {
         ...state.layerVisibility,
-        [layerKey]: !state.layerVisibility[layerKey],
-      },
-    })),
+        [layerKey]: nextValue,
+      };
+      return {
+        layerVisibility,
+        ...(layerKey === "pois" ? { poiLayerVisible: nextValue } : null),
+      };
+    }),
 
   /**
    * setLayerVisibility：直接设置某图层的布尔值
@@ -236,12 +255,40 @@ export const useSceneStore = create((set, get) => ({
    */
   // 允许直接设置某图层的布尔值，便于 LayerToggle 初始化
   setLayerVisibility: (layerKey, value) =>
+    set((state) => {
+      const boolValue = Boolean(value);
+      const layerVisibility = {
+        ...state.layerVisibility,
+        [layerKey]: boolValue,
+      };
+      return {
+        layerVisibility,
+        ...(layerKey === "pois" ? { poiLayerVisible: boolValue } : null),
+      };
+    }),
+
+  /**
+   * setPoiLayerVisible：专门控制 POI 图层显隐（同时同步 layerVisibility）
+   */
+  setPoiLayerVisible: (visible) =>
     set((state) => ({
+      poiLayerVisible: Boolean(visible),
       layerVisibility: {
         ...state.layerVisibility,
-        [layerKey]: value,
+        pois: Boolean(visible),
       },
     })),
+
+  /**
+   * updatePoiStatistics：更新 POI 数量统计，供 DebugPanel 展示
+   */
+  updatePoiStatistics: (stats = {}) =>
+    set({
+      poiStatistics: {
+        total: Math.max(0, stats.total ?? 0),
+        independent: Math.max(0, stats.independent ?? 0),
+      },
+    }),
 
   /**
    * pushLogPreview：添加一条日志到预览列表

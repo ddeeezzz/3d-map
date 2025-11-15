@@ -51,6 +51,7 @@ function DebugPanel() {
   const updateEnvironmentSettings = useSceneStore(
     (state) => state.updateEnvironmentSettings
   );
+  const poiStatistics = useSceneStore((state) => state.poiStatistics);
 
   /**
    * 在非开发环境中隐藏调试面板
@@ -255,6 +256,31 @@ function DebugPanel() {
             />
             <span>启用环境光</span>
           </label>
+        </div>
+      </details>
+
+      <details className="debug-panel__section">
+        <summary>POI 数据</summary>
+        <div className="debug-panel__section-content">
+          <div className="debug-panel__row">
+            <span>POI 总数</span>
+            <span className="debug-panel__value">
+              {poiStatistics.total ?? 0}
+            </span>
+          </div>
+          <div className="debug-panel__row">
+            <span>独立 POI</span>
+            <span className="debug-panel__value">
+              {poiStatistics.independent ?? 0}
+            </span>
+          </div>
+          <div className="debug-panel__row">
+            <span>附属 POI</span>
+            <span className="debug-panel__value">
+              {(poiStatistics.total ?? 0) -
+                (poiStatistics.independent ?? 0)}
+            </span>
+          </div>
         </div>
       </details>
     </div>
