@@ -39,7 +39,7 @@ export const config = {
       stadium: "#50E3C2",
       track: "#ff8800",
       swimming_pool: "#4FC3F7",
-      parking: "#d0d0d0",
+      parking: "#ff7777",
       construction: "#d3b6b6",
     },
   },
@@ -169,10 +169,10 @@ export const config = {
    */
   greenery: {
     width: 3,
-    height: 3.5,
-    baseY: -4.5,
-    surfaceDepth: 3.5,
-    surfaceBaseY: -4.5,
+    height: 4,
+    baseY: -5,
+    surfaceDepth: 4,
+    surfaceBaseY: -5,
   },
 
   /**
@@ -182,8 +182,11 @@ export const config = {
    * - baseY：矮柱整体的基准 Y 偏移，保持与道路顶面一致
    */
   site: {
-    height: 4,
+    height: 2,
     baseY: -5.5,
+    categoryHeights: {
+      track: 7,
+    },
   },
 
   /**

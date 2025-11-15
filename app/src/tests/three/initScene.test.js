@@ -58,6 +58,21 @@ vi.mock("three", () => {
 
   class AxesHelper {}
 
+  class PMREMGenerator {
+    constructor() {}
+
+    compileEquirectangularShader() {}
+
+    fromEquirectangular() {
+      return {
+        texture: { dispose: vi.fn() },
+        dispose: vi.fn(),
+      };
+    }
+
+    dispose() {}
+  }
+
   return {
     Scene,
     PerspectiveCamera,
@@ -68,6 +83,12 @@ vi.mock("three", () => {
     GridHelper,
     AxesHelper,
     PCFSoftShadowMap: "PCFSoftShadowMap",
+    PMREMGenerator,
+    FloatType: "FloatType",
+    ACESFilmicToneMapping: "ACESFilmicToneMapping",
+    ReinhardToneMapping: "ReinhardToneMapping",
+    CineonToneMapping: "CineonToneMapping",
+    LinearToneMapping: "LinearToneMapping",
   };
 });
 

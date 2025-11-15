@@ -6,6 +6,7 @@ const cleanCoords = require("../app/node_modules/@turf/clean-coords").default;
 const rewind = require("../app/node_modules/@turf/rewind").default;
 const centroid = require("../app/node_modules/@turf/centroid").default;
 const { detectGreeneryType } = require("./greenery-tags");
+const { parseNumeric, resolveSiteElevation } = require("./site-elevation");
 /**
  * 场地分类优先级列表，确保按照 stadium → track → swimming_pool → parking → construction 的顺序匹配
  * @type {Array<{ tag: "amenity"|"leisure"|"landuse", value: string }>}
@@ -71,13 +72,6 @@ function determineCategory(buildingTag, config) {
     return buildingTag;
   }
   return "默认";
-}
-
-function parseNumeric(value) {
-  if (value == null) return null;
-  if (typeof value === "number") return value;
-  const num = Number(String(value).replace(/[^\d.]/g, ""));
-  return Number.isFinite(num) ? num : null;
 }
 
 function computeElevation(props, category, heights) {
@@ -502,9 +496,6 @@ async function main() {
   const config = await loadModule("../app/src/config/index.js");
   const loggerModule = await loadModule("../app/src/logger/logger.js");
   const { logInfo, logWarn, logError } = loggerModule;
-  /** 场地矮柱挤出高度，供场地要素复用 */
-  const siteElevationValue = resolveSiteElevation(config);
-
   try {
     logInfo("数据管线", "开始清洗临时数据", { 输入: tmpPath });
 
@@ -720,13 +711,20 @@ async function main() {
         const trimmedName = typeof props.name === "string" ? props.name.trim() : "";
         const hasName = Boolean(trimmedName);
         const displayName = hasName ? trimmedName : SITE_DEFAULT_DISPLAY_NAME;
+        const elevation = resolveSiteElevation(
+          props,
+          siteCategory,
+          config,
+          parseNumeric,
+        );
+
         const newProps = {
           ...props,
           stableId,
           featureType: "site",
           siteCategory,
           displayName,
-          elevation: siteElevationValue,
+          elevation,
           sourceTag: {
             name: props.name,
             amenity: props.amenity,
@@ -740,7 +738,7 @@ async function main() {
           newProps.sportsType = props.sports;
         }
 
-        if (siteElevationValue == null) {
+        if (elevation == null) {
           summary.missingElevation++;
           logWarn("数据管线", "场地高度缺失，请检查配置", {
             stableId,

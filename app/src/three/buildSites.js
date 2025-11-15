@@ -130,12 +130,29 @@ function getSiteMaterial(category, cache) {
  * @param {number} fallbackHeight 配置提供的默认高度
  * @returns {number} 最终挤出高度
  */
-function resolveSiteElevation(props, fallbackHeight) {
+function resolveSiteElevation(props, siteCategory, siteConfig, globalHeights) {
+  const categoryHeights = siteConfig?.categoryHeights || {};
+  const categoryValue = parseNumeric(categoryHeights[siteCategory]);
+  if (categoryValue != null) {
+    return categoryValue;
+  }
+
   const fromProps = parseNumeric(props?.elevation);
   if (fromProps != null) {
     return fromProps;
   }
-  return fallbackHeight;
+
+  const siteDefault = parseNumeric(siteConfig?.height);
+  if (siteDefault != null) {
+    return siteDefault;
+  }
+
+  const fallback =
+    parseNumeric(globalHeights?.site) ||
+    parseNumeric(globalHeights?.默认) ||
+    parseNumeric(globalHeights?.default);
+
+  return fallback ?? 2;
 }
 
 /**
@@ -154,10 +171,6 @@ export function buildSites(scene) {
   const origin = findProjectionOrigin(data.features);
   const materialCache = new Map();
   const siteConfig = config.site || {};
-  const siteHeightFallback =
-    parseNumeric(siteConfig.height) ||
-    parseNumeric(config.heights?.site) ||
-    2;
   const baseY = parseNumeric(siteConfig.baseY) ?? 0;
 
   data.features.forEach((feature, featureIndex) => {
@@ -167,12 +180,17 @@ export function buildSites(scene) {
     const projectedGeometry = projectGeometry(feature.geometry, origin);
     if (!projectedGeometry) return;
 
-    const elevation = resolveSiteElevation(props, siteHeightFallback);
+    const siteCategory = props.siteCategory || "默认";
+    const elevation = resolveSiteElevation(
+      props,
+      siteCategory,
+      siteConfig,
+      config.heights,
+    );
     if (!elevation || elevation <= 0) {
       return;
     }
 
-    const siteCategory = props.siteCategory || "默认";
     const stableId = props.stableId || feature.id || `site-${featureIndex}`;
     const displayName = props.displayName || props.name || "未命名场地";
     const sportsType = props.sportsType;

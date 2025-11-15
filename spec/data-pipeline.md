@@ -28,7 +28,7 @@
    - 根据命中标签写入 `properties.siteCategory`，优先级：`stadium > track > swimming_pool > parking > construction`。
    - `properties.displayName = properties.name ?? "未命名场地"`，并保留原始 `name` 于 `sourceTag`。
    - 若 `sports` 同时存在，写入 `properties.sportsType = properties.sports`。
-   - 场地高度统一取 `config.site.height`（若缺失则回退 `config.heights.site ?? config.heights.默认`）并写入 `properties.elevation`，用于矮柱挤出；`sourceTag` 需记录 `{ amenity, leisure, landuse, sports }`。
+   - 场地高度统一写入 `config.site.height`（若缺失则回退 `config.heights.site ?? config.heights.默认`），用于矮柱挤出；渲染阶段如需分类高度，可通过 `config.site.categoryHeights` 覆盖；`sourceTag` 需记录 `{ amenity, leisure, landuse, sports }`。
 4. **分类映射（建筑）**
    - 根据 `building` 标签映射到 `config.colors` 中已存在的分类（教学楼、宿舍等），写入 `properties.category`，无法匹配时记为“默认”。
 5. **ID 与元数据**
@@ -65,4 +65,3 @@
 - [x] `tools/convert-osm.js` 生成 `data/tmp.json`。
 - [x] `tools/clean-geojson.js` 输出 `campus.geojson` 与报告。
 - [ ] 实现围墙/边界裁剪并在报告中记录（待前端渲染稳定后）。
-

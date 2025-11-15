@@ -31,7 +31,7 @@
 
 ## 建筑 Hover/Click（`src/three/interactions/buildingPicking.js`）
 - 监听 `pointermove`/`click`，使用 Raycaster 命中建筑 Mesh，将 hover/selected 写入 `useSceneStore`。
-- hover 高亮可切换材质 emissive，点击触发 `logInfo("三维交互", ...)`。
+- hover 高亮可切换材质 emissive，点击触发 `logInfo("建筑交互", ...)`。
 
 ## 道路建模（`src/three/buildRoads.js`）
 1. 读取 `featureType = "road"` LineString/MultiLineString。
@@ -82,7 +82,7 @@
 - **数据输入**：`featureType = "site"` 要素，包含 `properties.siteCategory`、`displayName`、`sportsType` 与 `stableId`。
 - **几何构建**：
   - 在 `src/three/buildSites.js` 内复用建筑的投影工具，将 Polygon/MultiPolygon 转为 `Shape`，再以 `ExtrudeGeometry` 挤出矮柱体；
-  - `depth` 读取 `properties.elevation ?? config.site.height`，挤出后统一 `geometry.rotateX(-Math.PI / 2)`，`mesh.position.y = config.site.baseY`，确保与道路/绿化共享的基准面一致。
+  - `depth` 读取 `config.site.categoryHeights[siteCategory] ?? properties.elevation ?? config.site.height`（分类高度优先，不受数据默认值影响），挤出后统一 `geometry.rotateX(-Math.PI / 2)`，`mesh.position.y = config.site.baseY`，确保与道路/绿化共享的基准面一致。
 - **与场景基准对齐**：
   - `buildSites` 必须沿用 `buildBuildings` 中的坐标投影/归一化逻辑：从 `coordinates.js` 读取已缓存的校园原点（首个建筑质心），用相同的 `projectPolygonToPlane`/`centerGeometry` 工具生成 XZ 平面坐标，避免出现与建筑错位的“第二坐标系”；
   - 生成的 `sitesGroup` 调用 `applySceneTransform(sitesGroup, sceneTransform, SCENE_BASE_ALIGNMENT)`，以保持与建筑、道路统一的旋转/缩放/平移；禁止在 `buildSites` 内额外写死平移或缩放，所有对准操作均应依赖 `sceneTransform`；

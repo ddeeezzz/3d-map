@@ -245,7 +245,7 @@ const environmentSettings = useSceneStore(
             if (stableId) {
               useSceneStore.getState().setSelectedBuilding(stableId);
             }
-            logInfo("三维交互", `选中 ${name ?? stableId ?? "未知建筑"}`);
+            logInfo("建筑交互", `选中 ${name ?? stableId ?? "未知建筑"}`);
           },
         });
 

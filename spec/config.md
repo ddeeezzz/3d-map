@@ -13,12 +13,13 @@
 - `boundary`：围墙厚度/高度/底边及挖孔参数，例如 `{ width: 1, height: 2, baseY: 18.08, holeInset: 0.35, gateWidth: 6, gateDepth: 3 }`。其中 `height = 2` 统一体积厚度，`baseY` 仅用于维持原有顶面高度；`width + holeInset` 决定向校园外扩展的主墙厚度，不会侵入内侧。
 - `waterway`：水系统一参数，包含线状 `width/height/baseY` 与面状 `surfaceDepth/surfaceBaseY`，示例 `{ width: 5, height: 0.2, baseY: -0.4, surfaceDepth: 1, surfaceBaseY: 0 }`。
 - `greenery`：绿化统一参数，线状使用 `width/height/baseY`，面状使用 `surfaceDepth/surfaceBaseY`，示例 `{ width: 3, height: 2, baseY: -2.35, surfaceDepth: 2, surfaceBaseY: -2.35 }`，同样遵循“体积高度 2m、顶面保持原位”的约束。
+- `site`：场地矮柱参数，包含 `height/baseY` 以及可选 `categoryHeights`（如 `{ track: 3 }`）用于覆盖特定 `siteCategory` 的高度需求，Three.js 渲染阶段会优先读取该分类高度。
 - `dataPath`：静态 GeoJSON 相对路径（当前 `/src/data/campus.geojson`）。
 - 若新增配置项，需先在本 spec 说明再更新 `index.js`。
 
 ## 使用约定
 - 数据清洗脚本：高度补全引用 `config.heights`，围墙厚度使用 `config.boundary`，河道/绿化参数分别来自 `config.waterway`、`config.greenery`。
-- Three.js / deck.gl 渲染：材质颜色统一从 `config.colors` 获取；LayerToggle 基于 `config.layers` 初始化可见性；道路厚度读取 `config.roadWidths`；道路/围墙/河道/绿化的体积高度与底边统一从对应配置读取。
+- Three.js / deck.gl 渲染：材质颜色统一从 `config.colors` 获取；LayerToggle 基于 `config.layers` 初始化可见性；道路厚度读取 `config.roadWidths`；道路/围墙/河道/绿化的体积高度与底边统一从对应配置读取；场地挤出高度优先读取 `config.site.categoryHeights[siteCategory]`，若未配置再读 `properties.elevation` 或 `config.site.height`。
 - 线状绿化建模：所有 `greenType` 共用 `config.greenery.width/height/baseY`；面状绿化挤出厚度与偏移统一取 `surfaceDepth/surfaceBaseY`，如需特例必须先扩展配置规范。
 
 ## TODO
