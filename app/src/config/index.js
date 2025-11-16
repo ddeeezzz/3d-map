@@ -176,6 +176,17 @@ export const config = {
   },
 
   /**
+   * ground：校园地面（淡黄色平面）
+   * 字段：
+   * - color：平面颜色
+   * - baseY：平面放置的 y 坐标（米）
+   */
+  ground: {
+    color: "#fef3c7",
+    baseY: -10,
+  },
+
+  /**
    * site：场地矮柱统一参数
    * 字段：
    * - height：Three.js 场地矮柱的高度（单位：米）

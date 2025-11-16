@@ -26,6 +26,9 @@ import { SCENE_BASE_ALIGNMENT } from "../store/useSceneStore";
  * data：解析后的 GeoJSON 数据
  */
 const data = JSON.parse(rawGeojson);
+/**
+ * 缓存 GeoJSON 供围墙与地面层复用，避免重复解析
+ */
 
 /**
  * EPSILON：浮点数比较精度阈值
@@ -395,6 +398,31 @@ function createGateHolePath(gate, origin, options) {
   };
 }
 
+/**
+ * buildGroundShape：根据围墙外环与孔洞生成地面 Shape
+ *
+ * 参数：
+ * - outerRing：已投影、按序排列的围墙外环
+ * - holeRings：围墙内部洞的数组，可为空
+ */
+function buildGroundShape(outerRing, holeRings = []) {
+  const normalizedOuter = ensureCounterClockwise(outerRing);
+  if (!normalizedOuter || normalizedOuter.length < 3) {
+    return null;
+  }
+  const shape = new THREE.Shape(normalizedOuter);
+  if (Array.isArray(holeRings)) {
+    holeRings.forEach((ring) => {
+      if (!ring || ring.length < 3) return;
+      const holePath = createPathFromRing(ring, true);
+      if (holePath) {
+        shape.holes.push(holePath);
+      }
+    });
+  }
+  return shape;
+}
+
 function buildClosedWallShape({
   innerRing,
   wallThickness,
@@ -456,6 +484,7 @@ export const __boundaryInternals = {
   ensureCounterClockwise,
   offsetRing,
   buildClosedWallShape,
+  buildGroundShape,
 };
 
 /**
@@ -495,12 +524,20 @@ export function buildBoundary(scene) {
   const wallThickness = (boundaryWidth + boundaryHoleInset) / baseScale;
   const gateWidthScaled = boundaryGateWidth / baseScale;
   const gateDepthScaled = boundaryGateDepth / baseScale;
+  const groundColor = config.ground?.color || "#fef3c7"; // 淡黄色地面颜色
+  const rawGroundBaseY = Number(config.ground?.baseY);
+  const groundBaseY = Number.isFinite(rawGroundBaseY) ? rawGroundBaseY : -4; // 地面 Y 坐标
 
   const material = new THREE.MeshPhongMaterial({
     color,
     transparent: true,
     opacity: 0.9,
   });
+  const groundMaterial = new THREE.MeshStandardMaterial({
+    color: groundColor,
+    roughness: 0.95,
+    metalness: 0,
+  }); // 围墙地面材质
 
   const group = new THREE.Group();
   group.name = "boundary";
@@ -531,7 +568,29 @@ export function buildBoundary(scene) {
        */
       const outerRing = sanitizeRing(polygon[0], origin);
       if (outerRing.length < 2) return;
+      const innerHoleRings = polygon
+        .slice(1)
+        .map((ring) => sanitizeRing(ring, origin))
+        .filter((ring) => ring.length >= 3); // 涓嬬幆鍦嗗彾锛屽弽瑙?
       const gates = Array.isArray(props.boundaryGates) ? props.boundaryGates : [];
+      const boundaryStableId = props.stableId || feature.id || `boundary-${featureIndex}`; // 鍦版澘鍩烘湰鏍囪瘑
+
+      const groundShape = buildGroundShape(outerRing, innerHoleRings); // 鍒涘缓鍦哄噣鍥存爣
+      if (groundShape) {
+        const groundGeometry = new THREE.ShapeGeometry(groundShape, 16);
+        groundGeometry.rotateX(-Math.PI / 2);
+        groundGeometry.computeVertexNormals();
+        const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+        groundMesh.position.y = groundBaseY;
+        groundMesh.receiveShadow = true;
+        groundMesh.castShadow = false;
+        groundMesh.userData = {
+          stableId: `${boundaryStableId}-ground`,
+          boundaryType: props.boundaryType || "campus",
+          layerType: "boundaryGround",
+        };
+        group.add(groundMesh);
+      }
 
       const closedShapeResult =
         wallThickness > EPSILON

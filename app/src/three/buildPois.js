@@ -33,6 +33,7 @@ const defaultPoiStyle = {
   scaleReferenceDistance: 400,
   minScale: 0.5,
   maxScale: 2,
+  renderOrder: 20,
 };
 
 /** 将配置与默认值合并 */
@@ -135,6 +136,7 @@ function createLabelMaterial(text, style) {
       map: texture,
       transparent: true,
       depthWrite: false,
+      depthTest: false,
     }),
     width: canvas.width,
     height: canvas.height,
@@ -181,7 +183,8 @@ function createPoiSprite(feature, style, origin) {
     Number(properties.elevation ?? 0) + (style.labelHeight ?? defaultPoiStyle.labelHeight),
     worldZ
   );
-  sprite.renderOrder = 5;
+  const spriteRenderOrder = style.renderOrder ?? defaultPoiStyle.renderOrder; // 设置较高渲染优先级，避免被遮挡
+  sprite.renderOrder = spriteRenderOrder;
   sprite.userData = {
     poiId: properties.poiId,
     parentId: properties.parentId,

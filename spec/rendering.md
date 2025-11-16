@@ -1,73 +1,74 @@
-# æ¸²æŸ“å±‚ Rendering Spec
+# äÖÈ¾²ã Rendering Spec
 
-## ç›®æ ‡
-- å¯¹ `t2/app/src/data/campus.geojson` ä¸­çš„è¦ç´ è¿›è¡Œ Three.js / deck.gl åŒè½¨æ¸²æŸ“ï¼Œæ”¯æŒçŠ€æµ¦æ ¡åŒºçš„ä¸‰ç»´å±•ç¤ºä¸äº¤äº’æ¢ç´¢ã€‚
-- æ‰€æœ‰ä¸‰ç»´å®ç°ã€äº¤äº’æ‹¾å–ä¸ deck.gl çº¦æŸéœ€åœ¨ `t2/` å†…å®Œæˆï¼Œä¿è¯é…ç½®ã€è„šæœ¬ä¸æ•°æ®æ¥æºå¯è¿½æº¯ã€‚
+## Ä¿±ê
+- ¶Ô `t2/app/src/data/campus.geojson` ÖĞµÄÒªËØÊµÊ© Three.js / deck.gl »ìºÏäÖÈ¾£¬Ö§³ÅÎ÷ÄÏ½»Í¨´óÑ§Ï¬ÆÖĞ£ÇøµÄÈıÎ¬¿ÉÊÓ»¯Óë½»»¥¡£
+- ËùÓĞÈıÎ¬ÊµÌå¡¢½»»¥Ä£¿éÓë deck.gl Í¼²ã¾ùĞèÔÚ `t2/` Ä¿Â¼ÄÚÍê³É£¬ÊµÏÖÅäÖÃ¡¢²ÄÖÊ¡¢Êı¾İÔ´µÄÈ«Á¿¿É×·Ëİ¡£
 
-## Three.js æ¶æ„
-- **æ ¸å¿ƒç»„ä»¶**ï¼š`Scene`ã€`PerspectiveCamera`ã€`WebGLRenderer`ï¼Œé…åˆ `OrbitControls`ã€`AmbientLight + DirectionalLight` å®Œæˆå¯¼èˆªåœºæ™¯ã€‚
-- **è¾…åŠ©å·¥å…·**ï¼š`GridHelper`ã€`AxesHelper` ä»…åœ¨è°ƒè¯•æ¨¡å¼ä½¿ç”¨ï¼Œä¾¿äºæ ¡å‡†åæ ‡ç³»ã€‚
+## Three.js ¼Ü¹¹
+- **ºËĞÄ×é¼ş**£º`Scene`¡¢`PerspectiveCamera`¡¢`WebGLRenderer`£¬Í³Ò»½ÓÈë `OrbitControls` Óë `AmbientLight + DirectionalLight` ×é³É¿É½»»¥³¡¾°¡£
+- **µ÷ÊÔ¸¨Öú**£º`GridHelper`¡¢`AxesHelper` Ö»ÔÚ¿ª·¢Ä£Ê½ÆôÓÃ£¬±ãÓÚĞ£×¼³¡¾°×ø±êÏµ¡£
 
-### åˆå§‹åŒ–æµç¨‹ï¼ˆ`src/three/initScene.js`ï¼‰
-1. åˆ›å»º Scene / Camera / Rendererï¼Œå¹¶æŠŠ renderer canvas æ³¨å…¥ React å®¹å™¨ã€‚
-2. æš´éœ² `resize(width, height)`ã€`render()`ã€`start()`ã€`stop()`ï¼Œæ–¹ä¾¿ App å¤ç”¨ã€‚
-3. ç»Ÿä¸€å°è£… `disposeEnvironment` é‡Šæ”¾ HDR RenderTargetï¼Œé˜²æ­¢åˆ‡æ¢å¤©ç©ºç›’æ—¶æ³„æ¼ã€‚
+### ³õÊ¼»¯Á÷³Ì£¨`src/three/initScene.js`£©
+1. ´´½¨ Scene / Camera / Renderer£¬²¢½« renderer canvas ¹ÒÔØµ½ React ÈİÆ÷¡£
+2. ±©Â¶ `resize(width, height)`¡¢`render()`¡¢`start()`¡¢`stop()`£¬¹© App ¸´ÓÃ¡£
+3. ·â×° `disposeEnvironment` ÊÍ·Å HDR RenderTarget£¬±ÜÃâÇĞ»»Ìì¿ÕºĞÊ±µÄÕ¼ÓÃĞ¹Â©¡£
 
-## å¤©ç©ºç›’ä¸ç¯å¢ƒè´´å›¾
-- HDR èµ„æºç»Ÿä¸€æ”¾åœ¨ `app/public/textures/skyboxes/`ï¼Œé»˜è®¤ä½¿ç”¨ `citrus_orchard_road_puresky_4k.hdr`ã€‚
-- é€šè¿‡ `HDRLoader -> PMREMGenerator` ç”Ÿæˆ `scene.environment/background`ï¼Œå¼‚å¸¸æ—¶è°ƒç”¨ `logWarn("å¤©ç©ºç›’åŠ è½½", ...)`ã€‚
-- `config.environment = { skybox, exposure, toneMapping }` ä¸º DebugPanel çš„åˆå§‹å€¼ï¼Œæ”¹åŠ¨æ—¶è§¦å‘ `sceneContext.applyEnvironmentSettings`ã€‚
+## Ìì¿ÕºĞÓë»·¾³ÌùÍ¼
+- HDR ×ÊÔ´Í³Ò»·ÅÔÚ `app/public/textures/skyboxes/`£¬Ä¬ÈÏÊ¹ÓÃ `citrus_orchard_road_puresky_4k.hdr`¡£
+- Í¨¹ı `HDRLoader -> PMREMGenerator` Éú³É `scene.environment/background`£¬Òì³£Ê±Ğ´ `logWarn("Ìì¿ÕÌùÍ¼¼ÓÔØÊ§°Ü", ...)`¡£
+- `config.environment = { skybox, exposure, toneMapping }` ×÷Îª DebugPanel µÄ³õÊ¼Öµ£¬µ÷½ÚÊ±µ÷ÓÃ `sceneContext.applyEnvironmentSettings`¡£
 
-## å»ºç­‘å»ºæ¨¡ï¼ˆ`src/three/buildBuildings.js`ï¼‰
-1. æ¶ˆè´¹ `featureType = "building"` ç‰¹å¾ï¼ŒPolygon/MultiPolygon ç»è¿‡æŠ•å½±åç”Ÿæˆ `Shape + ExtrudeGeometry`ã€‚
-2. é«˜åº¦è¯»å– `properties.elevation`ï¼Œæè´¨ä½¿ç”¨ `config.colors[category]` + åŠé€æ˜ `MeshPhongMaterial`ï¼Œå†™å…¥ `userData = { stableId, name, category, elevation }`ã€‚
-3. æ‰€æœ‰ Mesh è£…å…¥ `buildings` groupï¼Œå†ç”± `applySceneTransform` ç»Ÿä¸€æ—‹è½¬/ç¼©æ”¾/å¹³ç§»ã€‚
+## ½¨Öş½¨Ä££¨`src/three/buildBuildings.js`£©
+1. ¹ıÂË `featureType = "building"` µÄ Polygon/MultiPolygon£¬Í¶Ó°ºóÊ¹ÓÃ `Shape + ExtrudeGeometry` ¹¹Ôì¼¸ºÎ¡£
+2. ¸ß¶ÈÀ´Ô´ `properties.elevation`£¬²ÄÖÊÊ¹ÓÃ `config.colors[category]` Óë°ëÍ¸Ã÷ `MeshPhongMaterial`£¬`userData = { stableId, name, category, elevation }`¡£
+3. È«²¿ Mesh ÊÕÊøµ½ `buildings` group£¬ÔÙÍ¨¹ı `applySceneTransform` Í³Ò»Ğı×ª¡¢Ëõ·Å¡¢Æ½ÒÆ¡£
 
-## deck.gl è¯´æ˜
-- å½“å‰é˜¶æ®µä»…ä¿ç•™è§„èŒƒä¸æ•°æ®ç»“æ„ï¼Œæœªå¯ç”¨å®é™… deck.gl å›¾å±‚ï¼›æœªæ¥ PathLayer / GeoJsonLayer çš„å¼€å¯/å…³é—­è¦ä¸ `layerVisibility` åè®®ä¸€è‡´ã€‚
+## deck.gl ËµÃ÷
+- µ±Ç°½×¶ÎÖ»±£Áô¹æ·¶ÓëÊı¾İ½á¹¹£¬ÉĞÎ´ÆôÓÃÕæÊµ deck.gl Í¼²ã£»Î´À´ PathLayer / GeoJsonLayer µÄÆôÍ£ĞèÓë `layerVisibility` ±£³ÖÒ»ÖÂ¡£
 
-## å»ºç­‘ Hover/Clickï¼ˆ`src/three/interactions/buildingPicking.js`ï¼‰
-- `pointermove/click` ç›‘å¬ + Raycaster æ‹¾å–ï¼Œhover æ—¶å…‹éš†æè´¨å¹¶è®¾ç½® emissiveï¼Œç¦»å¼€åæ¢å¤ã€‚
-- onHover/onSelect å°†æ•°æ®å†™å…¥ `useSceneStore`ï¼ˆ`hoveredBuilding`ã€`selectedBuilding`ï¼‰ï¼Œå¹¶åœ¨ç‚¹å‡»æ—¶è®°å½• `logInfo("å»ºç­‘äº¤äº’", ...)`ã€‚
+## ½¨Öş Hover/Click£¨`src/three/interactions/buildingPicking.js`£©
+- `pointermove/click` ¼àÌı + Raycaster Ê°È¡£¬hover Ê±¸Ä±ä emissive£¬¸ßÁÁ½áÊøºó»Ö¸´¡£
+- onHover/onSelect ½«Êı¾İĞ´Èë `useSceneStore`£¨`hoveredBuilding`¡¢`selectedBuilding`£©£¬µã»÷Ê±¼ÇÂ¼ `logInfo("½¨Öş½»»¥", ...)`¡£
 
-## é“è·¯å»ºæ¨¡ä¸æ‹¾å–
-- **å»ºæ¨¡ï¼ˆ`src/three/buildRoads.js`ï¼‰**ï¼šè¯»å– `featureType = "road"` çš„ LineStringï¼Œç»“åˆ `properties.width/lanes` ä¸ `config.roadWidths[highwayType]` å†³å®šæŒ¤å‡ºå®½åº¦ï¼Œ`config.road.height/baseY` æ§åˆ¶åšåº¦ä¸åŸºå‡†ã€‚
-- **æ‹¾å–ï¼ˆ`src/three/interactions/roadPicking.js`ï¼‰**ï¼šRaycaster + emissive é«˜äº®ï¼Œè¿”å› userData ç›´æ¥å†™å…¥æ—¥å¿—ï¼›æä¾› `clearHover/dispose` æ–¹ä¾¿å›¾å±‚åˆ‡æ¢æ—¶æ¸…ç†ã€‚
+## µÀÂ·½¨Ä£ÓëÊ°È¡
+- **½¨Ä££¨`src/three/buildRoads.js`£©**£º¶ÁÈ¡ `featureType = "road"` µÄ LineString£¬¸ù¾İ `properties.width/lanes` Óë `config.roadWidths[highwayType]` ¼ÆËã¿í¶È£¬`config.road.height/baseY` ¿ØÖÆºñ¶ÈÓë»ù×¼¡£
+- **Ê°È¡£¨`src/three/interactions/roadPicking.js`£©**£ºRaycaster + emissive ¸ßÁÁ£¬·µ»ØµÄ userData Ö±½ÓĞ´ÈëÈÕÖ¾£¬²¢±©Â¶ `clearHover/dispose` ¹©Í¼²ãÇĞ»»¡£
 
-## æ°´ç³»å»ºæ¨¡
-- **æ°´ä½“ï¼ˆ`src/three/buildWater.js`ï¼‰**ï¼šPolygon/MultiPolygon åŠ è½½ `config.waterway.surfaceDepth/surfaceBaseY`ï¼Œé€æ˜è“è‰²æè´¨å¢å¼ºå¯è§†åŒ–ã€‚
-- **æ²³æµï¼ˆ`src/three/buildWaterway.js`ï¼‰**ï¼šå¯¹çº¿æ€§è¦ç´ è¿›è¡Œåç§»æŒ¤å‡ºï¼Œå®½åº¦æ¥æº `config.waterway.width`ï¼Œæè´¨ä¿æŒä¸æ°´ä½“ä¸€è‡´ä»¥å½¢æˆè¿ç»­æ°´ç³»ã€‚
-- **æ‹¾å–**ï¼š`riverPicking`ã€`waterPicking` åˆ†åˆ«è´Ÿè´£ MultiLineString ä¸ Polygonï¼Œhover ä¿¡æ¯ä¿å­˜åœ¨ App å†…éƒ¨å¼•ç”¨ï¼Œclick ä»…è®°å½•æ—¥å¿—ã€‚
+## Ë®Ïµ½¨Ä£
+- **Ë®Ìå£¨`src/three/buildWater.js`£©**£ºPolygon/MultiPolygon ¶ÁÈ¡ `config.waterway.surfaceDepth/surfaceBaseY`£¬Í¸Ã÷À¶É«²ÄÖÊÇ¿»¯¿É¼û¶È¡£
+- **Ë®µÀ£¨`src/three/buildWaterway.js`£©**£º¶Ô LineString ×ö»º³åĞÎ³É½ØÃæ£¬¿í¶ÈÀ´Ô´ `config.waterway.width`£¬ÓëË®ÌåÒ»ÖÂµÄ²ÄÖÊ¡£
+- **Ê°È¡**£º`riverPicking`¡¢`waterPicking` ·Ö±ğ´¦Àí MultiLineString/Polygon£¬hover ĞÅÏ¢»º´æÔÚ App£¬click Ê±Ğ´ÈÕÖ¾¡£
 
-## å›´å¢™ä¸ç»¿åŒ–
-- **å›´å¢™ï¼ˆ`src/three/buildBoundary.js`ï¼‰**ï¼šPolygon æ‹‰ä¼¸ + `Raycaster` å¯é€‰ hoverï¼Œç”¨äºå±•ç¤ºæ ¡å›­è¾¹ç•Œã€‚
-- **ç»¿åŒ–ï¼ˆ`src/three/buildGreenery.js`ï¼‰**ï¼šåŒæ—¶æ”¯æŒ Polygonï¼ˆä½çŸ®ä½“å—ï¼‰ä¸ LineStringï¼ˆå¸¦å®½åº¦çš„èµ°å»Šï¼‰æ¨¡å¼ï¼Œé¢œè‰²è¯»å– `config.colors.greenery`ã€‚
+## Î§Ç½µØÃæ²ã
+- **Êı¾İÀ´Ô´**£º½öÕë¶Ô `campus.geojson` ÖĞ `featureType = "campusBoundary"` µÄ¶à±ßĞÎ£¬Ê¹ÓÃ `projectCoordinate/findProjectionOrigin` Í¶Ó°µ½±¾µØÆ½Ãæ£¬Éú³ÉÎ§Ç½ÓëµØÃæµÄÍ³Ò»×ø±ê¡£
+- **½¨Ä£²ßÂÔ**£º`buildBoundary.js` ÏÈÓÃ `ensureCounterClockwise` ´¦ÀíÍâ»·£¬ÔÙ½«ËùÓĞÄÚ»·Ğ´Èë `holes`£»Ê¹ÓÃ `THREE.Shape + ShapeGeometry` Éú³Éµ­»ÆÉ«µØÃæ Mesh£¬²¢ÔÚÉú³ÉÇ°ÌŞ³ı×Ô½»»òÍË»¯»·£¬±£Ö¤ÍØÆËÎÈ¶¨¡£
+- **²ÄÖÊÓë¸ß¶È**£º`config.ground.color` ¾ö¶¨µØÃæÑÕÉ«£¨Ä¬ÈÏ #fef3c7£©£¬`config.ground.baseY` ¿ØÖÆ Mesh µÄ Y ×ø±ê£»²ÄÖÊ²ÉÓÃ `MeshStandardMaterial`£¬ÍÆ¼ö `roughness=0.95`¡¢`metalness=0` ÒÔÌùºÏĞ£Ô°µØÃæµÄÂş·´ÉäĞ§¹û¡£
+- **äÖÈ¾¼¯³É**£ºµØÃæ Mesh ¼ÓÈë `boundary` group£¬ÉèÖÃ `receiveShadow = true`£¬²¢¸ù¾İĞèÒªµ÷Õû `renderOrder` ±£Ö¤´¦ÓÚ½¨Öş/µÀÂ·Ö®ÏÂ£»DebugPanel / LayerToggle µÄÎ§Ç½ÏÔÒşÓ¦Í¬Ê±×÷ÓÃÓÚµØÃæ£¬·ÀÖ¹¾Ö²¿ÂãÂ¶»òÕÚµ²ÎÊÌâ¡£
 
-## åœºåœ°æ¸²æŸ“ï¼ˆSitesï¼‰
-- æ•°æ®æ¥æº `featureType = "site"`ï¼Œé‡ç‚¹ä¿ç•™ `properties.siteCategory/displayName/sportsType/stableId`ã€‚
-- `buildSites.js` å¯¹ Polygon/MultiPolygon è¿›è¡ŒæŠ•å½±ã€è½¬æ¢ä¸º Shape åæ‰§è¡Œ `ExtrudeGeometry`ã€‚é«˜åº¦ä¼˜å…ˆçº§ï¼š`config.site.categoryHeights[siteCategory]` â†’ `properties.elevation` â†’ `config.site.height` â†’ `config.heights.site/default`ã€‚
-- æ‰€æœ‰ Mesh å…±äº« `config.colors.site` ä¸­çš„é¢œè‰²æ˜ å°„ï¼Œæè´¨é€æ˜åº¦ 0.85ï¼Œå‘½åç»Ÿä¸€ä¸º `sites-<stableId>-<index>` å¹¶å†™å…¥ `userData`ã€‚
-- `sitesGroup` åŒæ ·æ¥å…¥ `applySceneTransform`ï¼Œä¸å»ºç­‘/é“è·¯ä¿æŒä¸€è‡´çš„åŸºå‡†å§¿æ€ï¼›æ˜¾éšçŠ¶æ€ç”± `layerVisibility.sites` æ§åˆ¶ã€‚
+## ³¡µØäÖÈ¾£¨Sites£©
+- Êı¾İÀ´Ô´ `featureType = "site"`£¬±£Áô `properties.siteCategory/displayName/sportsType/stableId`¡£
+- `buildSites.js` ¶Ô Polygon/MultiPolygon ½øĞĞÀ­Éì£¬`height = config.site.categoryHeights[siteCategory] + properties.elevation + config.site.height`¡£
+- Mesh Ê¹ÓÃ `config.colors.site` ÖĞµÄÉ«°å£¬Í¸Ã÷¶È 0.85£¬ÃüÃû `sites-<stableId>-<index>` ²¢Ğ´ `userData`¡£
+- `sitesGroup` Í¬²½ `applySceneTransform`£¬ÏÔÒşÓÉ `layerVisibility.sites` ¿ØÖÆ¡£
 
-### åœºåœ°äº¤äº’ï¼ˆ`src/three/interactions/sitePicking.js`ï¼‰
-- Raycaster é’ˆå¯¹ `sitesGroup` children æ‰§è¡Œæ‹¾å–ï¼Œå‘½ä¸­å¯¹è±¡æ²¿çˆ¶é“¾æ‰¾åˆ°é¡¶å±‚ Meshï¼Œé¿å… Extrude å†…éƒ¨ Mesh è¢«é€‰ä¸­ã€‚
-- hover æ—¶å…‹éš†æè´¨ï¼Œè®¾ç½® #34d399 emissive å’Œè½»å¾®é€æ˜åº¦å˜åŒ–ï¼›`clearHover`/`dispose` è´Ÿè´£æ¢å¤åŸæè´¨å¹¶é‡Šæ”¾ GPU èµ„æºã€‚
-- onHover/onSelect ç»Ÿä¸€è¾“å‡º `{ stableId, displayName, siteCategory, sportsType }`ï¼ŒApp å°†å…¶å†™å…¥ `hoveredSite`ã€`selectedSite`ï¼Œå¹¶æ‰“ç‚¹ `logInfo("åœºåœ°äº¤äº’", ...)`ã€‚
-- å½“ `layerVisibility.sites` å…³é—­æ—¶ï¼Œ`sitePickingHandleRef` ä¼šè§¦å‘ `clearHover` ä¸”è°ƒç”¨ `useSceneStore.setHoveredSite(null)`ï¼Œç¡®ä¿ UI ä¸åœºæ™¯çŠ¶æ€åŒæ­¥ã€‚
+### ³¡µØ½»»¥£¨`src/three/interactions/sitePicking.js`£©
+- Raycaster Ö»Õë¶Ô `sitesGroup`£¬hover Ê±ÉèÖÃ #34d399 emissive ÓëÍ¸Ã÷¶È£¬`clearHover`/`dispose` »¹Ô­²ÄÖÊ¡£
+- onHover/onSelect Êä³ö `{ stableId, displayName, siteCategory, sportsType }` Ğ´Èë Store£¬²¢¼ÇÂ¼ `logInfo("³¡µØ½»»¥", ...)`¡£
+- `layerVisibility.sites` ¹Ø±ÕÊ±×Ô¶¯µ÷ÓÃ `clearHover` Óë `useSceneStore.setHoveredSite(null)`£¬±£³Ö UI Í¬²½¡£
 
-## çŠ¶æ€åŒæ­¥
-- `useSceneStore` ç»´æŠ¤ `sceneTransform`ã€`environmentSettings`ã€å„ç±» `layerVisibility` ä»¥åŠ hover/selected çŠ¶æ€ï¼Œæ‰€æœ‰ Three.js äº¤äº’æ¨¡å—é€šè¿‡ setter å†™å…¥ã€‚
-- `App.jsx` ç›‘å¬çŠ¶æ€å˜åŒ–ï¼š`sceneTransform` æ›´æ–°è§¦å‘ `applySceneTransform`ï¼Œå›¾å±‚æ˜¾éšé€šè¿‡ ref æ§åˆ¶ `group.visible`ï¼Œå¤©ç©ºç›’è®¾ç½®é€šè¿‡ `sceneContext.applyEnvironmentSettings` å¥—ç”¨ã€‚
+## ³¡¾°×´Ì¬Í¬²½
+- `useSceneStore` ¹ÜÀí `sceneTransform`¡¢`environmentSettings`¡¢¶àÍ¼²ãÏÔÒşÒÔ¼° hover/selected ×´Ì¬£¬ËùÓĞ Three.js ½»»¥Ä£¿éÍ¨¹ı setter Ğ´Èë¡£
+- `App.jsx` ¼àÌı `sceneTransform` ±ä»¯´¥·¢ `applySceneTransform`£¬Í¼²ãÏÔÒşÍ¨¹ı `group.visible` ¿ØÖÆ£¬Ìì¿ÕºĞÉèÖÃÓÉ `sceneContext.applyEnvironmentSettings` Ö´ĞĞ¡£
 
-## æ•°æ®åŠ è½½
-- ä¸‰ç»´æ¨¡å—é€šè¿‡é™æ€å¯¼å…¥ `import data from "../data/campus.geojson?raw"` è§£æ GeoJSON æ•°æ®ï¼›å¦‚æœéœ€è¦å¢é‡æ›´æ–°ï¼Œéœ€å…ˆæå‡ data pipeline specã€‚
+## Êı¾İ¼ÓÔØ
+- ËùÓĞÈıÎ¬Ä£¿é¾ùÍ¨¹ı `import data from "../data/campus.geojson?raw"` ½âÎö GeoJSON£»ĞÂÔöÊı¾İĞèÏÈ¸üĞÂ data pipeline spec¡£
 
-## æ ¡å›­èŒƒå›´æ§åˆ¶
-- **æ•°æ®èŒƒå›´**ï¼šThree.js ä»…åŠ è½½ `properties.region = "xipu-campus"` çš„å»ºç­‘/åœºåœ°/ç»¿åŒ–/æ°´ç³»ï¼›å›´å¢™ Group æä¾› `toggleVisibility`ï¼Œé»˜è®¤å¼€å¯ä»¥å¼ºè°ƒæ ¡åŒºè¾¹ç•Œã€‚
-- **é“è·¯æ‹†åˆ†**ï¼š`buildRoads.js` éœ€æ ¹æ® `properties.roadScope` å°†é“è·¯æ‹†æˆâ€œæ ¡å†… + ç¯æ ¡â€ä¸¤ä¸ª Groupï¼Œç¯æ ¡é“è·¯ä½¿ç”¨æ›´æ·¡æè´¨ã€é™ä½åšåº¦ï¼Œå¹¶åœ¨ `userData` ä¸­å¸¦ä¸Š `distanceToCampus` ä¾¿äºäº¤äº’é¢æ¿æ˜¾ç¤ºã€‚
-- **Store è”åŠ¨**ï¼šé€šè¿‡ `useSceneStore` æ–°å¢çš„ `campusOnly`ã€`roadBufferMeters` æ§åˆ¶ä¸¤ç»„é“è·¯æ˜¾éšä¸ç¼“å†²æç¤ºï¼›DebugPanel / LayerToggle éœ€è¯»å†™è¯¥çŠ¶æ€ï¼Œå¹¶åœ¨åˆ‡æ¢æ—¶è°ƒç”¨ç›¸åº” Group çš„ `toggleVisibility`ã€‚
-- **UI å±•ç¤º**ï¼šé“è·¯ InfoCard/æ—¥å¿—è¾“å‡ºéœ€è¦è¯»å– `distanceToCampus` å¹¶ä»¥ä¸­æ–‡æ˜¾ç¤ºâ€œè·æ ¡ç•Œ xx ç±³â€ï¼›èŒƒå›´åˆ‡æ¢æ“ä½œéœ€è®°å½• `logInfo("èŒƒå›´åˆ‡æ¢", ...)`ï¼Œä»¥ä¾¿æ’æŸ¥è¯¯æ“ä½œã€‚
+## Ğ£Ô°·¶Î§¿ØÖÆ
+- **Êı¾İ·¶Î§**£º½ö¼ÓÔØ `properties.region = "xipu-campus"` µÄ½¨Öş¡¢³¡µØ¡¢ÂÌ»¯¡¢Ë®Ïµ£¬ËùÓĞ Group Ìá¹© `toggleVisibility`£¬Ä¬ÈÏ¿ªÆô¡£
+- **µÀÂ··Ö²ã**£º`buildRoads.js` ¸ù¾İ `properties.roadScope` ½«µÀÂ·²ğÎª¡°Ğ£ÄÚ + ÊĞÕş¡±Á½¸ö Group£¬ÊĞÕşµÀÂ·Ê¹ÓÃ¸üµÍ¸ß¶ÈÓëÑÕÉ«£¬²¢ÔÚ `userData` ¼ÇÂ¼ `distanceToCampus`¡£
+- **Store Áª¶¯**£ºÍ¨¹ı `useSceneStore` µÄ `campusOnly`¡¢`roadBufferMeters` ¿ØÖÆÁ½×éµÀÂ·µÄÏÔÒşÓë»º³åÌáÊ¾£»DebugPanel/LayerToggle ĞèÒª°ó¶¨×´Ì¬²¢ÔÚÇĞ»»Ê±²Ù×÷¶ÔÓ¦ Group¡£
+- **UI Õ¹Ê¾**£ºµÀÂ· InfoCard/ÈÕÖ¾Êä³öĞè¶ÁÈ¡ `distanceToCampus` ²¢ÒÔÖĞÎÄÕ¹Ê¾¡°¾àĞ£½ç xx Ã×¡±£»·¶Î§ÇĞ»»²Ù×÷Ğè¼ÇÂ¼ `logInfo("·¶Î§ÇĞ»»", ...)` ±ãÓÚÅÅ²éÎó²Ù×÷¡£
 
 ## TODO
-- [ ] å®Œå–„ hover/click ä¸ UI é¢æ¿çš„è”åŠ¨æ–¹æ¡ˆã€‚
-- [ ] é“è·¯å®½åº¦ã€æè´¨ä¸é˜´å½±çš„ç»†èŠ‚è°ƒä¼˜ã€‚
+- [ ] ÍêÉÆ hover/click Óë UI Ãæ°åµÄÁª¶¯·½°¸¡£
+- [ ] µÀÂ·¿í¶È¡¢²ÄÖÊÓëÒõÓ°µÄÏ¸½Úµ÷ÓÅ¡£
