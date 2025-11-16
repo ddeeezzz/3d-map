@@ -16,6 +16,7 @@
  */
 
 import { useEffect, useRef } from "react";
+import * as THREE from "three";
 import "./App.css";
 import { initScene } from "./three/initScene";
 import { buildBuildings } from "./three/buildBuildings";
@@ -189,6 +190,10 @@ const environmentSettings = useSceneStore(
           environment: initialEnvironment,
         });
         sceneContextRef.current = sceneContext;
+        if (typeof window !== "undefined") {
+          window.sceneContext = sceneContext;
+          window.THREE = THREE;
+        }
 
         await sceneContext.environmentReady;
         if (disposed) {
