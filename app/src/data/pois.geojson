@@ -2832,7 +2832,7 @@
       "properties": {
         "poiId": "poi-derived-way/632176715-362",
         "osmId": "way/632176715",
-        "name": "犀浦春天",
+        "name": "安逸美食生活广场",
         "poiType": "label",
         "elevation": 10,
         "parentType": "building",
@@ -2857,7 +2857,7 @@
       "properties": {
         "poiId": "poi-derived-way/1098786977-399",
         "osmId": "way/1098786977",
-        "name": "图书馆",
+        "name": "西南交通大学犀浦校区图书馆",
         "poiType": "label",
         "elevation": 10,
         "parentType": "building",

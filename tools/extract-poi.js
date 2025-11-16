@@ -64,9 +64,9 @@ function resolveSingleFloorHeight(config) {
 function resolveName(props) {
   if (!props) return null;
   return (
+    props.name ||
     props["name:zh"] ||
     props["name:zh-cn"] ||
-    props.name ||
     props["name:en"] ||
     null
   );

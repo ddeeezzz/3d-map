@@ -29,8 +29,8 @@ export const config = {
     宿舍: "#F5A623",
     体育馆: "#50E3C2",
     行政楼: "#B8E986",
-    默认: "#999999",
-    道路: "#d0d0d0",
+    默认: "#606060",
+    道路: "#bcbcbc",
     水系: "#4fc3f7",
     围墙: "#f5deb3",
     绿化: "#4caf50",
@@ -65,6 +65,22 @@ export const config = {
     体育馆: 12,
     默认: 10,
     site: 2,
+  },
+
+  /**
+   * buildingOverrides：按建筑名称精确匹配的渲染覆盖
+   * - byName：键为 properties.name（需与数据完全一致），值为覆盖项
+   * - 支持字段：
+   *   - color：自定义颜色
+   *   - elevation：绝对高度（米），覆盖 properties.elevation
+   *   - heightOffset：在最终高度上叠加的增量（米，可正可负）
+   *   - opacity：材质透明度（0-1）
+   * 默认留空，按需在部署环境中添加“图书馆”“行政楼”等特殊建筑
+   */
+  buildingOverrides: {
+    byName: {
+      "图书馆": { color: "#8B5CF6", elevation: 32, opacity: 0.65 },
+    },
   },
 
   /**
@@ -133,7 +149,7 @@ export const config = {
   boundary: {
     width: 1,
     height: 20,
-    baseY: 0.08,
+    baseY: -11,
     holeInset: 0.35,
     gateWidth: 6,
     gateDepth: 3,

@@ -8,6 +8,8 @@
 - **输出**：
   - `t2/app/src/data/campus.geojson`：清洗后的 FeatureCollection，包含 `featureType`、稳定 ID、补全属性等。
   - `t2/data/reports/campus-summary.json`：记录建筑/道路/湖泊/河流/围墙/场地数量、缺失高度及耗时摘要。
+  - `t2/data/roads-graph.json` / `t2/app/src/data/roads-graph.json`：路网图（节点 + 边），供 POI 路径高亮使用。
+  - `t2/data/reports/road-graph.json`：路网生成统计（节点数、边数、孤立节点等）。
 
 ## 流程
 ### 1. 临时 GeoJSON
@@ -60,6 +62,7 @@
 ### 3. 后续阶段
 - 如需扩大环校缓冲距离或引入更多外部街区，需先在本 spec 登记参数，再更新 `config.boundary.roadBufferMeters` 与 `summary.perimeterRoads` 的统计口径。
 - 若将来需要加载更多数据源（如 `osmium` 增量更新），需补充转换脚本及回归指标，确保 `campus.geojson` 仍可直接被 Three.js 与 deck.gl 消费。
+- `tools/build-road-graph.js`：在 `campus.geojson` 生成后运行，产出路网 JSON 与统计报告，详见 `spec/poi-route-highlighting.md` 第一阶段。
 
 ## 配置引用
 - `config.heights`：提供高度补全的层高与分类默认值。

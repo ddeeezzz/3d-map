@@ -127,6 +127,20 @@ function determineColor(category) {
 }
 
 /**
+ * resolveBuildingOverride：根据建筑名称查找覆盖配置
+ *
+ * 参数：properties - GeoJSON properties
+ * 返回：配置对象或 null
+ */
+function resolveBuildingOverride(properties) {
+  const name = properties.name?.trim();
+  if (!name) return null;
+  const overrides = config.buildingOverrides?.byName;
+  if (!overrides) return null;
+  return overrides[name] || null;
+}
+
+/**
  * buildBuildings：构建所有建筑几何体
  * 
  * 参数：scene - Three.js Scene 对象
@@ -197,21 +211,50 @@ export function buildBuildings(scene) {
     const projectedPolygons = convertGeometry(feature, origin);
     if (!projectedPolygons) continue;
 
+    const override = resolveBuildingOverride(props);
+
     /**
      * 确定建筑高度
      * 优先级：
-     * 1. properties.elevation（清洗后补全的高度）
-     * 2. config.heights.默认（全局默认）
-     * 3. 10（最终保底值）
+     * 1. 覆盖配置 elevation
+     * 2. properties.elevation（清洗后补全的高度）
+     * 3. config.heights.默认（全局默认）
+     * 4. 10（最终保底值）
+     * heightOffset：在最终高度基础上叠加
      */
-    const height = Number(props.elevation) || config.heights.默认 || 10;
+    let height = Number(props.elevation);
+    if (!Number.isFinite(height) || height <= 0) {
+      height = config.heights.默认 || 10;
+    }
+    if (Number.isFinite(override?.elevation)) {
+      height = Number(override.elevation);
+    }
+    if (Number.isFinite(override?.heightOffset)) {
+      height += Number(override.heightOffset);
+    }
+    if (!Number.isFinite(height) || height <= 0) {
+      height = 10;
+    }
 
     /**
      * 确定建筑分类和颜色
      * 用于统计报告和渲染时的视觉区分
+     * 覆盖配置 color 优先
      */
     const category = props.category || "默认";
-    const color = determineColor(category);
+    const color = override?.color || determineColor(category);
+
+    /**
+     * 自定义透明度（默认 0.5）
+     */
+    let opacity = 0.5;
+    if (
+      typeof override?.opacity === "number" &&
+      override.opacity >= 0 &&
+      override.opacity <= 1
+    ) {
+      opacity = override.opacity;
+    }
 
     /**
      * 从缓存或新建材质
@@ -220,15 +263,16 @@ export function buildBuildings(scene) {
      * - transparent: true + opacity: 0.75：支持透明度效果
      * - side: THREE.DoubleSide：双面渲染（避免背面不可见）
      */
-    let material = materialCache.get(color);
+    const materialKey = `${color}-${opacity}`;
+    let material = materialCache.get(materialKey);
     if (!material) {
       material = new THREE.MeshPhongMaterial({
         color,
         transparent: true,
-        opacity: 0.5,
+        opacity,
         side: THREE.DoubleSide,
       });
-      materialCache.set(color, material);
+      materialCache.set(materialKey, material);
     }
 
     /**
