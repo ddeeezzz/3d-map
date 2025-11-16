@@ -30,6 +30,8 @@ import { buildPois } from "./three/buildPois";
 import DebugPanel from "./components/DebugPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
+import { solveRouteBetweenPoints } from "./lib/roadGraph";
+import { findPoiByName } from "./lib/poiIndex";
 import { attachBuildingPicking } from "./three/interactions/buildingPicking";
 import { attachWaterPicking } from "./three/interactions/waterPicking";
 import { attachRiverPicking } from "./three/interactions/riverPicking";
@@ -113,9 +115,12 @@ const sitesVisible = useSceneStore(
 const poisVisible = useSceneStore(
   (state) => state.poiLayerVisible ?? state.layerVisibility?.pois ?? true
 );
-const environmentSettings = useSceneStore(
-  (state) => state.environmentSettings
-);
+  const environmentSettings = useSceneStore(
+    (state) => state.environmentSettings
+  );
+  useEffect(() => {
+    useSceneStore.getState().markRoadGraphReady?.();
+  }, []);
 
   /**
    * applySceneTransform：应用场景变换到所有几何体 Group
@@ -476,6 +481,98 @@ const environmentSettings = useSceneStore(
       roadsGroupRef.current = null;
       sitesGroupRef.current = null;
       poisGroupRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+    const highlightRoute = (fromName, toName) => {
+      const trimmedFrom = (fromName ?? "").trim();
+      const trimmedTo = (toName ?? "").trim();
+      if (!trimmedFrom || !trimmedTo) {
+        console.warn("请提供起点和终点 POI 名称");
+        return;
+      }
+      const poiA = findPoiByName(trimmedFrom);
+      if (!poiA) {
+        logError("POI 路径高亮失败", `未找到 POI：${trimmedFrom}`);
+        return;
+      }
+      const poiB = findPoiByName(trimmedTo);
+      if (!poiB) {
+        logError("POI 路径高亮失败", `未找到 POI：${trimmedTo}`);
+        return;
+      }
+      try {
+        const path = solveRouteBetweenPoints(poiA, poiB);
+        const length = Number((path.totalLength ?? 0).toFixed(2));
+        useSceneStore.getState().setHighlightedRoads(path.roadIds);
+        useSceneStore.getState().setActiveRoute({
+          from: trimmedFrom,
+          to: trimmedTo,
+          length,
+        });
+        logInfo("POI 路径高亮", `完成 ${trimmedFrom} → ${trimmedTo}`, {
+          from: trimmedFrom,
+          to: trimmedTo,
+          length,
+          roadIds: path.roadIds,
+        });
+        // 按路线节点绘制红色调试线段
+        if (sceneContextRef.current?.scene && window.THREE) {
+          const debugGroup = new window.THREE.Group();
+          debugGroup.name = "routeDebug";
+          const material = new window.THREE.LineBasicMaterial({
+            color: 0xff0000,
+          });
+          (path.pointPath || []).forEach((point, index) => {
+            const next = path.pointPath?.[index + 1];
+            if (!next) return;
+            const geometry = new window.THREE.BufferGeometry().setFromPoints([
+              new window.THREE.Vector3(point.worldX, 0.2, point.worldZ),
+              new window.THREE.Vector3(next.worldX, 0.2, next.worldZ),
+            ]);
+            const line = new window.THREE.Line(geometry, material);
+            debugGroup.add(line);
+          });
+          const roadsGroup = sceneContextRef.current.scene.getObjectByName("roads");
+          if (roadsGroup) {
+            debugGroup.rotation.copy(roadsGroup.rotation);
+            debugGroup.position.copy(roadsGroup.position);
+            debugGroup.scale.copy(roadsGroup.scale);
+          }
+          sceneContextRef.current.scene.add(debugGroup);
+        }
+        console.info("[POI 路径高亮]", {
+          from: trimmedFrom,
+          to: trimmedTo,
+          length,
+          roadIds: path.roadIds,
+          nodePath: path.nodePath,
+          pointPath: path.pointPath,
+        });
+        return path;
+      } catch (error) {
+        logError(
+          "POI 路径高亮失败",
+          String(error?.message ?? error),
+          { from: trimmedFrom, to: trimmedTo }
+        );
+        throw error;
+      }
+    };
+    const clearRoute = () => {
+      useSceneStore.getState().setHighlightedRoads([]);
+      useSceneStore.getState().setActiveRoute(null);
+      logInfo("POI 路径高亮", "已清除路线高亮");
+    };
+    window.highlightRouteByPoiNames = highlightRoute;
+    window.clearRouteHighlight = clearRoute;
+    return () => {
+      delete window.highlightRouteByPoiNames;
+      delete window.clearRouteHighlight;
     };
   }, []);
 

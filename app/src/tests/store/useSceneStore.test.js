@@ -92,4 +92,23 @@ describe("useSceneStore", () => {
     expect(env.enabled).toBe(true);
     expect(env.skybox).toBe("citrus_orchard_road_puresky_4k.hdr");
   });
+
+  it("updates highlighted roads and active route", () => {
+    useSceneStore.getState().setHighlightedRoads(["road-1", "road-2"]);
+    expect(useSceneStore.getState().highlightedRoadIds).toEqual([
+      "road-1",
+      "road-2",
+    ]);
+    useSceneStore
+      .getState()
+      .setActiveRoute({ from: "A", to: "B", length: 123 });
+    expect(useSceneStore.getState().activeRoute).toEqual({
+      from: "A",
+      to: "B",
+      length: 123,
+    });
+    useSceneStore.getState().resetStore();
+    expect(useSceneStore.getState().highlightedRoadIds).toEqual([]);
+    expect(useSceneStore.getState().activeRoute).toBeNull();
+  });
 });

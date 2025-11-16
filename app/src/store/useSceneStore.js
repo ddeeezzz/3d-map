@@ -138,6 +138,9 @@ const getInitialData = () => ({
   logsPreview: [],
   sceneTransform: getInitialSceneTransform(),
   environmentSettings: getInitialEnvironmentSettings(),
+  highlightedRoadIds: [],
+  activeRoute: null,
+  roadGraphReady: false,
 });
 
 /**
@@ -212,6 +215,22 @@ export const useSceneStore = create((set, get) => ({
    */
   // 由路径规划模块写入当前路线数据
   setRoute: (route) => set({ route }),
+
+  /**
+   * setHighlightedRoads：更新当前高亮的道路 ID 列表
+   * 参数：roadIds - string[]，需要高亮的道路 stableId 集合
+   */
+  setHighlightedRoads: (roadIds) => set({ highlightedRoadIds: roadIds || [] }),
+
+  /**
+   * setActiveRoute：记录当前路线信息（{ from, to, length }）
+   */
+  setActiveRoute: (routeInfo) => set({ activeRoute: routeInfo || null }),
+
+  /**
+   * markRoadGraphReady：标记路网数据已加载
+   */
+  markRoadGraphReady: () => set({ roadGraphReady: true }),
 
   /**
    * toggleLayerVisibility：切换指定图层的可见性

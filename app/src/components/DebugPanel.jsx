@@ -51,7 +51,11 @@ function DebugPanel() {
   const updateEnvironmentSettings = useSceneStore(
     (state) => state.updateEnvironmentSettings
   );
-  const poiStatistics = useSceneStore((state) => state.poiStatistics);
+  /**
+   * poiStatistics：POI 数量统计安全副本，调试或测试阶段若 store 尚未注入数据则回退为 0，避免空引用
+   */
+  const poiStatistics =
+    useSceneStore((state) => state.poiStatistics) ?? { total: 0, independent: 0 };
 
   /**
    * 在非开发环境中隐藏调试面板

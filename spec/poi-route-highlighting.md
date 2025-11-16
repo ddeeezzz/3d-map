@@ -43,15 +43,21 @@
   - `app/src/logger/logger.js`：允许新日志前缀。
 - **完成方法**：
   1. **载入数据**：在应用初始化时加载 `roads-graph.json`，构建内存图（节点数组 + 邻接表）。
-  2. **POI 映射**：
-     - 复用 `buildPois.js` 的投影函数取得 POI 的 world 坐标；
-     - 搜索 20 米半径内的最近边，若无则直接抛出 “POI 未贴合道路”；
-     - 命中边后，按距离在该边上插入**临时节点**：计算 t=distance(from→POI)/edgeLength，在 `{from→temp→to}` 之间生成两条临时边；
-     - 临时节点 ID 与边仅在当前寻径过程中存在，算法结束后销毁。
-  3. **寻径实现**：
-     - 对常规节点 + 可能存在的临时节点运行 Dijkstra（或 A*）；
-     - 返回 `{ nodes, edges, tempNodes }`，其中 edges 至少包含 `edgeId/roadId` 以便渲染高亮；
-     - 若起点终点本就是同一节点，直接返回空路径并提示 “起终点重合”。
+  2. **路网加载**：
+     - 在入口模块中以异步方式读取 `app/src/data/roads-graph.json`（支持 Vite `?raw` 或 fetch）；
+     - 构建 `{ nodeMap, adjacency }`，其中 nodeMap 以节点 ID 为键，value 包含 `lng/lat/worldX/worldZ`；
+     - 将 `graph` 缓存到 `useSceneStore` 或 `roadGraphStore`，避免重复解析。
+  3. **POI 映射**：
+     - 复用 `buildPois.js` 的投影逻辑得到 POI 的 `(worldX, worldZ)`；
+     - 遍历 **所有边**，使用 `nearestPointOnSegment` 计算每条边到 POI 的最近点和距离，选择距离最小且 ≤ `config.poiRoute.maxSnapDistance`（默认 20 米）的那条边；未命中则抛出 `throw new Error("POI 未贴合道路")` 并提示；
+     - 命中边后，计算 `t = distance(from→poi) / edgeLength`，插入一对临时节点/边：
+       - 临时节点结构 `{ id: "temp-xxx", worldX, worldZ, isTemp: true }`
+       - 临时边 `{ from, to: temp, length: t * edgeLength }` + `{ from: temp, to, length: (1 - t) * edgeLength }`
+       - 引擎停止寻径/高亮后必须清理这些临时对象。
+  4. **寻径实现**：
+     - 对“常规节点 + 临时节点”运行 Dijkstra（若将来需要方向权重，可拓展至 A*）；
+     - 返回 `{ nodePath, edgePath, totalLength, tempNodes, tempEdges }`，`edgePath` 需包含道路 ID；
+     - 如果起终点在同一节点，直接返回空路径并记录 `logInfo("POI 路径高亮", { reason: "同节点" })`。
   4. **控制台 API**：在 `window` 注入 `highlightRouteByPoiNames(nameA, nameB)`：
      ```js
      window.highlightRouteByPoiNames = (nameA, nameB) => {
@@ -77,8 +83,9 @@
   - `spec/ui.md` 更新说明。
 - **完成方法**：
   1. **状态联动**：`highlightRouteByPoiNames` 运行后，除了更新 `highlightedRoadIds`，还写入 `activeRoute` 供 React 组件显示（例如 DebugPanel 中 “当前路线：图书馆 → 体育馆，长度 320m”）。
-  2. **清除机制**：提供 `clearRouteHighlight()` 控制台函数或 UI 按钮，调用 `setHighlightedRoads([])`。
-  3. **日志与验收**：高亮成功记录 `logInfo("路网高亮", {...})`；录屏展示输入命令 → 高亮效果 → 清除流程。
+  2. **清理机制**：提供 `clearRouteHighlight()` 控制台函数或 UI 按钮，调用 `setHighlightedRoads([])` 并销毁本次寻径的临时节点/边。
+  3. **场景变换**：任何用于调试或高亮的 Three.js Group（如 `roadGraphDebug` 或高亮路径）都需在创建后调用 `applySceneTransform`（或直接挂在已有 Group 下），以继承当前的旋转/缩放/平移，避免与建筑出现角度偏差。
+  4. **日志与验收**：高亮成功记录 `logInfo("路网高亮", {...})`；录屏展示输入命令 → 高亮效果 → 清除流程。
 
 ## 后续扩展（非本阶段）
 - 按类别筛选 POI / 支持模糊搜索；

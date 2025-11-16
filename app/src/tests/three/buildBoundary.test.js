@@ -74,11 +74,15 @@ describe("buildBoundary", () => {
   it("生成包含 gateIds 的闭合围墙 Mesh", () => {
     const group = buildBoundary(scene);
     expect(scene.children).toContain(group);
-    const mesh = group.children[0];
-    expect(mesh.userData.stableId).toBe("relation/1");
-    expect(mesh.userData.wallMode).toBe("closedSubtractive");
-    expect(mesh.userData.gateIds).toContain("gate/1");
-    expect(mesh.geometry).toBeDefined();
+    /** wallMesh：筛选具有 wallMode 标记的 Mesh，用于验证围墙几何 */
+    const wallMesh = group.children.find(
+      (child) => child.userData && child.userData.wallMode === "closedSubtractive",
+    );
+    expect(wallMesh).toBeDefined();
+    expect(wallMesh.userData.stableId).toBe("relation/1");
+    expect(wallMesh.userData.wallMode).toBe("closedSubtractive");
+    expect(wallMesh.userData.gateIds).toContain("gate/1");
+    expect(wallMesh.geometry).toBeDefined();
   });
 
   it("scene 缺失时报错", () => {

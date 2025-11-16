@@ -217,6 +217,14 @@ export const config = {
   },
 
   /**
+   * poiRoute：POI 路径高亮相关配置
+   * - maxSnapDistance：POI 吸附到道路边的最大距离（米）
+   */
+  poiRoute: {
+    maxSnapDistance: 200,
+  },
+
+  /**
    * poi：POI 图层的文字与样式设定
    * 字段：
    * - labelFont：Sprite Canvas 的字体
