@@ -312,23 +312,23 @@ const environmentSettings = useSceneStore(
          * onHover：存储到 hoveredWaterInfoRef 以备查询
          * onSelect：记录选中的水体信息
          */
-        const waterPickingHandle = attachWaterPicking({
-          domElement: sceneContext.renderer.domElement,
-          camera: sceneContext.camera,
-          waterGroup,
-          onHover: (info) => {
-            hoveredWaterInfoRef.current = info;
-          },
-          onSelect: (info) => {
-            if (!info) return;
-            const { stableId, name, waterType } = info;
-            logInfo(
-              "水系交互",
-              `选中 ${name ?? stableId ?? "未命名水体"} (${waterType ?? "未知类型"})`
-            );
-          },
-        });
-        waterPickingHandleRef.current = waterPickingHandle;
+        // const waterPickingHandle = attachWaterPicking({
+        //   domElement: sceneContext.renderer.domElement,
+        //   camera: sceneContext.camera,
+        //   waterGroup,
+        //   onHover: (info) => {
+        //     hoveredWaterInfoRef.current = info;
+        //   },
+        //   onSelect: (info) => {
+        //     if (!info) return;
+        //     const { stableId, name, waterType } = info;
+        //     logInfo(
+        //       "水系交互",
+        //       `选中 ${name ?? stableId ?? "未命名水体"} (${waterType ?? "未知类型"})`
+        //     );
+        //   },
+        // });
+        // waterPickingHandleRef.current = waterPickingHandle;
 
         /**
          * 绑定河流拾取交互：针对 waterway 线性要素
