@@ -15,7 +15,9 @@
 - `greenery`：绿化统一参数，线状使用 `width/height/baseY`，面状使用 `surfaceDepth/surfaceBaseY`，示例 `{ width: 3, height: 2, baseY: -2.35, surfaceDepth: 2, surfaceBaseY: -2.35 }`，同样遵循“体积高度 2m、顶面保持原位”的约束。
 - `site`：场地矮柱参数，包含 `height/baseY` 以及可选 `categoryHeights`（如 `{ track: 3 }`）用于覆盖特定 `siteCategory` 的高度需求，Three.js 渲染阶段会优先读取该分类高度。
 - `dataPath`：静态 GeoJSON 相对路径（当前 `/src/data/campus.geojson`）。
-- `poiRoute`：POI 路径高亮专用参数，当前仅包含 `maxSnapDistance`（POI 吸附道路的最大距离，米），默认为 20，可根据需求调整。
+- `poiRoute`：POI 路线相关配置，包含：
+  - `maxSnapDistance`：POI 吸附道路的最大距离（米），默认 20。
+  - `highlightMesh = { width, height, yOffset, color, opacity }`：路线光带默认参数，渲染层需从该配置读取宽度/厚度/抬升高度与颜色/透明度，可通过 UI 或 DebugPanel 调整后写回 store。
 - 若新增配置项，需先在本 spec 说明再更新 `index.js`。
 
 ## 使用约定

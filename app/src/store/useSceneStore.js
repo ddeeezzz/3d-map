@@ -139,6 +139,8 @@ const getInitialData = () => ({
   sceneTransform: getInitialSceneTransform(),
   environmentSettings: getInitialEnvironmentSettings(),
   highlightedRoadIds: [],
+  highlightedRoutePath: [],
+  highlightedRouteMeta: null,
   activeRoute: null,
   roadGraphReady: false,
 });
@@ -221,6 +223,23 @@ export const useSceneStore = create((set, get) => ({
    * 参数：roadIds - string[]，需要高亮的道路 stableId 集合
    */
   setHighlightedRoads: (roadIds) => set({ highlightedRoadIds: roadIds || [] }),
+
+  /**
+   * setHighlightedRoutePath：记录当前路线节点序列
+   * 参数：path - pointPath 数组
+   */
+  setHighlightedRoutePath: (path) =>
+    set({
+      highlightedRoutePath: Array.isArray(path) ? path : [],
+    }),
+
+  /**
+   * setHighlightedRouteMeta：记录当前光带渲染参数
+   */
+  setHighlightedRouteMeta: (meta) =>
+    set({
+      highlightedRouteMeta: meta || null,
+    }),
 
   /**
    * setActiveRoute：记录当前路线信息（{ from, to, length }）

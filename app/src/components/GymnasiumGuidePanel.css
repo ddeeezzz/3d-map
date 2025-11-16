@@ -1,0 +1,1041 @@
+/**
+ * GymnasiumGuidePanel 样式
+ * 定位在图书馆使用指南按钮下方，提供美观的浮动面板效果
+ */
+
+.gymnasium-guide-container {
+  position: fixed;
+  left: 20px;
+  top: calc(50% + 70px);
+  z-index: 1000;
+}
+
+/* 主按钮样式 */
+.gymnasium-guide-main-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.gymnasium-guide-main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+}
+
+.gymnasium-guide-main-btn:active {
+  transform: translateY(0);
+}
+
+/* 弹出面板样式 */
+.gymnasium-guide-panel {
+  position: absolute;
+  left: 0;
+  top: -80px;
+  margin-left: 200px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 面板头部 */
+.gymnasium-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.gymnasium-guide-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 700;
+}
+
+/* 关闭按钮 */
+.gymnasium-guide-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.gymnasium-guide-close-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+/* 功能按钮容器 */
+.gymnasium-guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 功能按钮样式 */
+.gymnasium-guide-item-btn {
+  padding: 14px 18px;
+  background: white;
+  color: #333;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.gymnasium-guide-item-btn:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border-color: transparent;
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.gymnasium-guide-item-btn:active {
+  transform: translateX(3px);
+}
+
+/* 弹窗遮罩层 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 弹窗主体 */
+.modal-content {
+  position: fixed;
+  left: 500px;
+  top: 55%;
+  transform: translateY(-50%);
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  width: 750px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideRight 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+/* 弹窗头部 */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* 弹窗内容区 */
+.modal-body {
+  padding: 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* 场馆功能分区样式 */
+.facility-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.facility-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.facility-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.facility-intro {
+  margin: 12px 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border-left: 4px solid #f59e0b;
+  border-radius: 6px;
+}
+
+.facility-card {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.05) 100%);
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.facility-card:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+}
+
+.facility-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.facility-icon {
+  font-size: 24px;
+}
+
+.facility-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.facility-description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+  padding-left: 2px;
+}
+
+/* 体质健康测试样式 */
+.health-test-modal {
+  width: 800px;
+}
+
+.test-section {
+  margin-bottom: 28px;
+}
+
+.test-section:last-child {
+  margin-bottom: 0;
+}
+
+.test-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #f59e0b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.test-info-box {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border-radius: 10px;
+  border: 2px solid #f59e0b;
+}
+
+.test-info-box p {
+  margin: 10px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.test-info-box strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.test-notice {
+  margin-top: 12px !important;
+  padding: 10px 14px;
+  background: #fff9e6;
+  border-left: 4px solid #ffa500;
+  border-radius: 6px;
+  color: #d97706;
+  font-size: 14px !important;
+  font-weight: 500;
+}
+
+.venue-card {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.venue-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
+}
+
+.venue-card h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.venue-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.venue-list li {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.test-item-card {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.test-item-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
+}
+
+.test-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.test-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50%;
+}
+
+.test-item-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.test-item-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.test-item-card strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.test-item-card ul {
+  margin: 8px 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.test-item-card ul li {
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.test-warning {
+  margin-top: 10px !important;
+  padding: 8px 12px;
+  background: #fff9e6;
+  border-left: 4px solid #ffa500;
+  border-radius: 6px;
+  color: #d97706;
+  font-size: 13px !important;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.notice-box {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border-radius: 10px;
+  border: 2px solid #f59e0b;
+}
+
+.notice-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.notice-list li {
+  position: relative;
+  margin: 10px 0;
+  padding-left: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.notice-list li::before {
+  content: "▸";
+  position: absolute;
+  left: -12px;
+  color: #f59e0b;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.notice-list strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+/* 使用规范与预约流程样式 */
+.usage-rules-modal {
+  width: 780px;
+}
+
+.usage-section {
+  margin-bottom: 28px;
+}
+
+.usage-section:last-child {
+  margin-bottom: 0;
+}
+
+.usage-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #f59e0b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-info-box {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border-radius: 10px;
+  border: 2px solid #f59e0b;
+}
+
+.time-info-box p {
+  margin: 10px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.time-info-box strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.time-notice {
+  margin-top: 12px !important;
+  padding: 10px 14px;
+  background: #fff9e6;
+  border-left: 4px solid #ffa500;
+  border-radius: 6px;
+  color: #d97706;
+  font-size: 14px !important;
+  font-weight: 500;
+}
+
+.rule-card {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.rule-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
+}
+
+.rule-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.rule-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50%;
+}
+
+.rule-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.rule-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.rule-list li {
+  position: relative;
+  margin: 8px 0;
+  padding-left: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.rule-list li::before {
+  content: "•";
+  position: absolute;
+  left: -12px;
+  color: #f59e0b;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.rule-list strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.booking-step-card {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.booking-step-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
+}
+
+.booking-step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+}
+
+.booking-step-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.booking-step-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.booking-step-card strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.booking-methods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.booking-method {
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  text-align: center;
+}
+
+.booking-method h5 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.booking-method p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.booking-tip {
+  margin-top: 10px !important;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border-left: 4px solid #f59e0b;
+  border-radius: 6px;
+  font-size: 13px !important;
+  line-height: 1.6;
+  color: #555;
+}
+
+.booking-warning {
+  margin-top: 10px !important;
+  padding: 8px 12px;
+  background: #fff9e6;
+  border-left: 4px solid #ffa500;
+  border-radius: 6px;
+  color: #d97706;
+  font-size: 13px !important;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.violation-box {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.08) 100%);
+  border-radius: 10px;
+  border: 2px solid #ef4444;
+}
+
+.violation-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.violation-list li {
+  position: relative;
+  margin: 10px 0;
+  padding-left: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.violation-list li::before {
+  content: "⚠";
+  position: absolute;
+  left: -12px;
+  color: #ef4444;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.violation-list strong {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* 服务与应急保障样式 */
+.emergency-service-modal {
+  width: 800px;
+}
+
+.service-section {
+  margin-bottom: 28px;
+}
+
+.service-section:last-child {
+  margin-bottom: 0;
+}
+
+.service-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #f59e0b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.service-card {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.05) 100%);
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+}
+
+.service-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.service-icon {
+  font-size: 24px;
+}
+
+.service-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.service-card p {
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.service-detail {
+  padding-left: 2px;
+}
+
+.service-detail strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.service-warning {
+  margin-top: 8px !important;
+  padding: 8px 12px;
+  background: #fff9e6;
+  border-left: 4px solid #ffa500;
+  border-radius: 6px;
+  color: #d97706;
+  font-size: 13px !important;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.emergency-card {
+  margin: 18px 0;
+  padding: 16px 20px;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.emergency-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
+}
+
+.emergency-card.urgent {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%);
+  border-color: #ef4444;
+}
+
+.emergency-card.urgent:hover {
+  border-color: #dc2626;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.15);
+}
+
+.emergency-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.emergency-icon {
+  font-size: 24px;
+}
+
+.emergency-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.emergency-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.emergency-list li {
+  position: relative;
+  margin: 8px 0;
+  padding-left: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.emergency-list li::before {
+  content: "▸";
+  position: absolute;
+  left: -12px;
+  color: #f59e0b;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.emergency-card.urgent .emergency-list li::before {
+  color: #ef4444;
+}
+
+.emergency-list strong {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.emergency-card.urgent .emergency-list strong {
+  color: #dc2626;
+}
+
+.contact-section {
+  margin-top: 28px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border-radius: 10px;
+  border: 2px solid #f59e0b;
+}
+
+.contact-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.contact-info-item {
+  text-align: center;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+}
+
+.contact-info-item strong {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.contact-info-item p {
+  margin: 0;
+  font-size: 15px;
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.contact-note {
+  margin: 12px 0 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .gymnasium-guide-container {
+    left: 10px;
+    top: calc(50% + 60px);
+  }
+
+  .gymnasium-guide-main-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .gymnasium-guide-panel {
+    margin-left: 0;
+    left: 50%;
+    top: auto;
+    bottom: 80px;
+    transform: translateX(-50%);
+    min-width: 260px;
+  }
+
+  .modal-content {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .booking-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

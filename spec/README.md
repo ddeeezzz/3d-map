@@ -12,9 +12,9 @@
 - [Store 规范](store.md)：Zustand 状态结构、字段职责及实现建议。
 - [UI 结构](ui.md)：React 导航面板、信息卡片、状态管理。
 - [POI 标注](poi.md)：POI 数据转换、Three.js 图层渲染与交互控制。
+- [POI 路线光带](poi-route-overlay.md)：POI 之间的最短路、路线光带 Mesh 与 UI 联动方案。
+- [指南面板组件集成](guide-panels.md)：图书馆和体育馆使用指南面板组件的集成方案。
 
 ## 待补项
-
-- 导航算法与数据来源
 
 > 添加新功能前，请先创建对应 `spec/<feature>.md` 并在此列表中登记。

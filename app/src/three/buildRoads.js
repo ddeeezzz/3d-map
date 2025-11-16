@@ -222,7 +222,7 @@ function projectLineString(coordinates, origin) {
  * - 零长度段：跳过该边
  * - 轮廓 < 3 点：返回 null（无法形成面）
  */
-function buildRoadGeometry(points, thickness, depth) {
+export function buildRoadGeometry(points, thickness, depth) {
   if (points.length < 2 || thickness <= 0) {
     return null;
   }

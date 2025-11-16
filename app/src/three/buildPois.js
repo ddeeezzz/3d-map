@@ -33,7 +33,8 @@ const defaultPoiStyle = {
   scaleReferenceDistance: 400,
   minScale: 0.5,
   maxScale: 2,
-  renderOrder: 20,
+  // 渲染层级：确保高于道路与路线光带
+  renderOrder: 300,
 };
 
 /** 将配置与默认值合并 */

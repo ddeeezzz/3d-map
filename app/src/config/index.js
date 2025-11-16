@@ -222,6 +222,15 @@ export const config = {
    */
   poiRoute: {
     maxSnapDistance: 200,
+    highlightMesh: {
+      width: 10,
+      height: 5,
+      yOffset: 0,
+      color: "#FF5252",
+      opacity: 0.85,
+      // 渲染层级：高于道路，低于 POI 标签
+      renderOrder: 200,
+    },
   },
 
   /**
@@ -250,6 +259,8 @@ export const config = {
     scaleReferenceDistance: 400,
     minScale: 0.5,
     maxScale: 2,
+    // 渲染层级：最高，保证覆盖路线与道路
+    renderOrder: 300,
   },
 
   /**
