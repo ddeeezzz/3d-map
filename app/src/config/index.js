@@ -60,10 +60,10 @@ export const config = {
     "1层": 6,
     "2层": 12,
     "3层": 24,
-    教学楼: 36,
-    宿舍: 30,
+    教学楼: 30,
+    宿舍: 36,
     体育馆: 24,
-    默认: 15,
+    默认: 9,
     site: 2,
   },
 
@@ -80,6 +80,15 @@ export const config = {
   buildingOverrides: {
     byName: {
       "西南交通大学犀浦校区图书馆": { color: "#c5acff", elevation: 40, opacity: 0.65 },
+      鸿哲斋4号楼: { elevation: 70 },
+      鸿哲斋5号楼: { elevation: 70 },
+      鸿哲斋6号楼: { elevation: 70 },
+      鸿哲斋7号楼: { elevation: 70 },
+      鸿哲斋8号楼: { elevation: 70 },
+      鸿哲斋9号楼: { elevation: 70 },
+      鸿哲斋10号楼: { elevation: 70 },
+      鸿哲斋11号楼: { elevation: 70 },
+      西南交大犀浦3号教学楼: { elevation: 90 },
     },
   },
 
