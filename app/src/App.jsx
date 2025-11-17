@@ -591,13 +591,15 @@ useEffect(() => {
          * 绑定边界（围墙）拾取交互
          * 主要用于显示边界信息，支持 Hover 效果
          */
-        const boundaryPickingHandle = boundaryGroup
-          ? attachBoundaryPicking({
-              domElement: sceneContext.renderer.domElement,
-              camera: sceneContext.camera,
-              boundaryGroup,
-            })
-          : null;
+        const shouldBindBoundaryPicking = false;
+        const boundaryPickingHandle =
+          boundaryGroup && shouldBindBoundaryPicking
+            ? attachBoundaryPicking({
+                domElement: sceneContext.renderer.domElement,
+                camera: sceneContext.camera,
+                boundaryGroup,
+              })
+            : null;
         boundaryPickingHandleRef.current = boundaryPickingHandle;
 
         /**
@@ -647,22 +649,25 @@ useEffect(() => {
          * onHover：存储到 hoveredRoadInfoRef 以备查询
          * onSelect：记录选中的道路信息及其等级
          */
-        const roadPickingHandle = attachRoadPicking({
-          domElement: sceneContext.renderer.domElement,
-          camera: sceneContext.camera,
-          roadsGroup,
-          onHover: (info) => {
-            hoveredRoadInfoRef.current = info;
-          },
-          onSelect: (info) => {
-            if (!info) return;
-            const { stableId, name, highway } = info;
-            logInfo(
-              "道路交互",
-              `选中 ${name ?? stableId ?? "未知道路"} (${highway ?? "未知等级"})`
-            );
-          },
-        });
+        const shouldBindRoadPicking = false;
+        const roadPickingHandle = shouldBindRoadPicking
+          ? attachRoadPicking({
+              domElement: sceneContext.renderer.domElement,
+              camera: sceneContext.camera,
+              roadsGroup,
+              onHover: (info) => {
+                hoveredRoadInfoRef.current = info;
+              },
+              onSelect: (info) => {
+                if (!info) return;
+                const { stableId, name, highway } = info;
+                logInfo(
+                  "道路交互",
+                  `选中 ${name ?? stableId ?? "未知道路"} (${highway ?? "未知等级"})`
+                );
+              },
+            })
+          : null;
         roadPickingHandleRef.current = roadPickingHandle;
 
         const sitePickingHandle = sitesGroup

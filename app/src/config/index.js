@@ -32,7 +32,7 @@ export const config = {
     默认: "#606060",
     道路: "#bcbcbc",
     水系: "#4fc3f7",
-    围墙: "#f5deb3",
+    围墙: "#ae812f",
     绿化: "#4caf50",
     site: {
       默认: "#d3b6b6",
@@ -157,7 +157,7 @@ export const config = {
    */
   boundary: {
     width: 1,
-    height: 30,
+    height: 15,
     baseY: -11,
     holeInset: 0.35,
     gateGapWidth: 10,
