@@ -145,6 +145,7 @@ const getInitialData = () => ({
   roadGraphReady: false,
   highlightedLocationIds: new Set(),
   highlightedModelIds: new Map(),
+  guidePanelsVisible: {},
 });
 
 /**
@@ -269,6 +270,18 @@ export const useSceneStore = create((set) => ({
     set(() => ({
       highlightedLocationIds: new Set(),
       highlightedModelIds: new Map(),
+    })),
+
+  /**
+   * setGuidePanelVisible：控制指南面板开关（如图书馆/体育馆）
+   * 参数：key - 面板标识；visible - 布尔值
+   */
+  setGuidePanelVisible: (key, visible) =>
+    set((state) => ({
+      guidePanelsVisible: {
+        ...state.guidePanelsVisible,
+        [key]: Boolean(visible),
+      },
     })),
 
   /**

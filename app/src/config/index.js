@@ -93,6 +93,18 @@ export const config = {
   },
 
   /**
+   * guidePanels：建筑点击后触发的指南面板映射
+   * - byName 对应 properties.name，值为已注册面板 key
+   * - 新增/修改时记得同步 spec/config.md，保证配置文档最新
+   */
+  guidePanels: {
+    byName: {
+      西南交通大学犀浦校区图书馆: "library",
+      体育馆: "gymnasium",
+    },
+  },
+
+  /**
    * layers：图层列表和初始可见性
    * 格式：[{ name, key, visible, order }]
    * 使用场景：

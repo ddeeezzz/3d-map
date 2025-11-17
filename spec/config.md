@@ -17,6 +17,7 @@
 - `greenery`：绿化统一参数，线状使用 `width/height/baseY`，面状使用 `surfaceDepth/surfaceBaseY`，示例 `{ width: 3, height: 2, baseY: -2.35, surfaceDepth: 2, surfaceBaseY: -2.35 }`，同样遵循“体积高度 2m、顶面保持原位”的约束。
 - `site`：场地矮柱参数，包含 `height/baseY` 以及可选 `categoryHeights`（如 `{ track: 3 }`）用于覆盖特定 `siteCategory` 的高度需求，Three.js 渲染阶段会优先读取该分类高度。
 - `buildingOverrides`：按 `properties.name` 精确匹配的特殊建筑配置，用于覆盖高度/颜色/透明度等。
+- `guidePanels`：定义哪些建筑点击后需要弹出专项指南面板（键为建筑名、值为面板 key），若新增面板须同步更新此 spec 与 `app/src/config/index.js`。
 - `highlight`：交互高亮配置，目前包含 `navigation`（模型/POI 标签颜色），供导航面板和地点高亮使用。
 - `dataPath`：静态 GeoJSON 相对路径（当前 `/src/data/campus.geojson`）。
 - `poiRoute`：POI 路线相关配置，包含：

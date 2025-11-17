@@ -8,11 +8,12 @@
  */
 
 import { useState } from "react";
+import { useSceneStore } from "../store/useSceneStore";
 import "./GymnasiumGuidePanel.css";
 
 function GymnasiumGuidePanel() {
-  // 控制面板是否显示
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useSceneStore((state) => state.guidePanelsVisible?.gymnasium);
+  const setGuidePanelVisible = useSceneStore((state) => state.setGuidePanelVisible);
   // 控制场馆功能分区与核心设施弹窗
   const [showFacilityZoning, setShowFacilityZoning] = useState(false);
   // 控制体质健康测试专项安排弹窗
@@ -24,12 +25,12 @@ function GymnasiumGuidePanel() {
 
   // 切换面板显示状态
   const togglePanel = () => {
-    setIsOpen(!isOpen);
+    setGuidePanelVisible("gymnasium", !isOpen);
   };
 
   // 关闭面板
   const closePanel = () => {
-    setIsOpen(false);
+    setGuidePanelVisible("gymnasium", false);
   };
 
   // 四个功能按钮的点击处理

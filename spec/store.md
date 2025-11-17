@@ -61,6 +61,9 @@ type SceneStore = {
   hoveredSite: Record<string, any> | null
   setHoveredSite: (info: Record<string, any> | null) => void
 
+  guidePanelsVisible: Record<string, boolean>
+  setGuidePanelVisible: (key: string, visible: boolean) => void
+
   resetStore: () => void
 }
 ```
@@ -78,6 +81,7 @@ type SceneStore = {
 - **environmentSettings**：存放天空盒与环境贴图的实时配置，`App.jsx` 监听并调用 `sceneContext.applyEnvironmentSettings`；DebugPanel 使用 update/reset 接口驱动 UI 控件。
 - **hoveredBuilding**：建筑拾取在 hover 时写入，Tooltip 与信息卡片按需读取；置空表示移出 hover。
 - **hoveredSite**：场地拾取 hover 写入的业务对象，Tooltip/日志展示依据该字段输出当前指向的场地；图层隐藏或 clearHover 时必须置空。
+- **guidePanelsVisible**：记录图书馆/体育馆等指南面板的可见状态；点击按钮或建筑时调用 `setGuidePanelVisible(key, true/false)` 统一开关，扩展到更多面板时需在 `config.guidePanels.byName` 与本 spec 同步更新。
 - **resetStore**：测试场景与 UI “重置”按钮使用，避免手动覆盖内部状态。
 
 ### 基准对齐

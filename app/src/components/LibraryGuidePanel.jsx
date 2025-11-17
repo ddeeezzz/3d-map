@@ -8,11 +8,12 @@
  */
 
 import { useState } from "react";
+import { useSceneStore } from "../store/useSceneStore";
 import "./LibraryGuidePanel.css";
 
 function LibraryGuidePanel() {
-  // 控制面板是否显示
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useSceneStore((state) => state.guidePanelsVisible?.library);
+  const setGuidePanelVisible = useSceneStore((state) => state.setGuidePanelVisible);
   // 控制开放时间详情弹窗
   const [showOpeningHours, setShowOpeningHours] = useState(false);
   // 控制楼层功能分区弹窗
@@ -26,12 +27,12 @@ function LibraryGuidePanel() {
 
   // 切换面板显示状态
   const togglePanel = () => {
-    setIsOpen(!isOpen);
+    setGuidePanelVisible("library", !isOpen);
   };
 
   // 关闭面板
   const closePanel = () => {
-    setIsOpen(false);
+    setGuidePanelVisible("library", false);
   };
 
   // 五个功能按钮的点击处理（暂时占位，后续实现具体功能）

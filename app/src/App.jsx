@@ -570,6 +570,7 @@ useEffect(() => {
          * onHover：更新 store 中的悬停建筑信息
          * onSelect：更新 store 中的选中建筑 ID，并记录日志
          */
+        const guidePanelMap = config.guidePanels?.byName || {};
         detachBuildingPicking = attachBuildingPicking({
           domElement: sceneContext.renderer.domElement,
           camera: sceneContext.camera,
@@ -582,6 +583,10 @@ useEffect(() => {
             const { stableId, name } = info;
             if (stableId) {
               useSceneStore.getState().setSelectedBuilding(stableId);
+            }
+            const panelKey = name ? guidePanelMap[name] : null;
+            if (panelKey) {
+              useSceneStore.getState().setGuidePanelVisible(panelKey, true);
             }
             logInfo("建筑交互", `选中 ${name ?? stableId ?? "未知建筑"}`);
           },
