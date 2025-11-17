@@ -203,6 +203,18 @@ export const config = {
   },
 
   /**
+   * highlight：交互高亮配置
+   * - hover：鼠标悬停时的颜色
+   * - navigation：导航面板选中地点时的颜色
+   */
+  highlight: {
+    navigation: {
+      model: "#ffd700",
+      poiLabel: "#ffd700",
+    },
+  },
+
+  /**
    * site：场地矮柱统一参数
    * 字段：
    * - height：Three.js 场地矮柱的高度（单位：米）

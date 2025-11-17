@@ -14,6 +14,7 @@
 - [POI 标注](poi.md)：POI 数据转换、Three.js 图层渲染与交互控制。
 - [POI 路线光带](poi-route-overlay.md)：POI 之间的最短路、路线光带 Mesh 与 UI 联动方案。
 - [指南面板组件集成](guide-panels.md)：图书馆和体育馆使用指南面板组件的集成方案。
+- [导航面板与地点搜索](navigation-panel.md)：导航面板UI集成、POI地点搜索、地点高亮和路线规划可视化功能。
 
 ## 待补项
 

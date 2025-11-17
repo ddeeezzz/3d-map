@@ -24,6 +24,9 @@ const poiList = [];
     worldX: projectedX,
     worldZ: -projectedY,
     coordinate,
+    parentId: props.parentId ?? null,
+    parentType: props.parentType ?? null,
+    poiType: props.poiType ?? null,
   };
   if (!poiByName.has(name)) {
     poiByName.set(name, record);

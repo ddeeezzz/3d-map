@@ -4,7 +4,7 @@ import { attachRoadPicking } from "../../three/interactions/roadPicking";
 
 const ensurePointerEvent = () => {
   if (typeof PointerEvent === "undefined") {
-    global.PointerEvent = class PointerEvent extends MouseEvent {
+    globalThis.PointerEvent = class PointerEvent extends MouseEvent {
       constructor(type, props = {}) {
         super(type, props);
         Object.assign(this, props);

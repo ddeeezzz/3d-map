@@ -15,7 +15,7 @@
  * - DebugPanel：开发环境的调试面板
  */
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
 import "./App.css";
 import { initScene } from "./three/initScene";
@@ -29,20 +29,14 @@ import { buildSites } from "./three/buildSites";
 import { buildPois } from "./three/buildPois";
 import { buildRouteOverlay } from "./three/buildRouteOverlay";
 import DebugPanel from "./components/DebugPanel";
-/**
- * LibraryGuidePanel：左侧图书馆指南面板入口，负责展示图书馆服务信息
- */
 import LibraryGuidePanel from "./components/LibraryGuidePanel";
-/**
- * GymnasiumGuidePanel：左侧体育馆指南面板入口，承载体育馆使用指引
- */
 import GymnasiumGuidePanel from "./components/GymnasiumGuidePanel";
+import NavigationPanel from "./components/NavigationPanel";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
 import { solveRouteBetweenPoints } from "./lib/roadGraph";
 import { findPoiByName } from "./lib/poiIndex";
 import { attachBuildingPicking } from "./three/interactions/buildingPicking";
-import { attachWaterPicking } from "./three/interactions/waterPicking";
 import { attachRiverPicking } from "./three/interactions/riverPicking";
 import { attachRoadPicking } from "./three/interactions/roadPicking";
 import { attachBoundaryPicking } from "./three/interactions/boundaryPicking";
@@ -77,6 +71,9 @@ function App() {
   const poiScaleListenerRef = useRef(null);
   const routeOverlayRef = useRef(null);
   const routeDebugGroupRef = useRef(null);
+  const poiLayerRef = useRef(null);
+  const poiSpriteHighlightRef = useRef(new Map());
+  const modelHighlightRef = useRef(new Map());
 
   /**
    * 交互拾取事件处理器的清理函数或实例引用
@@ -106,28 +103,31 @@ function App() {
    * 参数：object - 需要释放的 Object3D
    * 返回：无
    */
-  const disposeThreeObject = (object) => {
-    if (!object) {
-      return;
-    }
-    if (object.geometry?.dispose) {
-      object.geometry.dispose();
-    }
-    if (Array.isArray(object.material)) {
-      object.material.forEach((mat) => mat?.dispose?.());
-    } else if (object.material?.dispose) {
-      object.material.dispose();
-    }
-    if (Array.isArray(object.children) && object.children.length > 0) {
-      object.children.forEach((child) => disposeThreeObject(child));
-    }
-  };
+  const disposeThreeObject = useCallback((object) => {
+    const disposeRecursively = (target) => {
+      if (!target) {
+        return;
+      }
+      if (target.geometry?.dispose) {
+        target.geometry.dispose();
+      }
+      if (Array.isArray(target.material)) {
+        target.material.forEach((mat) => mat?.dispose?.());
+      } else if (target.material?.dispose) {
+        target.material.dispose();
+      }
+      if (Array.isArray(target.children) && target.children.length > 0) {
+        target.children.forEach((child) => disposeRecursively(child));
+      }
+    };
+    disposeRecursively(object);
+  }, []);
 
   /**
    * removeRouteDebug：清除路线调试折线 Group
    * 场景同步：从所属父节点移除并释放全部子级资源
    */
-  const removeRouteDebug = () => {
+  const removeRouteDebug = useCallback(() => {
     if (!routeDebugGroupRef.current) {
       return;
     }
@@ -137,13 +137,13 @@ function App() {
     routeDebugGroupRef.current.clear?.();
     routeDebugGroupRef.current.parent?.remove(routeDebugGroupRef.current);
     routeDebugGroupRef.current = null;
-  };
+  }, [disposeThreeObject]);
 
   /**
    * drawRouteDebug：根据 pointPath 构建调试折线
    * 参数：pointPath - 包含 worldX/worldZ 的数组，用于验证路线对齐
    */
-  const drawRouteDebug = (pointPath = []) => {
+  const drawRouteDebug = useCallback((pointPath = []) => {
     removeRouteDebug();
     if (!Array.isArray(pointPath) || pointPath.length < 2) {
       return;
@@ -179,7 +179,99 @@ function App() {
     }
     host.add(debugGroup);
     routeDebugGroupRef.current = debugGroup;
-  };
+  }, [disposeThreeObject, removeRouteDebug]);
+
+  const findMeshByStableId = useCallback((group, stableId) => {
+    if (!group || !stableId) return null;
+    const stack = [...(group.children || [])];
+    while (stack.length > 0) {
+      const current = stack.pop();
+      if (current?.userData?.stableId === stableId) {
+        return current;
+      }
+      if (current?.children?.length) {
+        stack.push(...current.children);
+      }
+    }
+    return null;
+  }, []);
+
+  const findMeshByModelInfo = useCallback(
+    (modelInfo) => {
+      if (!modelInfo || !modelInfo.id) return null;
+      const targetId = modelInfo.id;
+      const type = modelInfo.type || "building";
+      switch (type) {
+        case "building":
+          return findMeshByStableId(buildingGroupRef.current, targetId);
+        case "road":
+          return findMeshByStableId(roadsGroupRef.current, targetId);
+        case "site":
+          return findMeshByStableId(sitesGroupRef.current, targetId);
+        case "water":
+        case "waterway":
+          return (
+            findMeshByStableId(waterGroupRef.current, targetId) ||
+            findMeshByStableId(waterwayGroupRef.current, targetId)
+          );
+        default:
+          return (
+            findMeshByStableId(buildingGroupRef.current, targetId) ||
+            findMeshByStableId(roadsGroupRef.current, targetId) ||
+            findMeshByStableId(sitesGroupRef.current, targetId) ||
+            findMeshByStableId(waterGroupRef.current, targetId) ||
+            findMeshByStableId(waterwayGroupRef.current, targetId)
+          );
+      }
+    },
+    [findMeshByStableId]
+  );
+
+  const restorePoiHighlight = useCallback((poiId) => {
+    const spriteHighlights = poiSpriteHighlightRef.current;
+    const cached = spriteHighlights.get(poiId);
+    if (!cached) {
+      return;
+    }
+    const { sprite, material } = cached;
+    if (sprite) {
+      sprite.material.dispose?.();
+      sprite.material = material;
+    } else {
+      material?.dispose?.();
+    }
+    spriteHighlights.delete(poiId);
+  }, []);
+
+  const restoreAllPoiHighlights = useCallback(() => {
+    const spriteHighlights = poiSpriteHighlightRef.current;
+    Array.from(spriteHighlights.keys()).forEach((poiId) =>
+      restorePoiHighlight(poiId)
+    );
+  }, [restorePoiHighlight]);
+
+  const restoreModelHighlight = useCallback((poiId) => {
+    const meshHighlights = modelHighlightRef.current;
+    const cached = meshHighlights.get(poiId);
+    if (!cached) {
+      return;
+    }
+    const { mesh, material } = cached;
+    if (mesh) {
+      mesh.material.dispose?.();
+      mesh.material = material;
+    } else {
+      material?.dispose?.();
+    }
+    meshHighlights.delete(poiId);
+  }, []);
+
+  const restoreAllModelHighlights = useCallback(() => {
+    const meshHighlights = modelHighlightRef.current;
+    Array.from(meshHighlights.keys()).forEach((poiId) =>
+      restoreModelHighlight(poiId)
+    );
+  }, [restoreModelHighlight]);
 
   /**
    * 从 Zustand store 读取全局状态
@@ -213,12 +305,101 @@ const highlightedRoutePath = useSceneStore(
 const highlightedRouteMeta = useSceneStore(
   (state) => state.highlightedRouteMeta
 );
+const highlightedLocationIds = useSceneStore(
+  (state) => state.highlightedLocationIds
+);
+const highlightedModelIds = useSceneStore(
+  (state) => state.highlightedModelIds
+);
+
+useEffect(() => {
+  const spriteHighlights = poiSpriteHighlightRef.current;
+  const meshHighlights = modelHighlightRef.current;
+  const poiHighlightColor =
+    config.highlight?.navigation?.poiLabel ?? "#ffd700";
+  const modelHighlightColor =
+    config.highlight?.navigation?.model ?? "#ffd700";
+
+  const activePoiIds = highlightedLocationIds
+    ? Array.from(highlightedLocationIds)
+    : [];
+  const activePoiSet = new Set(activePoiIds);
+
+  spriteHighlights.forEach((_value, poiId) => {
+    if (!activePoiSet.has(poiId)) {
+      restorePoiHighlight(poiId);
+    }
+  });
+
+  activePoiIds.forEach((poiId) => {
+    if (spriteHighlights.has(poiId)) {
+      return;
+    }
+    const sprite = poiLayerRef.current?.getPoiDetail?.(poiId)?.sprite;
+    if (!sprite || !sprite.material) {
+      return;
+    }
+    const originalMaterial = sprite.material;
+    const highlightMaterial = originalMaterial.clone();
+    if (highlightMaterial.color) {
+      highlightMaterial.color = new THREE.Color(poiHighlightColor);
+    }
+    sprite.material = highlightMaterial;
+    spriteHighlights.set(poiId, { sprite, material: originalMaterial });
+  });
+
+  const modelEntries =
+    highlightedModelIds instanceof Map
+      ? Array.from(highlightedModelIds.entries())
+      : [];
+  const activeModelPoiIds = new Set(modelEntries.map(([poiId]) => poiId));
+
+  meshHighlights.forEach((_value, poiId) => {
+    if (!activeModelPoiIds.has(poiId)) {
+      restoreModelHighlight(poiId);
+    }
+  });
+
+  modelEntries.forEach(([poiId, modelInfo]) => {
+    if (meshHighlights.has(poiId)) {
+      return;
+    }
+    const mesh = findMeshByModelInfo(modelInfo);
+    if (!mesh || !mesh.material) {
+      return;
+    }
+    const originalMaterial = mesh.material;
+    const highlightMaterial = originalMaterial.clone();
+    if (highlightMaterial.emissive) {
+      highlightMaterial.emissive = new THREE.Color(modelHighlightColor);
+      highlightMaterial.emissiveIntensity =
+        highlightMaterial.emissiveIntensity || 0.8;
+    } else if (highlightMaterial.color) {
+      highlightMaterial.color = new THREE.Color(modelHighlightColor);
+    }
+    mesh.material = highlightMaterial;
+    meshHighlights.set(poiId, { mesh, material: originalMaterial });
+  });
+}, [
+  highlightedLocationIds,
+  highlightedModelIds,
+  restorePoiHighlight,
+  restoreModelHighlight,
+  findMeshByModelInfo,
+]);
   const environmentSettings = useSceneStore(
     (state) => state.environmentSettings
   );
   useEffect(() => {
     useSceneStore.getState().markRoadGraphReady?.();
   }, []);
+
+useEffect(() => {
+  return () => {
+    restoreAllPoiHighlights();
+    restoreAllModelHighlights();
+  };
+}, [restoreAllPoiHighlights, restoreAllModelHighlights]);
 
 
   /**
@@ -318,6 +499,7 @@ const highlightedRouteMeta = useSceneStore(
         const routeOverlay = buildRouteOverlay(roadsGroup);
         const sitesGroup = buildSites(sceneContext.scene);
         const poiLayer = buildPois(sceneContext.scene);
+        poiLayerRef.current = poiLayer;
         const poiGroup = poiLayer?.group ?? poiLayer;
 
         buildingGroupRef.current = buildingGroup;
@@ -497,10 +679,10 @@ const highlightedRouteMeta = useSceneStore(
                 if (stableId) {
                   useSceneStore.getState().setSelectedSite(stableId);
                 }
-                logInfo(
-                  "场地交互",
-                  选中  ()
-                );
+                logInfo("场地交互", `选中 ${displayName ?? stableId ?? "未知场地"}`, {
+                  stableId,
+                  siteCategory: siteCategory ?? "未知分类",
+                });
               },
             })
           : null;
@@ -585,8 +767,9 @@ const highlightedRouteMeta = useSceneStore(
       removeRouteDebug();
       sitesGroupRef.current = null;
       poisGroupRef.current = null;
+      poiLayerRef.current = null;
     };
-  }, []);
+  }, [removeRouteDebug]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -663,7 +846,7 @@ const highlightedRouteMeta = useSceneStore(
       delete window.highlightRouteByPoiNames;
       delete window.clearRouteHighlight;
     };
-  }, []);
+  }, [drawRouteDebug, removeRouteDebug]);
 
   useEffect(() => {
     if (!routeOverlayRef.current) {
@@ -794,13 +977,15 @@ const highlightedRouteMeta = useSceneStore(
         <h1>西南交通大学犀浦校区</h1>
         <p>场景初始化完成后会自动加载建筑、围墙、水系与道路数据</p>
       </div>
+      {/* 导航面板 */}
+      <NavigationPanel />
       
       {/* 图书馆使用指南面板 */}
       <LibraryGuidePanel />
 
       {/* 体育馆使用指南面板 */}
       <GymnasiumGuidePanel />
-
+      
       {/* 调试面板：在开发环境中允许手动调整场景变换参数 */}
       <DebugPanel />
     </div>

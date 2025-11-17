@@ -148,10 +148,10 @@ describe("initScene", () => {
     expect(mockSetSize).toHaveBeenLastCalledWith(400, 300);
 
     ctx.start();
-    expect(global.requestAnimationFrame).toHaveBeenCalled();
+    expect(globalThis.requestAnimationFrame).toHaveBeenCalled();
 
     ctx.stop();
-    expect(global.cancelAnimationFrame).toHaveBeenCalled();
+    expect(globalThis.cancelAnimationFrame).toHaveBeenCalled();
   });
 
   it("throws when container missing", () => {

@@ -143,6 +143,8 @@ const getInitialData = () => ({
   highlightedRouteMeta: null,
   activeRoute: null,
   roadGraphReady: false,
+  highlightedLocationIds: new Set(),
+  highlightedModelIds: new Map(),
 });
 
 /**
@@ -156,7 +158,7 @@ const getInitialData = () => ({
  * 状态字段及操作方法说明详见下方
  */
 // useSceneStore：集中暴露校园导航需要的状态与 setter
-export const useSceneStore = create((set, get) => ({
+export const useSceneStore = create((set) => ({
   ...getInitialData(),
 
   /**
@@ -223,6 +225,51 @@ export const useSceneStore = create((set, get) => ({
    * 参数：roadIds - string[]，需要高亮的道路 stableId 集合
    */
   setHighlightedRoads: (roadIds) => set({ highlightedRoadIds: roadIds || [] }),
+
+  /**
+   * setHighlightedLocations：记录当前需要高亮的 POI 集合
+   * 参数：poiIds - string[]，地点 ID；modelRefs - Map/Object/Array，可选的实体映射
+   */
+  setHighlightedLocations: (poiIds = [], modelRefs = null) =>
+    set(() => {
+      const locationSet = new Set(Array.isArray(poiIds) ? poiIds : []);
+      const modelMap = new Map();
+      if (modelRefs instanceof Map) {
+        modelRefs.forEach((value, key) => {
+          if (key) {
+            modelMap.set(key, value);
+          }
+        });
+      } else if (Array.isArray(modelRefs)) {
+        modelRefs.forEach((entry) => {
+          if (entry?.poiId) {
+            modelMap.set(entry.poiId, {
+              type: entry.type,
+              id: entry.id,
+            });
+          }
+        });
+      } else if (modelRefs && typeof modelRefs === "object") {
+        Object.entries(modelRefs).forEach(([key, value]) => {
+          if (key) {
+            modelMap.set(key, value);
+          }
+        });
+      }
+      return {
+        highlightedLocationIds: locationSet,
+        highlightedModelIds: modelMap,
+      };
+    }),
+
+  /**
+   * clearHighlightedLocations：清空地点和模型高亮状态
+   */
+  clearHighlightedLocations: () =>
+    set(() => ({
+      highlightedLocationIds: new Set(),
+      highlightedModelIds: new Map(),
+    })),
 
   /**
    * setHighlightedRoutePath：记录当前路线节点序列

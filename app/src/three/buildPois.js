@@ -4,7 +4,7 @@
  * 职责：
  * - 读取 data/pois.geojson，生成 Three.js Sprite 作为文字精灵
  * - 控制 Sprite 可见性、缩放、用户数据，便于后续交互模块使用
- * - 向外暴露 setVisible / updateLabelScale / getPoiById 供 App.jsx 管理
+ * - 向外暴露 setVisible / updateLabelScale / getPoiDetail / getAllPoiDetails 供 App.jsx 管理
  */
 
 import * as THREE from "three";
@@ -255,6 +255,8 @@ export function buildPois(scene) {
     },
     updateLabelScale,
     getPoiById: (poiId) => poiMap.get(poiId) || null,
+    getPoiDetail: (poiId) => poiMap.get(poiId) || null,
+    getAllPoiDetails: () => Array.from(poiMap.values()),
     stats: {
       total: poiMap.size,
       independent: independentCount,

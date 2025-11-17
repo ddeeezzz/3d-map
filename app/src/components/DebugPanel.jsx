@@ -58,13 +58,6 @@ function DebugPanel() {
     useSceneStore((state) => state.poiStatistics) ?? { total: 0, independent: 0 };
 
   /**
-   * 在非开发环境中隐藏调试面板
-   */
-  if (!isDev) {
-    return null;
-  }
-
-  /**
    * rotationDeg：将弧度旋转转换为角度以显示
    * 使用 useMemo 缓存结果，避免不必要的重算
    * 依赖于 sceneTransform.rotationY：当其改变时重新计算
@@ -87,6 +80,13 @@ function DebugPanel() {
       },
     ];
   }, [environmentSettings.skybox]);
+
+  /**
+   * 在非开发环境中隐藏调试面板
+   */
+  if (!isDev) {
+    return null;
+  }
 
   /**
    * handleRotationChange：旋转角度 range 输入的改变处理

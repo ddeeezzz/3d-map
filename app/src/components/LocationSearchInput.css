@@ -1,0 +1,71 @@
+/* app/src/components/LocationSearchInput.css */
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  color: #f0f0f0;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #2c2c2e;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 5px;
+  z-index: 1001;
+}
+
+.suggestions-list li {
+  padding: 8px 12px;
+  color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.suggestions-list li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.selected-location-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  background-color: rgba(74, 144, 226, 0.2); /* 蓝色背景以示已选择 */
+  border: 1px solid rgba(74, 144, 226, 0.5);
+  border-radius: 5px;
+  color: #f0f0f0;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  color: #f0f0f0;
+  opacity: 0.7;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 5px;
+}
+
+.clear-button:hover {
+  opacity: 1;
+}

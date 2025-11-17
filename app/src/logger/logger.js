@@ -67,8 +67,10 @@ function formatExtra(extra) {
   }
   try {
     return `｜数据：${JSON.stringify(extra)}`;
-  } catch (_error) {
-    return `｜数据：${String(extra)}`;
+  } catch (error) {
+    const fallbackMessage =
+      error instanceof Error ? error.message : String(error);
+    return `｜数据：${String(extra)}｜序列化失败：${fallbackMessage}`;
   }
 }
 
