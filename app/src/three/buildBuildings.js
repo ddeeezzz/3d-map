@@ -216,18 +216,32 @@ export function buildBuildings(scene) {
     /**
      * 确定建筑高度
      * 优先级：
-     * 1. 覆盖配置 elevation
-     * 2. properties.elevation（清洗后补全的高度）
-     * 3. config.heights.默认（全局默认）
-     * 4. 10（最终保底值）
-     * heightOffset：在最终高度基础上叠加
+     * 1. config.buildingOverrides.byName：elevation、heightOffset（最高优先）
+     * 2. config.heights：先尝试按分类查表（若不存在则跳过）
+     * 3. properties.elevation：数据清洗阶段写入的高度
+     * 4. config.heights.默认：全局默认高度（最低优先级）
+     * 5. 10：兜底，防止高度缺失
      */
-    let height = Number(props.elevation);
-    if (!Number.isFinite(height) || height <= 0) {
-      height = config.heights.默认 || 10;
-    }
+    const category = props.category || "默认";
+    let height;
     if (Number.isFinite(override?.elevation)) {
       height = Number(override.elevation);
+    }
+    if (!Number.isFinite(height)) {
+      const categoryHeight = config.heights?.[category];
+      if (Number.isFinite(categoryHeight)) {
+        height = Number(categoryHeight);
+      }
+    }
+    if (!Number.isFinite(height)) {
+      const elevationFromData = Number(props.elevation);
+      if (Number.isFinite(elevationFromData) && elevationFromData > 0) {
+        height = elevationFromData;
+      }
+    }
+    if (!Number.isFinite(height) || height <= 0) {
+      const defaultHeight = Number(config.heights?.默认);
+      height = Number.isFinite(defaultHeight) && defaultHeight > 0 ? defaultHeight : 10;
     }
     if (Number.isFinite(override?.heightOffset)) {
       height += Number(override.heightOffset);
@@ -241,7 +255,6 @@ export function buildBuildings(scene) {
      * 用于统计报告和渲染时的视觉区分
      * 覆盖配置 color 优先
      */
-    const category = props.category || "默认";
     const color = override?.color || determineColor(category);
 
     /**

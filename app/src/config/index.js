@@ -25,8 +25,8 @@ export const config = {
    * - 默认: 灰色（#999999）- 未分类建筑的降级方案
    */
   colors: {
-    教学楼: "#4A90E2",
-    宿舍: "#F5A623",
+    教学楼: "#6db1ff",
+    宿舍: "#ffaa00",
     体育馆: "#50E3C2",
     行政楼: "#B8E986",
     默认: "#606060",
@@ -57,13 +57,13 @@ export const config = {
    * - 默认: 10m - 未知建筑的保守估计
    */
   heights: {
-    "1层": 4,
-    "2层": 8,
-    "3层": 12,
-    教学楼: 18,
-    宿舍: 15,
-    体育馆: 12,
-    默认: 10,
+    "1层": 6,
+    "2层": 12,
+    "3层": 24,
+    教学楼: 36,
+    宿舍: 30,
+    体育馆: 24,
+    默认: 15,
     site: 2,
   },
 
@@ -79,7 +79,7 @@ export const config = {
    */
   buildingOverrides: {
     byName: {
-      "图书馆": { color: "#8B5CF6", elevation: 32, opacity: 0.65 },
+      "西南交通大学犀浦校区图书馆": { color: "#c5acff", elevation: 40, opacity: 0.65 },
     },
   },
 
@@ -148,11 +148,11 @@ export const config = {
    */
   boundary: {
     width: 1,
-    height: 20,
+    height: 30,
     baseY: -11,
     holeInset: 0.35,
-    gateWidth: 6,
-    gateDepth: 3,
+    gateGapWidth: 10,
+    gateSnapDistance: 50,
   },
 
   /**
@@ -311,7 +311,7 @@ export const config = {
   environment: {
     enabled: true,
     skybox: "citrus_orchard_road_puresky_4k.hdr",
-    exposure: 1,
+    exposure: 1.2,
     toneMapping: "ACESFilmic",
     skyboxes: [
       {

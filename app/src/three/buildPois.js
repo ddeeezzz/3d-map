@@ -37,6 +37,103 @@ const defaultPoiStyle = {
   renderOrder: 300,
 };
 
+/**
+ * 根据建筑名称查找渲染覆盖配置
+ * @param {string} name 建筑在 GeoJSON 中的 name 字段
+ * @returns {Record<string, any> | null} 命中的覆盖对象
+ */
+function resolveBuildingOverrideByName(name) {
+  if (!name) return null;
+  const overrides = config.buildingOverrides?.byName;
+  if (!overrides) return null;
+  return overrides[name.trim()] || null;
+}
+
+/**
+ * 依据建筑属性计算高度，保持与 buildBuildings.js 一致的优先级
+ * @param {Record<string, any>} properties 建筑要素的 properties
+ * @returns {number} 该建筑的渲染高度（米）
+ */
+function computeBuildingHeight(properties = {}) {
+  const override = resolveBuildingOverrideByName(properties.name);
+  const category = properties.category || "默认";
+  let height;
+
+  if (Number.isFinite(override?.elevation)) {
+    height = Number(override.elevation);
+  }
+  if (!Number.isFinite(height)) {
+    const categoryHeight = config.heights?.[category];
+    if (Number.isFinite(categoryHeight)) {
+      height = Number(categoryHeight);
+    }
+  }
+  if (!Number.isFinite(height)) {
+    const elevationFromData = Number(properties.elevation);
+    if (Number.isFinite(elevationFromData) && elevationFromData > 0) {
+      height = elevationFromData;
+    }
+  }
+  if (!Number.isFinite(height) || height <= 0) {
+    const defaultHeight = Number(config.heights?.默认);
+    height = Number.isFinite(defaultHeight) && defaultHeight > 0 ? defaultHeight : 10;
+  }
+  if (Number.isFinite(override?.heightOffset)) {
+    height += Number(override.heightOffset);
+  }
+  if (!Number.isFinite(height) || height <= 0) {
+    height = 10;
+  }
+  return height;
+}
+
+/**
+ * 建筑高度索引：key 可以是 stableId / id / feature.id
+ * @returns {Map<string, number>} 预先构建的高度查找表
+ */
+const buildingHeightIndex = (() => {
+  const index = new Map();
+  (campusData.features || []).forEach((feature) => {
+    const properties = feature.properties || {};
+    if (properties.featureType !== "building") {
+      return;
+    }
+    const height = computeBuildingHeight(properties);
+    const candidateKeys = [
+      properties.stableId,
+      properties.id,
+      feature.id,
+    ].filter(Boolean);
+    candidateKeys.forEach((key) => {
+      if (!index.has(key)) {
+        index.set(key, height);
+      }
+    });
+  });
+  return index;
+})();
+
+/**
+ * 计算 POI 标签的基准高度
+ * @param {Record<string, any>} properties POI 要素属性
+ * @returns {number} 标签摆放用的 y 值（米）
+ */
+function resolvePoiBaseElevation(properties = {}) {
+  const parentType = properties.parentType || properties.labelTargetType;
+  const parentId = properties.parentId;
+  if (parentType === "building" && parentId) {
+    const buildingHeight = buildingHeightIndex.get(parentId);
+    if (Number.isFinite(buildingHeight)) {
+      return buildingHeight;
+    }
+  }
+  const rawElevation = Number(properties.elevation);
+  if (Number.isFinite(rawElevation)) {
+    return rawElevation;
+  }
+  return 0;
+}
+
 /** 将配置与默认值合并 */
 function resolvePoiStyle() {
   const style = config.poi || {};
@@ -179,11 +276,9 @@ function createPoiSprite(feature, style, origin) {
   const baseWidth = materialInfo.width * spriteScale;
   const baseHeight = materialInfo.height * spriteScale;
   sprite.scale.set(baseWidth, baseHeight, 1);
-  sprite.position.set(
-    worldX,
-    Number(properties.elevation ?? 0) + (style.labelHeight ?? defaultPoiStyle.labelHeight),
-    worldZ
-  );
+  const baseElevation = resolvePoiBaseElevation(properties);
+  const labelHeightOffset = style.labelHeight ?? defaultPoiStyle.labelHeight;
+  sprite.position.set(worldX, baseElevation + labelHeightOffset, worldZ);
   const spriteRenderOrder = style.renderOrder ?? defaultPoiStyle.renderOrder; // 设置较高渲染优先级，避免被遮挡
   sprite.renderOrder = spriteRenderOrder;
   sprite.userData = {

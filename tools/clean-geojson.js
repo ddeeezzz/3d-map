@@ -466,7 +466,8 @@ function attachGatesToBoundary(
   });
 
   const snapDistance =
-    Math.max(boundaryConfig.width || 1, boundaryConfig.gateDepth || 3) * 4;
+    Number(boundaryConfig.gateSnapDistance) ||
+    Math.max(boundaryConfig.width || 1, boundaryConfig.gateDepth || 3) * 17;
   const matches = [];
   const remaining = [];
 

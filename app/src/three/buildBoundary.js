@@ -240,6 +240,349 @@ function buildBoundaryGeometry(points, thickness, height) {
   return geometry;
 }
 
+/**
+ * 计算环的长度、分段等辅助信息，供门洞裁剪使用
+ * @param {THREE.Vector2[]} ringPoints 已投影的环点
+ * @returns {object|null} 包含 points、segmentLengths、cumulativeDistances、totalLength
+ */
+function computeRingMetrics(ringPoints) {
+  if (!Array.isArray(ringPoints) || ringPoints.length < 3) {
+    return null;
+  }
+  const points = ringPoints
+    .map((point) =>
+      point instanceof THREE.Vector2 ? point.clone() : new THREE.Vector2(point.x, point.y),
+    )
+    .filter(Boolean);
+  const validPoints = [];
+  points.forEach((point, index) => {
+    const prev = index === 0 ? points[points.length - 1] : points[index - 1];
+    if (!prev || !point) return;
+    if (point.distanceToSquared(prev) <= EPSILON) {
+      return;
+    }
+    validPoints.push(point);
+  });
+  if (validPoints.length < 3) {
+    return null;
+  }
+  const segmentLengths = [];
+  const cumulativeDistances = [0];
+  let totalLength = 0;
+  for (let i = 0; i < validPoints.length; i += 1) {
+    const current = validPoints[i];
+    const next = validPoints[(i + 1) % validPoints.length];
+    const segmentLength = current.distanceTo(next);
+    segmentLengths.push(segmentLength);
+    totalLength += segmentLength;
+    cumulativeDistances.push(totalLength);
+  }
+  if (totalLength <= EPSILON) {
+    return null;
+  }
+  return {
+    points: validPoints,
+    segmentLengths,
+    cumulativeDistances,
+    totalLength,
+  };
+}
+
+function projectPointOntoRing(metrics, targetPoint) {
+  if (!metrics || !targetPoint) {
+    return null;
+  }
+  let best = null;
+  metrics.points.forEach((point, index) => {
+    const nextPoint = metrics.points[(index + 1) % metrics.points.length];
+    const result = projectPointToSegment(targetPoint, point, nextPoint);
+    if (!best || result.distanceSq < best.distanceSq) {
+      best = {
+        segmentIndex: index,
+        t: result.t,
+        distanceAlong:
+          metrics.cumulativeDistances[index] + result.t * metrics.segmentLengths[index],
+        projectedPoint: result.point,
+        distanceSq: result.distanceSq,
+      };
+    }
+  });
+  return best;
+}
+
+function projectPointToSegment(point, start, end) {
+  const segment = new THREE.Vector2().subVectors(end, start);
+  const lengthSq = segment.lengthSq();
+  if (lengthSq <= EPSILON) {
+    return {
+      point: start.clone(),
+      t: 0,
+      distanceSq: point.distanceToSquared(start),
+    };
+  }
+  const clampedT = THREE.MathUtils.clamp(
+    new THREE.Vector2().subVectors(point, start).dot(segment) / lengthSq,
+    0,
+    1,
+  );
+  const projected = start.clone().add(segment.multiplyScalar(clampedT));
+  return {
+    point: projected,
+    t: clampedT,
+    distanceSq: projected.distanceToSquared(point),
+  };
+}
+
+function normalizeDistance(value, totalLength) {
+  if (!(totalLength > EPSILON)) {
+    return 0;
+  }
+  let result = value % totalLength;
+  if (result < 0) {
+    result += totalLength;
+  }
+  if (result === totalLength) {
+    return 0;
+  }
+  return result;
+}
+
+function mergeIntervals(intervals) {
+  if (!Array.isArray(intervals) || !intervals.length) {
+    return [];
+  }
+  const sorted = [...intervals].sort((a, b) => a.start - b.start);
+  const merged = [];
+  sorted.forEach((interval) => {
+    if (!merged.length) {
+      merged.push({ ...interval });
+      return;
+    }
+    const last = merged[merged.length - 1];
+    if (interval.start <= last.end + EPSILON) {
+      last.end = Math.max(last.end, interval.end);
+    } else {
+      merged.push({ ...interval });
+    }
+  });
+  return merged;
+}
+
+function invertIntervals(intervals, totalLength) {
+  if (!(totalLength > EPSILON)) {
+    return [];
+  }
+  if (!intervals.length) {
+    return [{ start: 0, end: totalLength }];
+  }
+  const solids = [];
+  let cursor = 0;
+  intervals.forEach((interval) => {
+    if (interval.start > cursor + EPSILON) {
+      solids.push({ start: cursor, end: interval.start });
+    }
+    cursor = Math.max(cursor, interval.end);
+  });
+  if (cursor < totalLength - EPSILON) {
+    solids.push({ start: cursor, end: totalLength });
+  }
+  return solids;
+}
+
+function sampleRingAtDistance(metrics, distance) {
+  if (!metrics) return null;
+  const total = metrics.totalLength;
+  if (!(total > EPSILON)) return null;
+  let target = distance;
+  if (target < 0 || target > total) {
+    target = normalizeDistance(target, total);
+  }
+  if (target === total) {
+    target = 0;
+  }
+  for (let i = 0; i < metrics.segmentLengths.length; i += 1) {
+    const startDist = metrics.cumulativeDistances[i];
+    const endDist = metrics.cumulativeDistances[i + 1];
+    if (target <= endDist + EPSILON) {
+      const segmentLength = endDist - startDist;
+      const ratio = segmentLength > EPSILON ? (target - startDist) / segmentLength : 0;
+      const startPoint = metrics.points[i];
+      const endPoint = metrics.points[(i + 1) % metrics.points.length];
+      const point = startPoint.clone().lerp(endPoint, THREE.MathUtils.clamp(ratio, 0, 1));
+      return {
+        point,
+        segmentIndex: i,
+        ratio: THREE.MathUtils.clamp(ratio, 0, 1),
+        distance: target,
+      };
+    }
+  }
+  return {
+    point: metrics.points[0].clone(),
+    segmentIndex: 0,
+    ratio: 0,
+    distance: 0,
+  };
+}
+
+function extractSegmentPoints(metrics, startDistance, endDistance) {
+  if (!metrics) return [];
+  if (endDistance - startDistance <= EPSILON) return [];
+  const result = [];
+  const startSample = sampleRingAtDistance(metrics, startDistance);
+  const endSample = sampleRingAtDistance(metrics, endDistance);
+  if (!startSample || !endSample) {
+    return [];
+  }
+  result.push(startSample.point.clone());
+  let currentIndex = startSample.segmentIndex;
+  let currentDistance = metrics.cumulativeDistances[currentIndex + 1];
+  while (currentDistance < endDistance - EPSILON) {
+    const vertexIndex = (currentIndex + 1) % metrics.points.length;
+    result.push(metrics.points[vertexIndex].clone());
+    currentIndex += 1;
+    if (currentIndex >= metrics.segmentLengths.length) {
+      break;
+    }
+    currentDistance = metrics.cumulativeDistances[currentIndex + 1];
+  }
+  if (endSample.point.distanceToSquared(result[result.length - 1]) > EPSILON) {
+    result.push(endSample.point.clone());
+  }
+  return result;
+}
+
+function buildOpenStripGeometry(points, thickness, height) {
+  if (!Array.isArray(points) || points.length < 2) return null;
+  if (!(thickness > 0) || !(height > 0)) return null;
+  const halfWidth = thickness / 2;
+  const leftSide = [];
+  const rightSide = [];
+  let fallbackNormal = new THREE.Vector2(0, 1);
+  for (let i = 0; i < points.length; i += 1) {
+    const current = points[i];
+    const prev = i === 0 ? null : points[i - 1];
+    const next = i === points.length - 1 ? null : points[i + 1];
+    let dirPrev = prev ? new THREE.Vector2().subVectors(current, prev) : null;
+    let dirNext = next ? new THREE.Vector2().subVectors(next, current) : null;
+    if (dirPrev && dirPrev.lengthSq() <= EPSILON) {
+      dirPrev = null;
+    }
+    if (dirNext && dirNext.lengthSq() <= EPSILON) {
+      dirNext = null;
+    }
+    if (!dirPrev && dirNext) {
+      dirPrev = dirNext.clone();
+    }
+    if (!dirNext && dirPrev) {
+      dirNext = dirPrev.clone();
+    }
+    if (!dirPrev || !dirNext) {
+      dirPrev = fallbackNormal.clone();
+      dirNext = fallbackNormal.clone();
+    } else {
+      dirPrev.normalize();
+      dirNext.normalize();
+    }
+    const normalPrev = new THREE.Vector2(-dirPrev.y, dirPrev.x);
+    const normalNext = new THREE.Vector2(-dirNext.y, dirNext.x);
+    let normal = new THREE.Vector2().addVectors(normalPrev, normalNext);
+    if (normal.lengthSq() <= EPSILON) {
+      normal = fallbackNormal.clone();
+    } else {
+      normal.normalize();
+      fallbackNormal = normal.clone();
+    }
+    const offset = normal.clone().multiplyScalar(halfWidth);
+    leftSide.push(new THREE.Vector2().addVectors(current, offset));
+    rightSide.push(new THREE.Vector2().subVectors(current, offset));
+  }
+  const contour = [...leftSide, ...rightSide.reverse()];
+  if (!contour.length) return null;
+  if (!contour[0].equals(contour[contour.length - 1])) {
+    contour.push(contour[0].clone());
+  }
+  const shape = new THREE.Shape(contour);
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: height,
+    bevelEnabled: false,
+  });
+  geometry.rotateX(-Math.PI / 2);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+function buildWallSegmentsWithGateGaps({
+  ringPoints,
+  gates,
+  origin,
+  gapWidth,
+  stripThickness,
+  wallHeight,
+}) {
+  if (!Array.isArray(ringPoints) || ringPoints.length < 3) return null;
+  if (!Array.isArray(gates) || !gates.length) return null;
+  if (!(gapWidth > 0) || !(stripThickness > 0) || !(wallHeight > 0)) return null;
+  const metrics = computeRingMetrics(ringPoints);
+  if (!metrics) return null;
+  const intervals = [];
+  const appliedGateIds = [];
+  const halfGap = gapWidth / 2;
+  gates.forEach((gate) => {
+    if (!gate || !Array.isArray(gate.center) || gate.center.length < 2) {
+      return;
+    }
+    const [gx, gy] = projectCoordinate(gate.center, origin);
+    if (!Number.isFinite(gx) || !Number.isFinite(gy)) {
+      return;
+    }
+    const projection = projectPointOntoRing(metrics, new THREE.Vector2(gx, gy));
+    if (!projection) {
+      return;
+    }
+    appliedGateIds.push(gate.stableId || gate.id || null);
+    const start = projection.distanceAlong - halfGap;
+    const end = projection.distanceAlong + halfGap;
+    const normalizedStart = normalizeDistance(start, metrics.totalLength);
+    const normalizedEnd = normalizeDistance(end, metrics.totalLength);
+    if (normalizedEnd < normalizedStart) {
+      intervals.push({ start: normalizedStart, end: metrics.totalLength });
+      intervals.push({ start: 0, end: normalizedEnd });
+    } else {
+      intervals.push({ start: normalizedStart, end: normalizedEnd });
+    }
+  });
+  if (!intervals.length) {
+    return null;
+  }
+  const merged = mergeIntervals(intervals);
+  if (!merged.length) {
+    return null;
+  }
+  const solids = invertIntervals(merged, metrics.totalLength);
+  if (!solids.length) {
+    return null;
+  }
+  const geometries = [];
+  solids.forEach((segment) => {
+    const segmentPoints = extractSegmentPoints(metrics, segment.start, segment.end);
+    if (segmentPoints.length < 2) {
+      return;
+    }
+    const geometry = buildOpenStripGeometry(segmentPoints, stripThickness, wallHeight);
+    if (geometry) {
+      geometries.push(geometry);
+    }
+  });
+  if (!geometries.length) {
+    return null;
+  }
+  return {
+    geometries,
+    gateIds: appliedGateIds.filter(Boolean),
+  };
+}
+
 function computeSignedArea(points) {
   if (!Array.isArray(points) || points.length < 3) return 0;
   let area = 0;
@@ -518,12 +861,16 @@ export function buildBoundary(scene) {
   const rawBoundaryBaseY = Number(config.boundary?.baseY);
   const boundaryBaseY = Number.isFinite(rawBoundaryBaseY) ? rawBoundaryBaseY : 0;
   const boundaryGateWidth = Number(config.boundary?.gateWidth) || boundaryWidth;
-  const boundaryGateDepth = Number(config.boundary?.gateDepth) || boundaryWidth;
   const baseScale = SCENE_BASE_ALIGNMENT?.scale ?? 1;
   const stripThickness = boundaryWidth / baseScale;
   const wallThickness = (boundaryWidth + boundaryHoleInset) / baseScale;
   const gateWidthScaled = boundaryGateWidth / baseScale;
-  const gateDepthScaled = boundaryGateDepth / baseScale;
+  const gateDepthScaled = wallThickness;
+  /**
+   * 门洞缺口宽度读取配置，默认 15m，保持显著开口
+   */
+  const rawGateGapWidth = Number(config.boundary?.gateGapWidth) || 12;
+  const gateGapWidth = rawGateGapWidth / baseScale;
   const groundColor = config.ground?.color || "#fef3c7"; // 淡黄色地面颜色
   const rawGroundBaseY = Number(config.ground?.baseY);
   const groundBaseY = Number.isFinite(rawGroundBaseY) ? rawGroundBaseY : -4; // 地面 Y 坐标
@@ -590,6 +937,38 @@ export function buildBoundary(scene) {
           layerType: "boundaryGround",
         };
         group.add(groundMesh);
+      }
+
+      const gapResult =
+        gates.length && gateGapWidth > EPSILON
+          ? buildWallSegmentsWithGateGaps({
+              ringPoints: outerRing,
+              gates,
+              origin,
+              gapWidth: gateGapWidth,
+              stripThickness,
+              wallHeight: boundaryHeight,
+            })
+          : null;
+
+      if (gapResult?.geometries?.length) {
+        gapResult.geometries.forEach((geometry, segmentIndex) => {
+          const segmentMesh = new THREE.Mesh(geometry, material);
+          segmentMesh.position.y = boundaryBaseY;
+          segmentMesh.castShadow = false;
+          segmentMesh.receiveShadow = false;
+          segmentMesh.userData = {
+            stableId: `${props.stableId || feature.id || `boundary-${featureIndex}`}-${
+              segmentIndex + 1
+            }`,
+            name: props.name || "校园围墙",
+            boundaryType: props.boundaryType || "campus",
+            wallMode: "stripWithGateGap",
+            gateIds: gapResult.gateIds,
+          };
+          group.add(segmentMesh);
+        });
+        return;
       }
 
       const closedShapeResult =
