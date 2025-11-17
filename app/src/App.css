@@ -53,26 +53,129 @@
 }
 
 /**
- * .scene-overlay：场景标题和说明卡片
- * 位置：左上角（top: 24px, left: 24px）
- * 样式：玻璃态（毛玻璃背景 + 边框），适合大屏展示
+ * .top-container：顶部容器
+ * 包含场景标题和导航按钮组，水平排列
  * 
  * 属性说明：
  * - position: absolute：脱离文档流，悬浮在 canvas 上方
+ * - top: 24px：距离顶部 24px
+ * - left: 0, right: 0：左右撑满
+ * - padding: 0 24px：左右内边距
+ * - display: flex：水平排列
+ * - align-items: center：垂直居中
+ * - justify-content: flex-start：默认靠左排列，标题在左
+ * - gap: 16px：标题和按钮组之间的间距
+ * - width: 100%：占满宽度
+ */
+.top-container {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+/**
+ * .top-container::after：右侧占位元素（flex: 1）
+ * 用于平衡布局，让按钮组可以真正居中（通过绝对定位）
+ */
+.top-container::after {
+  content: '';
+  flex: 1;
+}
+
+ /**
+ * .scene-overlay：场景标题和说明卡片
+ * 位置：在 top-container 内，靠左显示
+ * 样式：玻璃态（毛玻璃背景 + 边框），适合大屏展示
+ * 
+ * 属性说明：
+ * - position: relative：在容器内正常流
+ * - flex-shrink: 0：不允许收缩，保持固定宽度
  * - backdrop-filter: blur(8px)：毛玻璃效果（需浏览器支持）
  * - border: 1px solid rgba(..., 0.22)：半透明边框
  * - box-shadow：阴影增强深度感
+ * - text-align: left：文本左对齐
  */
 .scene-overlay {
-  position: absolute;
-  top: 24px;
-  left: 24px;
+  position: relative;
+  flex-shrink: 0;
   padding: 16px 20px;
   border-radius: 12px;
   border: 1px solid rgba(226, 232, 240, 0.22);
   background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(8px);
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.45);
+  text-align: left;
+}
+
+/**
+ * .navigation-buttons-group：导航按钮组容器
+ * 水平排列三个导航按钮，在顶部容器中居中（不受标题宽度影响）
+ * 
+ * 属性说明：
+ * - display: flex：水平排列
+ * - gap: 12px：按钮之间的间距
+ * - flex-wrap: wrap：小屏幕时允许换行
+ * - justify-content: center：水平居中
+ * - position: absolute：绝对定位，相对于 top-container
+ * - left: 50% + transform: translateX(-50%)：水平居中
+ * - flex-shrink: 0：不允许收缩，保持按钮组宽度
+ */
+.navigation-buttons-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-shrink: 0;
+}
+
+/**
+ * 响应式设计：小屏幕时调整顶部容器和按钮布局
+ */
+@media (max-width: 768px) {
+  .top-container {
+    padding: 0 16px;
+    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .top-container::before,
+  .top-container::after {
+    display: none;
+  }
+  
+  .navigation-buttons-group {
+    width: 100%;
+    order: 2;
+    padding: 0;
+    flex: none;
+  }
+  
+  .scene-overlay {
+    order: 1;
+    padding: 12px 16px;
+    width: 100%;
+  }
+  
+  .scene-overlay h1 {
+    font-size: 1.1rem;
+  }
+  
+  .scene-overlay p {
+    font-size: 0.85rem;
+  }
 }
 
 /**

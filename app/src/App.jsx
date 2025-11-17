@@ -32,6 +32,7 @@ import DebugPanel from "./components/DebugPanel";
 import LibraryGuidePanel from "./components/LibraryGuidePanel";
 import GymnasiumGuidePanel from "./components/GymnasiumGuidePanel";
 import NavigationPanel from "./components/NavigationPanel";
+import RouteInfoPopup from "./components/RouteInfoPopup";
 import { logInfo, logError } from "./logger/logger";
 import { useSceneStore, SCENE_BASE_ALIGNMENT } from "./store/useSceneStore";
 import { solveRouteBetweenPoints } from "./lib/roadGraph";
@@ -982,19 +983,29 @@ useEffect(() => {
       {/* Three.js 渲染容器，canvas 将挂载到此处 */}
       <div ref={containerRef} className="scene-container" />
       
-      {/* 固定位置的场景标题和说明文字 */}
-      <div className="scene-overlay">
-        <h1>西南交通大学犀浦校区</h1>
-        <p>场景初始化完成后会自动加载建筑、围墙、水系与道路数据</p>
-      </div>
-      {/* 导航面板 */}
-      <NavigationPanel />
-      
-      {/* 图书馆使用指南面板 */}
-      <LibraryGuidePanel />
+      {/* 顶部容器：包含场景标题和导航按钮组 */}
+      <div className="top-container">
+        {/* 固定位置的场景标题和说明文字 */}
+        <div className="scene-overlay">
+          <h1>西南交通大学犀浦校区</h1>
+          <p>场景初始化完成后会自动加载建筑、围墙、水系与道路数据</p>
+        </div>
+        
+        {/* 导航按钮组 */}
+        <div className="navigation-buttons-group">
+          {/* 导航面板 */}
+          <NavigationPanel />
+          
+          {/* 图书馆使用指南面板 */}
+          <LibraryGuidePanel />
 
-      {/* 体育馆使用指南面板 */}
-      <GymnasiumGuidePanel />
+          {/* 体育馆使用指南面板 */}
+          <GymnasiumGuidePanel />
+        </div>
+      </div>
+      
+      {/* 路线信息弹窗 */}
+      <RouteInfoPopup sceneContext={sceneContextRef.current} />
       
       {/* 调试面板：在开发环境中允许手动调整场景变换参数 */}
       <DebugPanel />

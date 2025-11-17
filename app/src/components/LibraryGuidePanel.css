@@ -1,13 +1,10 @@
 /**
  * LibraryGuidePanel 样式
- * 定位在地图左侧，提供美观的浮动面板效果
+ * 定位在校内导航按钮右侧，提供美观的浮动面板效果
  */
 
 .library-guide-container {
-  position: fixed;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
   z-index: 1000;
 }
 
@@ -42,9 +39,8 @@
 .library-guide-panel {
   position: absolute;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%) translateX(0);
-  margin-left: 180px;
+  top: 100%;
+  margin-top: 12px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 12px;
@@ -57,11 +53,11 @@
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(-20px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) translateX(0);
+    transform: translateY(0);
   }
 }
 
@@ -152,23 +148,10 @@
   }
 
   .library-guide-panel {
-    margin-left: 0;
     left: 50%;
-    top: auto;
-    bottom: 80px;
     transform: translateX(-50%);
     min-width: 260px;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-50%) translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    max-width: calc(100vw - 40px);
   }
 
   .modal-content {

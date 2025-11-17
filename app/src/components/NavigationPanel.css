@@ -1,16 +1,8 @@
 /* app/src/components/NavigationPanel.css */
 
 .navigation-panel-container {
-  position: fixed;
-  top: 20px;
+  position: relative;
   z-index: 1000;
-  
-  /* 
-   * 核心定位逻辑：
-   * right 的值是右侧所有元素的宽度总和。
-   * 您需要根据实际情况微调 “图书馆” 和 “体育馆” 按钮的宽度值。
-   */
-  left: 750px;
 }
 
 /* 

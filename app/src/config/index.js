@@ -219,7 +219,7 @@ export const config = {
    * - baseY：平面放置的 y 坐标（米）
    */
   ground: {
-    color: "#fef3c7",
+    color: "#b1ada1",
     baseY: -10,
   },
 
@@ -259,8 +259,8 @@ export const config = {
       width: 10,
       height: 5,
       yOffset: 0,
-      color: "#FF5252",
-      opacity: 0.85,
+      color: "#ff0000",
+      opacity: 0.95,
       // 渲染层级：高于道路，低于 POI 标签
       renderOrder: 200,
     },
