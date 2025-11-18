@@ -69,7 +69,6 @@ const TransportSelector = () => {
 const NavigationPanel = () => {
   const {
     isPanelVisible,
-    panelPosition,
     startLocation,
     endLocation,
     setStartLocation,
@@ -146,10 +145,7 @@ const NavigationPanel = () => {
         <button ref={navButtonRef} onClick={() => togglePanel(navButtonRef)}>🧭 校内导航</button>
       </div>
       {isPanelVisible && (
-        <div
-          className="navigation-popup"
-          style={{ top: `${panelPosition.top}px`, left: `${panelPosition.left}px` }}
-        >
+        <div className="navigation-popup">
           <div className="input-wrapper">
             <span className="input-icon">📍</span>
             <LocationSearchInput

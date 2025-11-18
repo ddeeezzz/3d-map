@@ -7,9 +7,38 @@
  * 3. 提供开放时间、楼层功能分区、图书借阅/还书流程、违规与补救措施、座位预约功能入口
  */
 
+/** React 状态钩子：用于控制各类弹窗开关 */
 import { useState } from "react";
+/** React DOM Portal：将弹窗传送至 body，确保相对视口定位 */
+import { createPortal } from "react-dom";
+/** 全局场景状态：管理图书馆指南面板显隐 */
 import { useSceneStore } from "../store/useSceneStore";
+/** 样式文件：提供按钮、弹窗与内容布局 */
 import "./LibraryGuidePanel.css";
+
+/**
+ * ModalPortal 组件：将弹窗内容通过 Portal 渲染到 body，避免父级 transform 影响 fixed 定位
+ * @param {Object} props - 组件参数
+ * @param {JSX.Element} props.children - 弹窗内部结构
+ * @param {() => void} props.onClose - 点击遮罩时触发的关闭回调
+ * @param {string} props.contentClassName - 弹窗主体样式类，便于复用不同布局
+ * @returns {JSX.Element} Portal 结构
+ */
+function ModalPortal({ children, onClose, contentClassName }) {
+  return createPortal(
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className={contentClassName}
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 function LibraryGuidePanel() {
   const isOpen = useSceneStore((state) => state.guidePanelsVisible?.library);
@@ -97,8 +126,12 @@ function LibraryGuidePanel() {
 
       {/* 开放时间详情弹窗 */}
       {showOpeningHours && (
-        <div className="modal-overlay" onClick={() => setShowOpeningHours(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowOpeningHours(false);
+          }}
+          contentClassName="modal-content"
+        >
             <div className="modal-header">
               <h2>📅 图书馆开放时间</h2>
               <button className="modal-close-btn" onClick={() => setShowOpeningHours(false)}>
@@ -143,14 +176,17 @@ function LibraryGuidePanel() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 楼层功能分区详情弹窗 */}
       {showFloorLayout && (
-        <div className="modal-overlay" onClick={() => setShowFloorLayout(false)}>
-          <div className="modal-content floor-layout-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowFloorLayout(false);
+          }}
+          contentClassName="modal-content floor-layout-modal"
+        >
             <div className="modal-header">
               <h2>🏢 图书馆楼层功能分区</h2>
               <button className="modal-close-btn" onClick={() => setShowFloorLayout(false)}>
@@ -251,14 +287,17 @@ function LibraryGuidePanel() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 图书借阅/还书流程弹窗 */}
       {showBorrowReturn && (
-        <div className="modal-overlay" onClick={() => setShowBorrowReturn(false)}>
-          <div className="modal-content borrow-return-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowBorrowReturn(false);
+          }}
+          contentClassName="modal-content borrow-return-modal"
+        >
             <div className="modal-header">
               <h2>📖 图书借阅/还书流程</h2>
               <button className="modal-close-btn" onClick={() => setShowBorrowReturn(false)}>
@@ -378,14 +417,17 @@ function LibraryGuidePanel() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 座位预约弹窗 */}
       {showSeatReservation && (
-        <div className="modal-overlay" onClick={() => setShowSeatReservation(false)}>
-          <div className="modal-content seat-reservation-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowSeatReservation(false);
+          }}
+          contentClassName="modal-content seat-reservation-modal"
+        >
             <div className="modal-header">
               <h2>💺 座位预约指南</h2>
               <button className="modal-close-btn" onClick={() => setShowSeatReservation(false)}>
@@ -517,14 +559,17 @@ function LibraryGuidePanel() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 违规与补救措施弹窗 */}
       {showViolations && (
-        <div className="modal-overlay" onClick={() => setShowViolations(false)}>
-          <div className="modal-content violations-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowViolations(false);
+          }}
+          contentClassName="modal-content violations-modal"
+        >
             <div className="modal-header">
               <h2>⚠️ 违规行为界定与补救措施</h2>
               <button className="modal-close-btn" onClick={() => setShowViolations(false)}>
@@ -774,8 +819,7 @@ function LibraryGuidePanel() {
                 <p className="contact-note">若有违规处理相关疑问，可工作日 9:00-17:00 致电咨询</p>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
     </div>
   );

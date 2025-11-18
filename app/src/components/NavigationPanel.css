@@ -2,33 +2,28 @@
 
 .navigation-panel-container {
   position: relative;
+  display: inline-block;
   z-index: 1000;
 }
 
-/* 
- * 确保所有按钮样式统一。
- * 您需要将这些值也应用到另外两个按钮的 CSS 规则中。
+/*
+ * 确保所有按钮样式统一
+ * 您需要将这些值也应用到另外两个按钮的 CSS 规则中
  */
 .navigation-panel-container button {
-  display: flex; /* 使用flex让内容居中 */
+  display: flex;
   align-items: center;
   justify-content: center;
-  
-  padding: 12px 20px; /* 统一内边距 */
+  padding: 12px 20px;
   border: none;
   border-radius: 8px;
   color: white;
   cursor: pointer;
-  
-  /* 统一字体样式 */
   font-size: 16px;
   font-weight: 600;
-  
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
-  
-  /* 设置按钮颜色 */
-  background-color: #007AFF; /* 蓝色 */
+  background-color: #007aff;
 }
 
 .navigation-panel-container button:hover {
@@ -37,9 +32,11 @@
 }
 
 /* --- 弹出面板的样式 --- */
-/* (这部分来自您提供的弹出面板CSS) */
 .navigation-popup {
-  position: fixed; /* 必须是 fixed 才能使用 store 计算出的 top/left 坐标 */
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 12px);
+  transform: translateX(-50%);
   width: 280px;
   background-color: rgba(28, 28, 30, 0.9);
   padding: 15px;
@@ -77,7 +74,7 @@
   font-size: 14px;
 }
 
-/* --- Transport Selector 的样式 (无需修改) --- */
+/* --- Transport Selector 的样式 --- */
 .transport-selector {
   position: relative;
 }

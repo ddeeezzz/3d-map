@@ -148,7 +148,7 @@
   animation: fadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
+  @keyframes fadeIn {
   from {
     opacity: 0;
   }
@@ -160,29 +160,29 @@
 /* 弹窗主体 */
 .modal-content {
   position: fixed;
-  left: 500px;
-  top: 55%;
-  transform: translateY(-50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background: white;
   border-radius: 16px;
   padding: 0;
-  width: 750px;
+  width: min(90vw, 750px);
   max-height: 80vh;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: slideRight 0.3s ease;
+  animation: slideDown 0.3s ease;
   display: flex;
   flex-direction: column;
 }
 
-@keyframes slideRight {
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-50%) translateX(-30px);
+    transform: translate(-50%, -60%);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) translateX(0);
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -1013,13 +1013,6 @@
     transform: translateX(-50%);
     min-width: 260px;
     max-width: calc(100vw - 40px);
-  }
-
-  .modal-content {
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 500px;
   }
 
   .booking-methods {

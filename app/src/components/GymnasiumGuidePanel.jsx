@@ -7,9 +7,38 @@
  * 3. 提供场馆功能分区与核心设施、体质健康测试专项安排、场馆日常使用规范与预约流程、服务与应急保障功能入口
  */
 
+/** React 状态钩子：管理各体育馆弹窗开关 */
 import { useState } from "react";
+/** React DOM Portal：解决弹窗 fixed 定位受父级 transform 影响的问题 */
+import { createPortal } from "react-dom";
+/** 全局场景 store：同步体育馆指南面板显隐 */
 import { useSceneStore } from "../store/useSceneStore";
+/** 样式文件：提供按钮、弹窗与内容排版 */
 import "./GymnasiumGuidePanel.css";
+
+/**
+ * ModalPortal 组件：通过 createPortal 将弹窗挂载至 body，保持相对视口定位
+ * @param {Object} props - 组件参数
+ * @param {JSX.Element} props.children - 弹窗内部结构
+ * @param {() => void} props.onClose - 点击遮罩时需执行的关闭逻辑
+ * @param {string} props.contentClassName - 弹窗主体额外样式类
+ * @returns {JSX.Element} Portal 包裹的弹窗节点
+ */
+function ModalPortal({ children, onClose, contentClassName }) {
+  return createPortal(
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className={contentClassName}
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 function GymnasiumGuidePanel() {
   const isOpen = useSceneStore((state) => state.guidePanelsVisible?.gymnasium);
@@ -88,8 +117,12 @@ function GymnasiumGuidePanel() {
 
       {/* 场馆功能分区与核心设施弹窗 */}
       {showFacilityZoning && (
-        <div className="modal-overlay" onClick={() => setShowFacilityZoning(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowFacilityZoning(false);
+          }}
+          contentClassName="modal-content"
+        >
             <div className="modal-header">
               <h2>🏢 场馆功能分区与核心设施</h2>
               <button className="modal-close-btn" onClick={() => setShowFacilityZoning(false)}>
@@ -158,14 +191,17 @@ function GymnasiumGuidePanel() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 体质健康测试专项安排弹窗 */}
       {showHealthTest && (
-        <div className="modal-overlay" onClick={() => setShowHealthTest(false)}>
-          <div className="modal-content health-test-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowHealthTest(false);
+          }}
+          contentClassName="modal-content health-test-modal"
+        >
             <div className="modal-header">
               <h2>📊 体质健康测试专项安排</h2>
               <button className="modal-close-btn" onClick={() => setShowHealthTest(false)}>
@@ -289,14 +325,17 @@ function GymnasiumGuidePanel() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 场馆日常使用规范与预约流程弹窗 */}
       {showUsageRules && (
-        <div className="modal-overlay" onClick={() => setShowUsageRules(false)}>
-          <div className="modal-content usage-rules-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowUsageRules(false);
+          }}
+          contentClassName="modal-content usage-rules-modal"
+        >
             <div className="modal-header">
               <h2>📋 场馆日常使用规范与预约流程</h2>
               <button className="modal-close-btn" onClick={() => setShowUsageRules(false)}>
@@ -424,14 +463,17 @@ function GymnasiumGuidePanel() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 服务与应急保障弹窗 */}
       {showEmergencyService && (
-        <div className="modal-overlay" onClick={() => setShowEmergencyService(false)}>
-          <div className="modal-content emergency-service-modal" onClick={(e) => e.stopPropagation()}>
+        <ModalPortal
+          onClose={() => {
+            setShowEmergencyService(false);
+          }}
+          contentClassName="modal-content emergency-service-modal"
+        >
             <div className="modal-header">
               <h2>🚑 服务与应急保障</h2>
               <button className="modal-close-btn" onClick={() => setShowEmergencyService(false)}>
@@ -545,8 +587,7 @@ function GymnasiumGuidePanel() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
+        </ModalPortal>
       )}
     </div>
   );
